@@ -1,4 +1,4 @@
-Laravel FormMaker
+EloquentForms
 =================
 
 EloquentForms was created by and is maintained by [Nick West](https://github.com/nickwest). It was created to minimize the time and effort required to create simple HTML forms generated from Eloquent Models to support CRUD functionality.
