@@ -1,0 +1,40 @@
+{
+    "name": "nickwest/EloquentForms",
+    "description": "Create Bulma compatible forms and tables directly from Eloquent Models and Collections",
+    "authors": [
+        {
+            "name": "Nick West",
+            "email": "nickwest@uw.edu"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=7.1",
+        "illuminate/support": "5.5.*",
+        "illuminate/database": "5.5.*",
+        "illuminate/validation": "5.5.*",
+        "nesbot/carbon": "^1.23",
+        "maatwebsite/excel": "^2.1"
+    },
+    "autoload": {
+        "classmap": [
+            "src/migrations"
+        ],
+        "psr-4": {
+            "Nickwest\\EloquentForms\\": "src/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require-dev": {
+        "fzaninotto/faker": "~1.4",
+        "phpunit/phpunit": "~6.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Nickwest\\EloquentForms\\EloquentFormsServiceProvider",
+                "Nickwest\\EloquentForms\\bulma\\EloquentFormsBulmaThemeServiceProvider"
+            ]
+        }
+    }
+}
