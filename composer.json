@@ -1,5 +1,5 @@
 {
-    "name": "nickwest/EloquentForms",
+    "name": "nickwest/eloquent-forms",
     "description": "Create Bulma compatible forms and tables directly from Eloquent Models and Collections",
     "authors": [
         {
