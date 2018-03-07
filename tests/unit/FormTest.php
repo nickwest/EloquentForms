@@ -99,8 +99,8 @@ class FormTest extends TestCase
         $Form->first = 'MyValue1234';
         $Form->second = 'DifferentValue4321';
 
-        $this->assertEquals('MyValue1234', $Form->first);
-        $this->assertEquals('DifferentValue4321', $Form->second);
+        $this->assertEquals('MyValue1234', $Form->first->value);
+        $this->assertEquals('DifferentValue4321', $Form->second->value);
     }
 
     public function test_field_value_magic_methods()
@@ -116,7 +116,7 @@ class FormTest extends TestCase
 
         // __get
         $this->expectException(InvalidFieldException::class);
-        $Form->first;
+        $Form->{$field_names[0]};
 
         // __ set
         $this->expectException(InvalidFieldException::class);
@@ -147,6 +147,74 @@ class FormTest extends TestCase
         $this->assertEquals(array_column($fields, 'value', 'name'), $Form->getFieldValues());
     }
 
+    public function test_settings_display_fields_on_a_form()
+    {
+        $fields = $this->getManyFieldDatas(10);
+
+        // Field names only (make sure there aren't duplicates)
+        $field_names = array_unique(array_column($fields, 'name'));
+        $field_names = array_combine($field_names, $field_names);
+
+        // Create the form
+        $Form = new Form();
+        $Form->addFields($field_names);
+
+
+        // Set all fields as display fields
+        $Form->setDisplayFields($field_names);
+
+        $this->assertEquals($field_names, $Form->getDisplayFields());
+
+        // remove one field
+        $key = array_rand($field_names);
+        $removed1 = [$field_names[$key]];
+        unset($field_names[$key]);
+
+        $Form->removeDisplayFields($removed1);
+        $this->assertEquals($field_names, $Form->getDisplayFields());
+
+        // remove many fields
+        $keys = array_rand($field_names, 3);
+        $removed = [];
+        foreach($keys as $key){
+            $removed[] = $field_names[$key];
+            unset($field_names[$key]);
+        }
+
+        $Form->removeDisplayFields($removed);
+        $this->assertEquals($field_names, $Form->getDisplayFields());
+
+        // Add the last fields we removed back in
+        $Form->addDisplayFields($removed);
+        $field_names = array_merge($field_names, array_combine($removed, $removed));
+        $this->assertEquals($field_names, $Form->getDisplayFields());
+
+        // Inject the first field we removed back in after the 3rd
+        $key = current(array_slice($field_names, 3, 1));
+        $Form->setDisplayAfter(current($removed1), $field_names[$key]);
+        $field_names = array_slice($field_names, 0, 3, true) + [current($removed1) => current($removed1)] + array_slice($field_names, 3, null, true);
+        $this->assertEquals($field_names, $Form->getDisplayFields());
+    }
+
+    public function test_form_fields_can_have_labels_set()
+    {
+        $fields = $this->getManyFieldDatas(5);
+
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
+
+        $labels = array_column($fields, 'label', 'name');
+
+        $Form->setLabels($labels);
+        $this->assertEquals($labels, $Form->getLabels());
+
+        // check individual fields too? why not...
+        foreach(array_column($fields, 'name') as $field_name) {
+            $this->assertEquals($labels[$field_name], $Form->getField($field_name)->label);
+        }
+    }
+
+
 
 
 
@@ -166,6 +234,22 @@ class FormTest extends TestCase
 
         $this->assertInstanceOf(\Nickwest\EloquentForms\bulma\Theme::class, $Form->getTheme());
     }
+
+    // public function test_form_can_make_a_view()
+    // {
+    //     $fields = $this->getManyFieldDatas(5);
+
+    //     $Form = new Form();
+    //     $Form->addFields(array_column($fields, 'name'));
+
+    //     $view = $Form->MakeView();
+    //     $this->assertInstanceOf(\Illuminate\View\View::class, $view);
+
+    //     // Test that the rendered view is as expected?
+    //     $view = $view->render();
+    //     var_dump($view);
+
+    // }
 
 
 
@@ -204,6 +288,7 @@ class FormTest extends TestCase
             'default' => $Faker->name,
             'value' => $Faker->name,
             'type' => 'text',
+            'label' => $Faker->state,
         ];
 
         return $field;
