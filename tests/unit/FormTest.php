@@ -5,6 +5,7 @@ use Faker;
 use Nickwest\EloquentForms\Form;
 use Nickwest\EloquentForms\Field;
 use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
+use Nickwest\EloquentForms\Exceptions\InvalidCustomFieldObjectException;
 
 use Nickwest\EloquentForms\Test\TestCase;
 
@@ -203,7 +204,7 @@ class FormTest extends TestCase
         $Form->setValues($fields);
     }
 
-    public function test_form_setValues_does_not_throw_an_exception_on_invalid_field_when_true_passed()
+    public function test_form_setValues_does_not_throw_an_exception_on_invalid_field_when_ignoring_invalid_fields()
     {
         $fields = $this->getFieldData(5);
 
@@ -215,6 +216,160 @@ class FormTest extends TestCase
 
         $this->assertEquals($fields[0]['value'], $Form->{$fields[0]['name']}->value);
     }
+
+    public function test_form_setTypes_sets_multiple_field_types()
+    {
+        $fields = $this->getFieldData(5);
+
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
+
+        $field_types = [$fields[0]['name'] => 'checkbox', $fields[1]['name'] => 'textarea'];
+        $Form->setTypes($field_types);
+
+        $this->assertEquals($Form->{$fields[0]['name']}->type, 'checkbox');
+        $this->assertEquals($Form->{$fields[1]['name']}->type, 'textarea');
+    }
+
+    public function test_form_setTypes_throws_an_exception_on_invalid_field()
+    {
+        $fields = $this->getFieldData(5);
+
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
+
+        $field_types = ['not_a_real_field' => 'text', $fields[0]['name'] => 'checkbox'];
+
+        $this->expectException(InvalidFieldException::class);
+        $Form->setTypes($field_types);
+    }
+
+    public function test_form_setTypes_allows_CustomField_types_to_be_set()
+    {
+        $fields = $this->getFieldData(5);
+
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
+
+        $CustomType = new \Nickwest\EloquentForms\CustomFields\daysofweek\CustomField();
+
+        $field_types = [$fields[0]['name'] => 'checkbox', $fields[1]['name'] => 'textarea', $fields[2]['name'] => $CustomType];
+        $Form->setTypes($field_types);
+
+        $this->assertInstanceOf(\Nickwest\EloquentForms\CustomField::class, $Form->{$fields[2]['name']}->CustomField);
+        $this->assertInstanceOf(\Nickwest\EloquentForms\CustomFields\daysofweek\CustomField::class, $Form->{$fields[2]['name']}->CustomField);
+    }
+
+    public function test_form_setTypes_throws_exception_if_object_is_not_CustomField()
+    {
+        $fields = $this->getFieldData(5);
+
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
+
+        $CustomType = new \StdClass;
+
+        $field_types = [$fields[0]['name'] => 'checkbox', $fields[1]['name'] => 'textarea', $fields[2]['name'] => $CustomType];
+        $this->expectException(InvalidCustomFieldObjectException::class);
+        $Form->setTypes($field_types);
+    }
+
+    public function test_form_setExamples_sets_examples_on_multiple_fields()
+    {
+        $fields = $this->getFieldData(5);
+
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
+
+        $field_examples = [$fields[0]['name'] => 'test@example.com', $fields[1]['name'] => '555-1212'];
+        $Form->setExamples($field_examples);
+
+        $this->assertEquals($Form->{$fields[0]['name']}->example, 'test@example.com');
+        $this->assertEquals($Form->{$fields[1]['name']}->example, '555-1212');
+    }
+
+    public function test_form_setDefaultValues_sets_default_values_on_multiple_fields()
+    {
+        $fields = $this->getFieldData(5);
+
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
+
+        $default_values = array_column($fields, 'default_value', 'name');
+
+        $Form->setDefaultValues($default_values);
+
+        foreach(array_column($fields, 'name') as $field_name) {
+            $this->assertEquals($default_values[$field_name], $Form->getField($field_name)->default_value);
+        }
+    }
+
+    public function test_form_setDefaultValues_throws_an_exception_on_invalid_field()
+    {
+        $fields = $this->getFieldData(5);
+
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
+
+        $default_values = array_column($fields, 'default_value', 'name');
+        $default_values['not_a_real_field'] = 'Blah blahh';
+
+        $this->expectException(InvalidFieldException::class);
+        $Form->setDefaultValues($default_values);
+    }
+
+    public function test_form_setRequiredFields_sets_required_attribute_on_fields()
+    {
+        $fields = $this->getFieldData(10);
+        $field_names = array_slice(array_column($fields, 'name'), 0, 3);
+
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
+
+        // Make sure they start out as Null
+        foreach(array_column($fields, 'name') as $field_name) {
+            $this->assertNull($Form->{$field_name}->attributes->required);
+        }
+
+        // Set required
+        $Form->setRequiredFields($field_names);
+
+        // Make sure they gained the required attribute, and it's set to true
+        foreach($field_names as $field_name) {
+            $this->assertTrue($Form->{$field_name}->attributes->required);
+        }
+    }
+
+    public function test_form_setRequiredFields_throws_exception_on_invalid_field()
+    {
+        $fields = $this->getFieldData(10);
+        $field_names = array_slice(array_column($fields, 'name'), 0, 3);
+
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
+
+        $field_names[] = 'not_a_real_field';
+
+        $this->expectException(InvalidFieldException::class);
+        $Form->setRequiredFields($field_names);
+    }
+
+    public function test_form_setInline_sets_multiple_fields_to_inline()
+    {
+        $fields = $this->getFieldData(10);
+        $field_names = array_slice(array_column($fields, 'name'), 0, 3);
+
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
+
+        $Form->setInline($field_names);
+
+        // Make sure they gained the inline, and it's set to true
+        foreach($field_names as $field_name) {
+            $this->assertTrue($Form->{$field_name}->is_inline);
+        }
+    }
+
 
     public function test_form_setDisplayFields_sets_multiple_fields_for_display()
     {
@@ -352,6 +507,7 @@ class FormTest extends TestCase
     }
 
 
+
     public function test_form_setTheme_sets_the_theme_on_the_form()
     {
         $field_names = ['first', 'second'];
@@ -410,7 +566,7 @@ class FormTest extends TestCase
             $fields[] = [
                 'name' => $Faker->unique()->word,
                 'length' => $Faker->numberBetween(10, 255),
-                'default' => $Faker->name,
+                'default_value' => $Faker->name,
                 'value' => $Faker->name,
                 'type' => 'text',
                 'label' => $Faker->state,

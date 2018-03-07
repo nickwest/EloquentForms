@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
 
 use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
+use Nickwest\EloquentForms\Exceptions\InvalidCustomFieldObjectException;
 
 class Form{
 
@@ -255,6 +256,109 @@ class Form{
             }
         }
     }
+
+    /**
+     * Set multiple field types at once [field_name] => type
+     *
+     * @param array $types
+     * @return void
+     * @throws Nickwest\EloquentForms\Exceptions\InvalidCustomFieldObjectException
+     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
+     */
+    public function setTypes(array $types)
+    {
+        foreach($types as $field_name => $type) {
+            if(isset($this->Fields[$field_name])) {
+                // If it's a custom type, it'll be an object
+                if(is_object($type) && is_a($type, '\Nickwest\EloquentForms\CustomField')) {
+                    $this->Fields[$field_name]->CustomField = $type;
+                }
+                // If it's some other object, it's not a valid type
+                elseif(is_object($type)) {
+                    throw new InvalidCustomFieldObjectException($field_name.' CustomField object need to extend \Nickwest\EloquentForms\CustomField');
+                }
+                // It's probably just a string so set it
+                else {
+                    $this->Fields[$field_name]->type = $type;
+                }
+            } else {
+                throw new InvalidFieldException($field_name.' is not part of the Form');
+            }
+        }
+    }
+
+    /**
+     * Set multiple field examples at once [field_name] => value
+     *
+     * @param array $examples
+     * @return void
+     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
+     */
+    public function setExamples($examples)
+    {
+        foreach($examples as $field_name => $example) {
+            if(isset($this->Fields[$field_name])) {
+                $this->Fields[$field_name]->example = $example;
+            } else {
+                throw new InvalidFieldException($field_name.' is not part of the Form');
+            }
+        }
+    }
+
+    /**
+     * Set multiple field default values at once [field_name] => value
+     *
+     * @param array $default_values
+     * @return void
+     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
+     */
+    public function setDefaultValues(array $default_values)
+    {
+        foreach($default_values as $field_name => $default_value) {
+            if(isset($this->Fields[$field_name])) {
+                $this->Fields[$field_name]->default_value = $default_value;
+            } else {
+                throw new InvalidFieldException($field_name.' is not part of the Form');
+            }
+        }
+    }
+
+    /**
+     * Set multiple field required fields at oncel takes array of field names
+     *
+     * @param array $required_fields
+     * @return void
+     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
+     */
+    public function setRequiredFields(array $required_fields)
+    {
+        foreach($required_fields as $field_name) {
+            if(isset($this->Fields[$field_name])) {
+                $this->Fields[$field_name]->attributes->required = true;
+            } else {
+                throw new InvalidFieldException($field_name.' is not part of the Form');
+            }
+        }
+    }
+
+    /**
+     * set inline fields
+     *
+     * @param array $fields an array of field names
+     * @return void
+     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
+     */
+    public function setInline(array $fields)
+    {
+        foreach($fields as $field_name) {
+            if(isset($this->Fields[$field_name])) {
+                $this->Fields[$field_name]->is_inline = true;
+            } else {
+                throw new InvalidFieldException($field_name.' is not part of the Form');
+            }
+        }
+    }
+
 
     /**
      * Add a data list to the form
