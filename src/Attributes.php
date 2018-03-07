@@ -1,103 +1,12 @@
 <?php namespace Nickwest\EloquentForms;
 
 class Attributes{
+
     /**
-     * Valid field attributes (HTML5)
+     * The key that should be used for multi fields
      *
      * @var string
      */
-    protected $valid_attributes = [
-        'global' => [
-            'accesskey', 'class', 'contenteditable', 'contextmenu', 'data-*', 'dir',
-            'draggable', 'dropzone', 'hidden', 'id', 'lang', 'spellcheck', 'style',
-            'tabindex', 'title', 'translate',
-        ],
-        'textarea' => [
-            'autofocus', 'cols', 'dirname', 'disabled', 'form', 'maxlength', 'name',
-            'readonly', 'required', 'rows', 'wrap',
-        ],
-        'select' => [
-            'autofocus', 'disabled', 'form', 'multiple', 'name', 'required',
-        ],
-        'input' => [
-            'autofocus', 'disabled', 'list', 'maxlength', 'name', 'readonly',
-            'type', 'value',
-        ],
-        'button' => [
-
-        ],
-        'checkbox' => [
-            'checked', 'required',
-        ],
-        'color' => [
-            'autocomplete', 'required',
-        ],
-        'date' => [
-            'autocomplete', 'max', 'min', 'pattern', 'required', 'step',
-        ],
-        'datetime' => [
-            'autocomplete', 'max', 'min', 'pattern', 'required', 'step',
-        ],
-        'datetime-local' => [
-            'autocomplete', 'max', 'min', 'pattern', 'required', 'step',
-        ],
-        'email' => [
-            'autocomplete', 'multiple', 'pattern', 'placeholder', 'required', 'size',
-        ],
-        'file' => [
-            'accept', 'multiple', 'required',
-        ],
-        'hidden' => [
-
-        ],
-        'image' => [
-            'align', 'alt', 'height', 'src', 'width',
-        ],
-        'month' => [
-            'autocomplete', 'max', 'min', 'pattern', 'required', 'step',
-        ],
-        'number' => [
-             'max', 'min', 'required', 'step',
-        ],
-        'password' => [
-            'autocomplete', 'pattern', 'placeholder', 'required', 'size',
-        ],
-        'radio' => [
-            'checked', 'required',
-        ],
-        'range' => [
-            'autocomplete', 'max', 'min', 'step',
-        ],
-        'reset' => [
-
-        ],
-        'search' => [
-            'autocomplete', 'pattern', 'placeholder', 'required', 'size',
-        ],
-        'submit' => [
-
-        ],
-        'tel' => [
-            'autocomplete', 'pattern', 'placeholder', 'required', 'size',
-        ],
-        'text' => [
-            'autocomplete', 'dirname', 'pattern', 'placeholder', 'required', 'size',
-        ],
-        'time' => [
-            'autocomplete', 'max', 'min', 'pattern', 'required', 'step',
-        ],
-        'url' => [
-            'autocomplete', 'pattern', 'placeholder', 'required', 'size',
-        ],
-        'week' => [
-            'autocomplete', 'max', 'min', 'pattern', 'required', 'step',
-        ],
-    ];
-
-    protected $flat_attributes = [
-        'checked', 'disabled', 'multiple', 'readonly', 'required', 'selected'
-    ];
-
     public $multi_key = null;
 
     /**
@@ -136,32 +45,59 @@ class Attributes{
     /**
      * Field property mutator
      *
-     * @param string $property
+     * @param string $attribute
      * @param mixed $value
      * @return void
-     * @throws \Exception
      */
     public function __set(string $attribute, $value)
     {
-        // We don't validate attributes when setting them, we only do that when generating a string for the given field type
+        // If it's a class, save it as an array so we can manipulate single classes
         if($attribute == 'class') {
             $this->classes = explode(' ', $value);
             return;
         }
 
-        // replace spaces in ids
+        // Replace spaces in ids **TODO: Should we do this here?
         if($attribute == 'id') {
             $value = str_replace(' ', '-', $value);
         }
 
         $this->attributes[$attribute] = $value;
-        return;
-// TODO: WTF?
-        throw new \Exception('"'.$attribute.'" is not a valid attribute');
     }
 
     /**
-     * Output all attributes as a string
+     * Field property mutator
+     *
+     * @param string $attribute
+     * @return boolean
+     */
+    public function __isset(string $attribute)
+    {
+        if($attribute == 'class'){
+            return count($this->classes) > 0;
+        }
+
+        return array_key_exists($attribute, $this->attributes);
+    }
+
+    /**
+     * Unset an attribute
+     *
+     * @param string $attribute
+     * @return void
+     */
+    public function __unset(string $attribute)
+    {
+        if($attribute == 'class'){
+            $this->classes = [];
+            return;
+        }
+
+        unset($this->attributes[$attribute]);
+    }
+
+    /**
+     * Output all attributes as a string that can be injected into a tag
      *
      * @return string
      */
@@ -169,27 +105,6 @@ class Attributes{
     {
         return $this->getString();
     }
-
-    public function toJson()
-    {
-        return json_encode([
-            'classes' => $this->classes,
-            'attributes' => $this->attributes,
-        ]);
-    }
-
-    public function fromJson($json)
-    {
-        $array = json_decode($json);
-        foreach($array as $key => $value) {
-            if(is_object($value)) {
-                $this->$key = (array)$value;
-            } else {
-                $this->$key = $value;
-            }
-        }
-    }
-
 
     /**
      * Add a css class
@@ -212,9 +127,18 @@ class Attributes{
      */
     public function removeClass(string $class_name)
     {
-        if(isset($this->classes['class_name'])) {
-            unset($this->classes[$class_name]);
-        }
+        unset($this->classes[$class_name]);
+    }
+
+    /**
+     * Check if classes has a specific class
+     *
+     * @param string $class_name
+     * @return boolean
+     */
+    public function hasClass(string $class_name)
+    {
+        return isset($this->classes[$class_name]);
     }
 
     /**
@@ -225,87 +149,58 @@ class Attributes{
     public function getString(){
         $output = [];
 
-        if(count($this->classes) > 0) {
-            $this->attributes['class'] = '';
+        if(count($this->classes) > 0 && isset($this->attributes['class'])) {
+            unset($this->attributes['class']);
+        }elseif(count($this->classes) > 0){
+            $this->attributes['class'] = implode(' ', $this->classes);
         }
 
-
         foreach($this->attributes as $key => $value) {
-            // Skip invalid attributes (they're not HTML valid, so don't ouput them)
-            if(!$this->isValidAttribute($key)) {
-                continue;
-            }
 
-            if($key == 'class') {
-                $value = implode(' ', $this->classes);
-            }
-
+            // Add [] to name attribute if there's a multi_key set or multi_key === true
             if($key == 'name'){
-                if((isset($this->attributes['multiple']) && $this->attributes['multiple'])) {
-                    $value .= '[]';
-                }
                 if($this->multi_key !== null && $this->multi_key !== false){
                     $value .= '['.($this->multi_key !== true ? $this->multi_key : '').']';
                 }
             }
 
-            if(in_array($key, $this->flat_attributes)) {
-                if($value) {
-                    $output[] = $key;
-                }
-            } else {
-                if($key == 'value' && $this->attributes['type'] == 'datetime-local' && $value != null) {
-                    $value = date('Y-m-d\TH:i', strtotime($value));
-                }
-                $output[] = $key.'="'.$value.'"';
-            }
+            $output[] = ($value === null ? $key : $key.'="'.$value.'"');
         }
 
         return implode(' ', $output);
     }
 
     /**
-     * Check if the property exists
+     * Convert this object to JSON representation
      *
-     * @param string $key
-     * @return bool
+     * @return string JSON
      */
-    public function attributeExists($key)
+    public function toJson()
     {
-        foreach($this->valid_attributes as $valid_attributes) {
-            foreach($valid_attributes as $attribute) {
-                if($attribute == $key) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return json_encode([
+            'classes' => $this->classes,
+            'attributes' => $this->attributes,
+            'multi_key' => $this->multi_key,
+        ]);
     }
 
     /**
-     * Check if the attribute is valid for the given field type
+     * Populate this object from JSON representation
      *
-     * @param string $key
-     * @return bool
+     * @param string JSON
+     * @return void
      */
-    public function isValidAttribute($key)
+    public function fromJson($json)
     {
-        if(isset($this->attributes['type']) && $this->attributes['type'] == 'textarea') {
-            $valid_attributes = array_merge($this->valid_attributes['global'], $this->valid_attributes['textarea']);
-        } elseif(isset($this->attributes['type']) && $this->attributes['type'] == 'select') {
-            $valid_attributes = array_merge($this->valid_attributes['global'], $this->valid_attributes['select']);
-        } else {
-            $valid_attributes = array_merge($this->valid_attributes['global'], $this->valid_attributes['input']);
-            if(isset($this->attributes['type']) && isset($this->valid_attributes[$this->attributes['type']])) {
-                $valid_attributes = array_merge($valid_attributes, $this->valid_attributes[$this->attributes['type']]);
-            }
-        }
+        $array = json_decode($json);
 
-        foreach($valid_attributes as $attribute) {
-            if($attribute == $key) {
-                return true;
+        foreach($array as $key => $value) {
+            if(is_object($value)) {
+                $this->$key = (array)$value;
+            } else {
+                $this->$key = $value;
             }
         }
-        return false;
     }
+
 }

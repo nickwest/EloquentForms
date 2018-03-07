@@ -8,14 +8,6 @@ use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
 use Nickwest\EloquentForms\Exceptions\InvalidCustomFieldObjectException;
 
 class Form{
-
-    /**
-     * Submit Button value (used on single submit button only)
-     *
-     * @var string
-     */
-    public $submit_button_value = null;
-
     /**
      * Use Laravel csrf_field() method for creating a CSRF field in the form?
      * Note: This will elegantly fail if the csrf_field() method is not available.
@@ -44,27 +36,6 @@ class Form{
      * @var array
      */
     protected $display_fields = [];
-
-    /**
-     * Array of field_names to display
-     *
-     * @var array
-     */
-    protected $submit_buttons = [];
-
-    /**
-     * Array of valid columns for the model using this trait
-     *
-     * @var array
-     */
-    protected $valid_columns = [];
-
-    /**
-     * Add Delete button?
-     *
-     * @var bool
-     */
-    protected $allow_delete = false;
 
     /**
      * Theme to use
@@ -126,13 +97,7 @@ class Form{
      */
     public function __set(string $field_name, $value)
     {
-        if(!isset($this->Fields[$field_name])){
-            throw new InvalidFieldException($field_name.' is not part of the Form');
-        }
-
-        if(isset($this->Fields[$field_name])) {
-            $this->Fields[$field_name]->value = $value;
-        }
+        return $this->setValue($field_name, $value);
     }
 
     /**
@@ -221,6 +186,40 @@ class Form{
     }
 
     /**
+     * Add a Subform into the current form
+     *
+     * @param string $name
+     * @param \Nickwest\FormMaker\Form $form
+     * @param string $before_field
+     * @return void
+     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
+     */
+    public function addSubform(string $name, \Nickwest\EloquentForms\Form $Form, string $before_field = '')
+    {
+        $this->addField($name);
+        $this->Fields[$name]->is_subform = true;
+        $this->Fields[$name]->subform = $Form;
+
+        // Insert it at a specific place in this form
+        if($before_field != null) {
+            $i = 0;
+            foreach($this->display_fields as $key => $value) {
+                if($value == $before_field) {
+                    $this->display_fields = array_merge(array_slice($this->display_fields, 0, $i), array($name => $name), array_slice($this->display_fields, $i));
+                    return;
+                }
+                $i++;
+            }
+
+            // If it wasn't found, then throw an exception
+            throw new InvalidFieldException($before_field.' is not a display field');
+        }
+
+        // Stick it on the end of the form
+        $this->display_fields[] = $name;
+    }
+
+    /**
      * Get an array of field values keyed by field name
      *
      * @return array
@@ -238,6 +237,40 @@ class Form{
     }
 
     /**
+     * Set a single field's value
+     *
+     * @param string $field_name
+     * @param string $value
+     * @return void
+     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
+     */
+    public function setValue(string $field_name, string $value)
+    {
+        if(isset($this->Fields[$field_name])) {
+            $this->Fields[$field_name]->Attributes->value = $value;
+        } else {
+            throw new InvalidFieldException($field_name.' is not part of the Form');
+        }
+    }
+
+    /**
+     * Get a single field's value
+     *
+     * @param string $field_name
+     * @return void
+     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
+     */
+    public function getValue(string $field_name)
+    {
+        if(!isset($this->Fields[$field_name])){
+            throw new InvalidFieldException($field_name.' is not part of the Form');
+        }
+
+        return $this->Fields[$field_name]->Attributes->value;
+    }
+
+
+    /**
      * Set multiple field values at once [field_name] => value
      *
      * @param array $values
@@ -249,7 +282,7 @@ class Form{
     {
         foreach($values as $field_name => $value) {
             if(isset($this->Fields[$field_name])) {
-                $this->Fields[$field_name]->value = $value;
+                $this->Fields[$field_name]->Attributes->value = $value;
 
             } elseif(!$ignore_invalid) {
                 throw new InvalidFieldException($field_name.' is not part of the Form');
@@ -334,7 +367,7 @@ class Form{
     {
         foreach($required_fields as $field_name) {
             if(isset($this->Fields[$field_name])) {
-                $this->Fields[$field_name]->attributes->required = true;
+                $this->Fields[$field_name]->Attributes->required = true;
             } else {
                 throw new InvalidFieldException($field_name.' is not part of the Form');
             }
@@ -371,8 +404,8 @@ class Form{
     {
         $this->addField($name);
 
-        $this->{$name}->attributes->type = 'datalist';
-        $this->{$name}->attributes->id = $name;
+        $this->{$name}->Attributes->type = 'datalist';
+        $this->{$name}->Attributes->id = $name;
         $this->{$name}->setOptions($options);
 
         $this->addDisplayFields([$name]);
@@ -515,6 +548,64 @@ class Form{
     }
 
     /**
+     * Set validation rules to Field(s).
+     *
+     * @param array $validation_rules [field_name] => rules
+     * @return void
+     */
+    public function setValidationRules(array $validation_rules)
+    {
+        foreach($validation_rules as $field_name => $rules)
+        {
+            if(isset($this->Fields[$field_name])) {
+                $this->Fields[$field_name]->validation_rules = $rules;
+            } else {
+                throw new InvalidFieldException($field_name.' is not part of the Form');
+            }
+        }
+    }
+
+    /**
+     * Using validation rules, determine if form values are valid.
+     *
+     * @return bool
+     */
+    public function isValid()
+    {
+        $rules = [];
+        foreach($this->Fields as $Field) {
+            $rules[$Field->original_name] = [];
+
+            if(isset($Field->validation_rules)) {
+                $rules[$Field->original_name] = $Field->validation_rules;
+            }
+
+            // Set required rule on all required fields
+            if($Field->Attributes->required && !in_array('required', $rules)) {
+                $rules[$Field->original_name][] = 'required';
+            }
+
+            // TODO: Could add more auto validation based on HTML field types (email, phone, etc)
+        }
+
+        // Set up the Validator
+        $Validator = Validator::make(
+            $this->getFieldValues(),
+            $rules
+        );
+
+        // Set error messages to fields
+        if(!($success = !$Validator->fails())) {
+            foreach($Validator->errors()->toArray() as $field => $error) {
+                $this->Fields[$field]->error_message = current($error);
+            }
+        }
+
+        return $success;
+    }
+
+
+    /**
      * Set the theme
      *
      * @param \Nickwest\EloquentForms\Theme $Theme
@@ -561,11 +652,11 @@ class Form{
                 break;
             }
 
-            if($Field->attributes->type == 'file'){
+            if($Field->Attributes->type == 'file'){
                 $this->Attributes->enctype = 'multipart/form-data';
             }elseif($Field->is_subform){
                 foreach($Field->subform->Fields as $SubField){
-                    if($SubField->attributes->type == 'file'){
+                    if($SubField->Attributes->type == 'file'){
                         $this->Attributes->enctype = 'multipart/form-data';
                     }
                 }
@@ -606,4 +697,64 @@ class Form{
         }
         return View::make('form-maker::subform', $blade_data);
     }
+
+    /**
+     * Get a JSON representation of this Form
+     *
+     * @return string JSON
+     */
+    public function toJson()
+    {
+        $array = [
+            'laravel_csrf' => $this->laravel_csrf,
+            'Attributes' => json_decode($this->Attributes->toJson()),
+            'Fields' => [],
+            'display_fields' => $this->display_fields,
+            'Theme' => (is_object($this->Theme) ? '\\'.get_class($this->Theme) : null),
+        ];
+
+        foreach($this->Fields as $key => $Field) {
+            $array['Fields'][$key] = json_decode($Field->toJson());
+        }
+
+        return json_encode($array);
+    }
+
+    /**
+     * Make A Form from JSON
+     *
+     * @param string $json
+     * @return Nickwest\EloquentForms\Form
+     */
+    public function fromJson(string $json): Form
+    {
+        $array = json_decode($json);
+
+        foreach($array as $key => $value) {
+            if($key == 'Fields') {
+                foreach($value as $key2 => $array) {
+                    $Field = new Field($key2);
+                    $Field->fromJson(json_encode($array));
+                    $this->$key[$key2] = $Field;
+                }
+
+            } elseif($key == 'Attributes') {
+                $Attributes = new Attributes;
+                $this->key = Attributes::fromJson($value);
+
+            } elseif($key == 'Theme' && $value != null) {
+                $this->Theme = new $value(); // TODO: make a to/from JSON method on this? is it necessary?
+
+            } elseif(is_object($value)) {
+                $this->$key = (array)$value;
+
+            } else {
+                $this->$key = $value;
+            }
+        }
+
+        return $this;
+    }
+
+
 }

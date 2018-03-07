@@ -12,7 +12,7 @@ class Field{
      *
      * @var \Nickwest\EloquentForms\Attributes
      */
-    public $attributes = null;
+    public $Attributes = null;
 
     /**
      * Human readable formatted name
@@ -216,15 +216,15 @@ class Field{
      */
     public function __construct(string $field_name, string $type = null)
     {
-        $this->attributes = new Attributes();
+        $this->Attributes = new Attributes();
 
-        $this->attributes->name = $field_name;
-        $this->attributes->type = $type != null ? $type : 'text';
-        $this->attributes->id = 'input-'.$field_name;
-        $this->attributes->class = '';
+        $this->Attributes->name = $field_name;
+        $this->Attributes->type = $type != null ? $type : 'text';
+        $this->Attributes->id = 'input-'.$field_name;
+        $this->Attributes->class = '';
 
-        $this->original_name = $this->attributes->name;
-        $this->original_id = $this->attributes->id;
+        $this->original_name = $this->Attributes->name;
+        $this->original_id = $this->Attributes->id;
         $this->label = $this->makeLabel();
 
         // Options for multi-choice fields
@@ -247,12 +247,12 @@ class Field{
             return $this->Theme->view_namespace();
         }
 
-        if($this->attributes->attributeExists($property)) {
-            return $this->attributes->$property;
+        if(isset($this->Attributes->$property)) {
+            return $this->Attributes->$property;
         }
 
         if(property_exists(__CLASS__, $property)) {
-            if($property == 'attributes'){
+            if($property == 'Attributes'){
                 if(($this->type == 'checkbox' || $this->type == 'radio') && count($this->options) > 1 && $this->multi_key == ''){
                     $this->multi_key = true;
                 }
@@ -295,13 +295,13 @@ class Field{
             }
         }
 
-        if(property_exists($this->attributes, $property)){
-            $this->attributes->$property = $value;
+        if(property_exists($this->Attributes, $property)){
+            $this->Attributes->$property = $value;
             return;
         }
 
-        if($this->attributes->attributeExists($property)) {
-            $this->setAttribute($property, $value);
+        if(isset($this->Attributes->$property)) {
+            $this->Attributes->$property = $value;
 
             return;
         }
@@ -321,7 +321,7 @@ class Field{
             return true;
         }
 
-        if($this->attributes->attributeExists($property)) {
+        if(isset($this->Attributes->$property)) {
             return true;
         }
 
@@ -336,7 +336,7 @@ class Field{
     public function toJson()
     {
         $array = [
-            'attributes' => json_decode($this->attributes->toJson()),
+            'Attributes' => json_decode($this->Attributes->toJson()),
             'label' => $this->label,
             'label_suffix' => $this->label_suffix,
             'example' => $this->example,
@@ -369,7 +369,7 @@ class Field{
     {
         $array = json_decode($json);
         foreach($array as $key => $value) {
-            if($key == 'attributes') {
+            if($key == 'Attributes') {
                 $Attributes = new Attributes();
                 $Attributes->fromJson(json_encode($value));
 
@@ -395,7 +395,7 @@ class Field{
         }
 
         // If this is a radio or checkbox switch between multiples or single
-        if($this->attributes->type == 'checkbox' && is_array($this->options)) {
+        if($this->Attributes->type == 'checkbox' && is_array($this->options)) {
             if($this->view_namespace != '' && View::exists($this->view_namespace.'::fields.checkboxes')) {
                 return $this->view_namespace.'::fields.checkboxes';
             }
@@ -403,17 +403,17 @@ class Field{
         }
 
         // If this is a radio or checkbox switch between multiples or single
-        if($this->attributes->type == 'radio' && is_array($this->options)) {
+        if($this->Attributes->type == 'radio' && is_array($this->options)) {
             if($this->view_namespace != '' && View::exists($this->view_namespace.'::fields.radios')) {
                 return $this->view_namespace.'::fields.radios';
             }
             return 'Nickwest\\EloquentForms::fields.radios';
         }
 
-        if($this->view_namespace != '' && View::exists($this->view_namespace.'::fields.'.$this->attributes->type)) {
-            return $this->view_namespace.'::fields.'.$this->attributes->type;
+        if($this->view_namespace != '' && View::exists($this->view_namespace.'::fields.'.$this->Attributes->type)) {
+            return $this->view_namespace.'::fields.'.$this->Attributes->type;
         }
-        return 'Nickwest\\EloquentForms::fields.'.$this->attributes->type;
+        return 'Nickwest\\EloquentForms::fields.'.$this->Attributes->type;
     }
 
     /**
@@ -425,8 +425,8 @@ class Field{
      */
     public function setAttribute(string $attribute, $value)
     {
-        if($this->attributes->attributeExists($attribute)) {
-            $this->attributes->$attribute = $value;
+        if(isset($this->Attributes->$attribute)) {
+            $this->Attributes->$attribute = $value;
             return;
         }
 
@@ -442,7 +442,7 @@ class Field{
      */
     public function getAttribute(string $attribute)
     {
-        return $this->attributes->$attribute;
+        return $this->Attributes->$attribute;
     }
 
     /**
@@ -454,7 +454,7 @@ class Field{
     public function addClass(string $class)
     {
         if(trim($class) != '') {
-            $this->attributes->addClass($class);
+            $this->Attributes->addClass($class);
         }
     }
 
@@ -466,7 +466,7 @@ class Field{
      */
     public function removeClass(string $class)
     {
-        $this->attributes->removeClass($class);
+        $this->Attributes->removeClass($class);
     }
 
     /**
@@ -578,17 +578,17 @@ class Field{
      */
     public function makeOptionView(string $key, bool $view_only = false)
     {
-        $this->attributes->id = $this->original_id.'-'.$key;
-        $this->attributes->value = $key;
+        $this->Attributes->id = $this->original_id.'-'.$key;
+        $this->Attributes->value = $key;
 
-        $this->attributes->checked = in_array($key, $this->multi_value) ? true : false;
+        $this->Attributes->checked = in_array($key, $this->multi_value) ? true : false;
 
         $this->Theme->prepareFieldView($this);
 
-        if($this->view_namespace != '' && View::exists($this->view_namespace.'::fields.'.$this->attributes->type.'_option')) {
-            return View::make($this->view_namespace.'::fields.'.$this->attributes->type.'_option', array('Field' => $this, 'key' => $key, 'view_only' => $view_only));
+        if($this->view_namespace != '' && View::exists($this->view_namespace.'::fields.'.$this->Attributes->type.'_option')) {
+            return View::make($this->view_namespace.'::fields.'.$this->Attributes->type.'_option', array('Field' => $this, 'key' => $key, 'view_only' => $view_only));
         }
-        return View::make('Nickwest\\EloquentForms::fields.'.$this->attributes->type.'_option', array('Field' => $this, 'key' => $key, 'view_only' => $view_only));
+        return View::make('Nickwest\\EloquentForms::fields.'.$this->Attributes->type.'_option', array('Field' => $this, 'key' => $key, 'view_only' => $view_only));
     }
 
 
@@ -610,7 +610,7 @@ class Field{
 
             case 'select':
                 if(!is_array($this->options) || count($this->options) == 0) {
-                    throw new \Exception('Field validation error: Field "'.$this->attributes->name.'" must have options set');
+                    throw new \Exception('Field validation error: Field "'.$this->Attributes->name.'" must have options set');
                 }
         }
     }
@@ -625,7 +625,7 @@ class Field{
         // If no label use the field's name, but replace _ with spaces
         if (trim($this->label) == '') {
             // If this is changed Table::getLabel() should be updated to match
-            $this->label = ucfirst(str_replace('_', ' ', $this->attributes->name));
+            $this->label = ucfirst(str_replace('_', ' ', $this->Attributes->name));
         }
 
         return $this->label;

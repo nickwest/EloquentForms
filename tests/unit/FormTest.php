@@ -164,6 +164,54 @@ class FormTest extends TestCase
         $this->assertFalse(isset($Form->third));
     }
 
+    public function test_form_addSubForm_adds_a_subform_to_the_form()
+    {
+        $field_names = ['first', 'second'];
+
+        $Form = new Form();
+        $Form->addFields($field_names);
+
+        $SubForm = new Form();
+        $SubForm->addFields(['sub1', 'sub2']);
+
+        $Form->addSubForm('my_subform', $SubForm);
+
+        $this->assertTrue(isset($Form->my_subform));
+        $this->assertInstanceOf(\Nickwest\EloquentForms\Form::class, $Form->my_subform->subform);
+    }
+
+    public function test_form_SubForm_fields_are_accessible()
+    {
+        $field_names = ['first', 'second'];
+
+        $Form = new Form();
+        $Form->addFields($field_names);
+
+        $SubForm = new Form();
+        $SubForm->addFields(['sub1', 'sub2']);
+
+        $Form->addSubForm('my_subform', $SubForm);
+
+        $this->assertInstanceOf(\Nickwest\EloquentForms\Field::class, $Form->my_subform->subform->sub1);
+    }
+
+    public function test_form_addSubForm_adds_form_before_specific_field()
+    {
+        $field_names = ['first', 'second'];
+
+        $Form = new Form();
+        $Form->addFields($field_names);
+        $Form->setDisplayFields($field_names);
+
+        $SubForm = new Form();
+        $SubForm->addFields(['sub1', 'sub2']);
+
+        $Form->addSubForm('my_subform', $SubForm, 'second');
+
+        // Make sure it's in the second spot, rather than the end
+        $this->assertEquals('my_subform', current(array_slice($Form->getDisplayFields(), 1, 1)));
+    }
+
     public function test_form_getFieldValues_returns_all_field_values()
     {
         $fields = $this->getFieldData(5);
@@ -177,6 +225,42 @@ class FormTest extends TestCase
         }
 
         $this->assertEquals(array_column($fields, 'value', 'name'), $Form->getFieldValues());
+    }
+
+    public function test_form_setValue_sets_a_fields_value()
+    {
+        $Form = new Form();
+        $Form->addFields(['test_field']);
+
+        $Form->setValue('test_field', 'abc1234');
+
+        $this->assertEquals('abc1234', $Form->test_field->value);
+    }
+
+    public function test_form_setValue_throws_an_exception_on_invalid_field()
+    {
+        $Form = new Form();
+
+        $this->expectException(InvalidFieldException::class);
+        $Form->setValue('test_field', 'abc1234');
+    }
+
+    public function test_form_getValue_returns_a_field_value()
+    {
+        $Form = new Form();
+        $Form->addFields(['test_field']);
+
+        $Form->setValue('test_field', 'abc1234');
+
+        $this->assertEquals('abc1234', $Form->getValue('test_field'));
+    }
+
+    public function test_form_getValue_throws_an_exception_on_invalid_field()
+    {
+        $Form = new Form();
+
+        $this->expectException(InvalidFieldException::class);
+        $value = $Form->getValue('test_field');
     }
 
     public function test_form_setValues_sets_multiple_field_values()
@@ -328,7 +412,7 @@ class FormTest extends TestCase
 
         // Make sure they start out as Null
         foreach(array_column($fields, 'name') as $field_name) {
-            $this->assertNull($Form->{$field_name}->attributes->required);
+            $this->assertFalse(isset($Form->{$field_name}->Attributes->required));
         }
 
         // Set required
@@ -336,7 +420,7 @@ class FormTest extends TestCase
 
         // Make sure they gained the required attribute, and it's set to true
         foreach($field_names as $field_name) {
-            $this->assertTrue($Form->{$field_name}->attributes->required);
+            $this->assertTrue(isset($Form->{$field_name}->Attributes->required));
         }
     }
 
@@ -368,6 +452,20 @@ class FormTest extends TestCase
         foreach($field_names as $field_name) {
             $this->assertTrue($Form->{$field_name}->is_inline);
         }
+    }
+
+    public function test_form_setInline_throws_exception_on_invalid_field()
+    {
+        $fields = $this->getFieldData(10);
+        $field_names = array_slice(array_column($fields, 'name'), 0, 3);
+
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
+
+        $field_names[] = 'not_a_real_field';
+
+        $this->expectException(InvalidFieldException::class);
+        $Form->setInline($field_names);
     }
 
 
@@ -474,6 +572,113 @@ class FormTest extends TestCase
         $Form->setLabels($labels);
     }
 
+    public function test_form_setValidationRules_adds_rules_to_fields()
+    {
+        $fields = $this->getFieldData(5);
+
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
+
+        $validation_rules = [
+            $fields[0]['name'] => 'required,date,after:tomorrow',
+            $fields[2]['name'] => 'exists:connection.staff,email',
+            $fields[4]['name'] => 'exists:connection.staff,image',
+        ];
+
+        $Form->setValidationRules($validation_rules);
+
+        foreach(array_column($fields, 'name') as $field_name) {
+            if(isset($validation_rules[$field_name])){
+                $this->assertEquals($validation_rules[$field_name], $Form->getField($field_name)->validation_rules);
+            }
+        }
+    }
+
+    public function test_form_setValidationRules_throws_exception_on_invalid_field()
+    {
+        $fields = $this->getFieldData(5);
+
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
+
+        $validation_rules = [
+            $fields[0]['name'] => 'required|date|after:tomorrow',
+            $fields[2]['name'] => 'exists:connection.staff|email',
+            $fields[4]['name'] => 'exists:connection.staff|image',
+            'not_valid_field' => 'required',
+        ];
+
+        $this->expectException(InvalidFieldException::class);
+        $Form->setValidationRules($validation_rules);
+    }
+
+    public function test_form_isValid_can_pass_validation()
+    {
+        $fields = $this->getFieldData(5);
+
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
+
+        $validation_rules = [
+            $fields[0]['name'] => 'required|date|after:tomorrow',
+            $fields[2]['name'] => 'email',
+            $fields[4]['name'] => 'required|email',
+        ];
+
+        $Form->{$fields[0]['name']}->Attributes->value = '2120-05-10';
+        $Form->{$fields[2]['name']}->Attributes->value = 'test@test.com';
+        $Form->{$fields[4]['name']}->Attributes->value = 'test2@test.com';
+
+        $Form->setValidationRules($validation_rules);
+
+        $this->assertTrue($Form->isValid());
+    }
+
+    public function test_form_isValid_can_fail_validation()
+    {
+        $fields = $this->getFieldData(5);
+
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
+
+        $validation_rules = [
+            $fields[0]['name'] => 'required|date|after:tomorrow',
+            $fields[2]['name'] => 'email',
+            $fields[4]['name'] => 'required|email',
+        ];
+
+        $Form->{$fields[0]['name']}->Attributes->value = '2120-05-10';
+        $Form->{$fields[2]['name']}->Attributes->value = 'test@test.com';
+
+        $Form->setValidationRules($validation_rules);
+
+        $this->assertFalse($Form->isValid());
+    }
+
+    public function test_form_isValid_sets_errors_on_invalid_fields()
+    {
+        $fields = $this->getFieldData(5);
+
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
+
+        $validation_rules = [
+            $fields[0]['name'] => 'required|date|after:tomorrow',
+            $fields[2]['name'] => 'email',
+            $fields[4]['name'] => 'required|email',
+        ];
+
+        $Form->{$fields[0]['name']}->Attributes->value = '2120-05-10'; // Valid
+        $Form->{$fields[2]['name']}->Attributes->value = 'testcom'; // invalid
+
+        $Form->setValidationRules($validation_rules);
+        $Form->isValid();
+
+        $this->assertNotEmpty($Form->{$fields[2]['name']}->error_message);
+        $this->assertNotEmpty($Form->{$fields[4]['name']}->error_message);
+    }
+
+
     public function test_form_has_Attributes()
     {
         $this->assertClassHasAttribute('Attributes', Form::class);
@@ -524,21 +729,27 @@ class FormTest extends TestCase
         $this->assertInstanceOf(\Nickwest\EloquentForms\bulma\Theme::class, $Form->getTheme());
     }
 
-    // public function test_form_can_make_a_view()
-    // {
-    //     $fields = $this->getFieldData(5);
 
-    //     $Form = new Form();
-    //     $Form->addFields(array_column($fields, 'name'));
+    public function test_form_toJson_converts_a_form_to_json_and_back_again()
+    {
 
-    //     $view = $Form->MakeView();
-    //     $this->assertInstanceOf(\Illuminate\View\View::class, $view);
+    }
 
-    //     // Test that the rendered view is as expected?
-    //     $view = $view->render();
-    //     var_dump($view);
 
-    // }
+    public function test_form_can_make_a_view()
+    {
+        // $fields = $this->getFieldData(5);
+
+        // $Form = new Form();
+        // $Form->addFields(array_column($fields, 'name'));
+
+        // $view = $Form->MakeView();
+        // $this->assertInstanceOf(\Illuminate\View\View::class, $view);
+
+        // // Test that the rendered view is as expected?
+        // $view = $view->render();
+
+    }
 
 
 
