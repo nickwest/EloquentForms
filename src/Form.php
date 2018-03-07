@@ -112,10 +112,6 @@ class Form{
      */
     public function __isset(string $field_name): bool
     {
-        if(!isset($this->Fields[$field_name])){
-            throw new InvalidFieldException($field_name.' is not part of the Form');
-        }
-
         return isset($this->Fields[$field_name]);
     }
 
@@ -238,6 +234,44 @@ class Form{
         }
 
         return $values;
+    }
+
+    /**
+     * Set multiple field values at once [field_name] => value
+     *
+     * @param array $values
+     * @param bool $ignore_invalid
+     * @return void
+     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
+     */
+    public function setValues(array $values, bool $ignore_invalid = false)
+    {
+        foreach($values as $field_name => $value) {
+            if(isset($this->Fields[$field_name])) {
+                $this->Fields[$field_name]->value = $value;
+
+            } elseif(!$ignore_invalid) {
+                throw new InvalidFieldException($field_name.' is not part of the Form');
+            }
+        }
+    }
+
+    /**
+     * Add a data list to the form
+     *
+     * @param array $name
+     * @param array $options
+     * @return void
+     */
+    public function addDatalist(string $name, array $options)
+    {
+        $this->addField($name);
+
+        $this->{$name}->attributes->type = 'datalist';
+        $this->{$name}->attributes->id = $name;
+        $this->{$name}->setOptions($options);
+
+        $this->addDisplayFields([$name]);
     }
 
     /**
