@@ -11,8 +11,6 @@
     "require": {
         "php": ">=7.1",
         "illuminate/support": "5.5.*",
-        "illuminate/database": "5.5.*",
-        "illuminate/validation": "5.5.*",
         "nesbot/carbon": "^1.23",
         "maatwebsite/excel": "^2.1"
     },
@@ -27,7 +25,8 @@
     "minimum-stability": "stable",
     "require-dev": {
         "fzaninotto/faker": "~1.4",
-        "phpunit/phpunit": "~6.0"
+        "phpunit/phpunit": "~6.0",
+        "orchestra/testbench": "~3.5.5"
     },
     "extra": {
         "laravel": {

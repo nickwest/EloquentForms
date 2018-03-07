@@ -1,97 +1,213 @@
-<?php
+<?php namespace Nickwest\EloquentForms\Test\unit;
 
-use Nickwest\FormMaker\Form;
-use Nickwest\FormMaker\Field;
+use Faker;
 
-class FormTest extends PHPUnit_Framework_TestCase
+use Nickwest\EloquentForms\Form;
+use Nickwest\EloquentForms\Field;
+use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
+
+use Nickwest\EloquentForms\Test\TestCase;
+
+class FormTest extends TestCase
 {
-	protected $test_fields;
+    protected $test_fields;
 
-	function setUp(){
-		$this->Form = new Form;
+    public function setUp(){
+        parent::setUp();
+    }
 
-		$this->test_fields = array('First Field', 'WeirdCharacters!@#$%^&*()_+\'\\', 'Third field', 'My Special Field');
-		$this->Form->addFields($this->test_fields);
-	}
+    public function test_field_can_be_added_to_a_form()
+    {
+        $field = $this->getFieldData();
+        $Form = new Form();
 
-	/** @test */
-	function a_form_has_days_of_week()
-	{
-		$this->setUp();
+        // Make sure there's no such field already and we get the proper exception
+        $this->expectException(InvalidFieldException::class);
+        $Form->getField($field['name']);
 
-		// What days of week should look like
-		$days_of_week = array('M' => 'Mon', 'T' => 'Tue', 'W' => 'Wed', 'R' => 'Thu', 'F' => 'Fri', 'S' => 'Sat', 'U' => 'Sun');
-		$this->assertEquals($days_of_week, $this->Form->getDaysOfWeekValues());
-	}
+        // Add the field
+        $Form->addField($field['name']);
+        $this->assertInstanceOf(Field::class, $Form->getField($field['name']));
+    }
 
-	/** @test */
-	function a_form_can_allow_delete()
-	{
-		$this->setUp();
+    public function test_a_form_can_have_many_fields()
+    {
+        $field_names = $this->getManyFieldNames(5);
 
-		$this->Form->allow_delete = true;
+        $Form = new Form();
+        $Form->addFields($field_names);
 
-		$view = $this->Form->makeView(array());
-	}
+        foreach($field_names as $field_name) {
+            $this->assertInstanceOf(Field::class, $Form->getField($field_name));
+        }
+    }
 
-	/** @test */
-	function a_form_will_not_let_you_set_invalid_properties()
-	{
-		$this->setUp();
+    public function test_a_field_can_be_removed()
+    {
+        $field = $this->getFieldData();
 
-		$this->expectException(Exception::class);
-		$this->Form->this_property_does_not_exist = true;
-	}
+        $Form = new Form();
+        $Form->addField($field['name']);
 
-	/** @test */
-	function a_form_can_have_fields_added()
-	{
-		$this->setUp();
+        $Form->removeField($field['name']);
 
-		$this->Form->addFields(array('new', 'new2'));
+        $this->expectException(InvalidFieldException::class);
+        $Form->getField($field['name']);
+    }
 
-		$this->assertInternalType('array', $this->Form->getFields());
-		$this->assertCount(6, $this->Form->getFields());
-		$this->assertContainsOnly('Nickwest\FormMaker\Field', $this->Form->getFields());
-	}
+    public function test_many_fields_can_be_removed()
+    {
+        $field_names = $this->getManyFieldNames(5);
 
-	/** @test */
-	function a_form_can_have_fields_removed()
-	{
-		$this->setUp();
+        $Form = new Form();
+        $Form->addFields($field_names);
 
-		$this->Form->removeFields($this->test_fields);
+        $remove = [$field_names[0], $field_names[2]];
+        unset($field_names[0]);
+        unset($field_names[2]);
+        $Form->removeFields($remove);
 
-		$this->assertInternalType('array', $this->Form->getFields());
-		$this->assertCount(0, $this->Form->getFields());
-	}
+        foreach($remove as $field_name) {
+            $this->expectException(InvalidFieldException::class);
+            $Form->getField($field_name);
+        }
 
-	/** @test */
-	function a_form_can_have_one_field_added()
-	{
-		$this->setUp();
+        foreach($field_names as $field_name) {
+            $this->assertInstanceOf(Field::class, $Form->{$field_name});
+        }
+    }
 
-		$field_name = 'My Latest Test Fields';
-		$this->Form->addField($field_name);
+    public function test_if_a_field_exists()
+    {
+        $field_names = ['first', 'second'];
 
-		$this->assertInstanceOf('Nickwest\FormMaker\Field', $this->Form->$field_name);
-		$this->assertInternalType('array', $this->Form->getFields());
-		$this->assertCount(count($this->test_fields) + 1, $this->Form->getFields());
-		$this->assertContainsOnly('Nickwest\FormMaker\Field', $this->Form->getFields());
-	}
+        $Form = new Form();
+        $Form->addFields($field_names);
 
-	/** @test */
-	function a_form_can_have_one_field_removed()
-	{
-		$this->setUp();
+        $this->assertTrue($Form->isField('first'));
+        $this->assertTrue($Form->isField('second'));
+        $this->assertFalse($Form->isField('third'));
+    }
 
-		$this->Form->removeField('First Field');
+    public function test_setting_field_value()
+    {
+        $field_names = ['first', 'second'];
 
-		$this->assertCount(3, $this->Form->getFields());
-		$this->assertContainsOnly('Nickwest\FormMaker\Field', $this->Form->getFields());
-		$this->assertSame(null, $this->Form->{'First Field'});
-	}
+        $Form = new Form();
+        $Form->addFields($field_names);
 
+        $Form->first = 'MyValue1234';
+        $Form->second = 'DifferentValue4321';
+
+        $this->assertEquals('MyValue1234', $Form->first);
+        $this->assertEquals('DifferentValue4321', $Form->second);
+    }
+
+    public function test_field_value_magic_methods()
+    {
+        $field_names = ['first', 'second'];
+
+        $Form = new Form();
+
+        // These throw exceptions before the Fields exist
+        // __isset
+        $this->expectException(InvalidFieldException::class);
+        isset($Form->first);
+
+        // __get
+        $this->expectException(InvalidFieldException::class);
+        $Form->first;
+
+        // __ set
+        $this->expectException(InvalidFieldException::class);
+        $Form->first = 'It Works!';
+
+
+        $Form->addFields($field_names);
+
+        $this->assertFalse(isset($Form->first));
+
+        $Form->first = 'It actually works now';
+        $this->assertTrue(isset($Form->first));
+
+        $this->assertEquals($Form->first, 'It actually works now');
+    }
+
+    public function test_getting_all_form_values()
+    {
+        $fields = $this->getManyFieldDatas(5);
+
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
+
+        foreach($fields as $field){
+            $Form->{$field['name']} = $field['value'];
+        }
+
+        $this->assertEquals(array_column($fields, 'value', 'name'), $Form->getFieldValues());
+    }
+
+
+
+
+
+    public function test_form_theme_can_be_set_and_it_affects_fields()
+    {
+        $field_names = ['first', 'second'];
+
+        $Form = new Form();
+        $Form->addFields($field_names);
+
+        // Verify it starts with the Default theme set
+        $this->assertInstanceOf(\Nickwest\EloquentForms\DefaultTheme::class, $Form->getTheme());
+
+        $myTheme = new \Nickwest\EloquentForms\bulma\Theme();
+        $Form->setTheme($myTheme);
+
+        $this->assertInstanceOf(\Nickwest\EloquentForms\bulma\Theme::class, $Form->getTheme());
+    }
+
+
+
+
+
+
+///// Test Setup helpers
+
+    private function getManyFieldNames(int $count)
+    {
+        $field_names = [];
+        foreach($this->getManyFieldDatas(5) as $field){
+            $field_names[] = $field['name'];
+        }
+
+        return $field_names;
+    }
+
+    private function getManyFieldDatas(int $count)
+    {
+        $fields = [];
+        for($i = 0; $i < $count; $i++){
+            $fields[] = $this->getFieldData();
+        }
+
+        return $fields;
+    }
+
+    private function getFieldData()
+    {
+        $Faker = Faker\Factory::create();
+
+        $field = [
+            'name' => $Faker->word,
+            'length' => $Faker->numberBetween(10, 255),
+            'default' => $Faker->name,
+            'value' => $Faker->name,
+            'type' => 'text',
+        ];
+
+        return $field;
+    }
 
 }
 

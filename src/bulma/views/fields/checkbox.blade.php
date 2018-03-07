@@ -1,4 +1,4 @@
-@formmaker_component($Field->view_namespace.'::components.field', ['Field' => $Field])
+@eloquentforms_component($Field->view_namespace.'::components.field', ['Field' => $Field])
 
     @slot('field_markup')
 
@@ -17,11 +17,11 @@
                 </label>
             </div>
 
-            @formmaker_include($Field->view_namespace.'::pieces.example')
-            @formmaker_include($Field->view_namespace.'::pieces.error')
+            @eloquentforms_include($Field->view_namespace.'::pieces.example')
+            @eloquentforms_include($Field->view_namespace.'::pieces.error')
         @endif
 
-        @formmaker_include($Field->view_namespace.'::pieces.note')
+        @eloquentforms_include($Field->view_namespace.'::pieces.note')
     @endslot
 
 @endcomponent

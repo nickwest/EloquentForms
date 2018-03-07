@@ -1,13 +1,16 @@
-<?php namespace Nickwest\FormMaker\bulma;
+<?php namespace Nickwest\EloquentForms\bulma;
 
-class Theme extends \Nickwest\FormMaker\Theme
+use Nickwest\EloquentForms\Field;
+use Nickwest\EloquentForms\Table;
+
+class Theme extends \Nickwest\EloquentForms\Theme
 {
     public function view_namespace() : string
     {
-        return 'form-maker-bulma';
+        return 'Nickwest\\EloquentForms';
     }
 
-    public function prepareFieldView(\Nickwest\FormMaker\Field &$Field)
+    public function prepareFieldView(Field &$Field)
     {
         $Field->label_class = 'label';
         switch($Field->type) {
@@ -50,7 +53,7 @@ class Theme extends \Nickwest\FormMaker\Theme
         return;
     }
 
-    public function prepareTableView(\Nickwest\FormMaker\Table &$Table)
+    public function prepareTableView(Table &$Table)
     {
         $Table->addClass('table');
 

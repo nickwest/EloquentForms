@@ -12,7 +12,7 @@ class Field{
      *
      * @var \Nickwest\EloquentForms\Attributes
      */
-    protected $attributes = null;
+    public $attributes = null;
 
     /**
      * Human readable formatted name
@@ -399,7 +399,7 @@ class Field{
             if($this->view_namespace != '' && View::exists($this->view_namespace.'::fields.checkboxes')) {
                 return $this->view_namespace.'::fields.checkboxes';
             }
-            return 'form-maker::fields.checkboxes';
+            return 'Nickwest\\EloquentForms::fields.checkboxes';
         }
 
         // If this is a radio or checkbox switch between multiples or single
@@ -407,13 +407,13 @@ class Field{
             if($this->view_namespace != '' && View::exists($this->view_namespace.'::fields.radios')) {
                 return $this->view_namespace.'::fields.radios';
             }
-            return 'form-maker::fields.radios';
+            return 'Nickwest\\EloquentForms::fields.radios';
         }
 
         if($this->view_namespace != '' && View::exists($this->view_namespace.'::fields.'.$this->attributes->type)) {
             return $this->view_namespace.'::fields.'.$this->attributes->type;
         }
-        return 'form-maker::fields.'.$this->attributes->type;
+        return 'Nickwest\\EloquentForms::fields.'.$this->attributes->type;
     }
 
     /**
@@ -566,7 +566,7 @@ class Field{
             return View::make($this->view_namespace.'::fields.display', ['Field' => $this, 'prev_inline' => $prev_inline]);
         }
 
-        return View::make('form-maker::fields.display', ['Field' => $this, 'prev_inline' => $prev_inline]);
+        return View::make('Nickwest\\EloquentForms::fields.display', ['Field' => $this, 'prev_inline' => $prev_inline]);
     }
 
     /**
@@ -588,7 +588,7 @@ class Field{
         if($this->view_namespace != '' && View::exists($this->view_namespace.'::fields.'.$this->attributes->type.'_option')) {
             return View::make($this->view_namespace.'::fields.'.$this->attributes->type.'_option', array('Field' => $this, 'key' => $key, 'view_only' => $view_only));
         }
-        return View::make('form-maker::fields.'.$this->attributes->type.'_option', array('Field' => $this, 'key' => $key, 'view_only' => $view_only));
+        return View::make('Nickwest\\EloquentForms::fields.'.$this->attributes->type.'_option', array('Field' => $this, 'key' => $key, 'view_only' => $view_only));
     }
 
 

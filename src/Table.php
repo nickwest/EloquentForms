@@ -393,13 +393,13 @@ class Table{
                 return View::make($this->Theme->view_namespace.'::table-extend', $blade_data);
             }
 
-            return View::make('form-maker::table-extend', $blade_data);
+            return View::make('Nickwest\\EloquentForms::table-extend', $blade_data);
         }
 
         if($this->Theme->view_namespace != '' && View::exists($this->Theme->view_namespace.'::table')) {
             return View::make($this->Theme->view_namespace.'::table', $blade_data);
         }
-        return View::make('form-maker::table', $blade_data);
+        return View::make('Nickwest\\EloquentForms::table', $blade_data);
     }
 
     /**

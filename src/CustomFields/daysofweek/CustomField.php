@@ -1,8 +1,10 @@
 <?php
 namespace Nickwest\EloquentForms\CustomFields\daysofweek;
 
-use Nickwest\FormMaker\CustomField as BaseCustomField;
 use Illuminate\Support\Facades\View;
+
+use Nickwest\EloquentForms\CustomField as BaseCustomField;
+use Nickwest\EloquentForms\Field;
 
 class CustomField extends BaseCustomField
 {
@@ -13,12 +15,12 @@ class CustomField extends BaseCustomField
      */
     public $daysofweek = [ 'M' => 'Mon', 'T' => 'Tue', 'W' => 'Wed', 'R' => 'Thu', 'F' => 'Fri', 'S' => 'Sat', 'U' => 'Sun' ];
 
-    public function makeView(\Nickwest\FormMaker\Field $Field, bool $prev_inline = false, bool $view_only = false)
+    public function makeView(Field $Field, bool $prev_inline = false, bool $view_only = false)
     {
-        return View::make('Nickwest\EloquentForms::customfields.daysofweek', ['Field' => $Field, 'daysofweek' => $this->daysofweek, 'view_only' => $view_only]);
+        return View::make('Nickwest\\EloquentForms::customfields.daysofweek', ['Field' => $Field, 'daysofweek' => $this->daysofweek, 'view_only' => $view_only]);
     }
 
-    public function hook_setAllFormValues(\Nickwest\FormMaker\Field $Field, $value)
+    public function hook_setAllFormValues(Field $Field, $value)
     {
         $data = explode('|', $value);
         foreach($this->daysofweek as $key => $day) {

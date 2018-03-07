@@ -1,7 +1,5 @@
 <?php namespace Nickwest\EloquentForms;
 
-// use Illuminate\Support\Facades\DB;
-// use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Collection;
 
 trait TableTrait{

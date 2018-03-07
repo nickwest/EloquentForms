@@ -1,7 +1,7 @@
-@formmaker_component($Field->view_namespace.'::components.field', ['Field' => $Field, 'prev_inline' => $prev_inline])
+@eloquentforms_component($Field->view_namespace.'::components.field', ['Field' => $Field, 'prev_inline' => $prev_inline])
 
     @slot('field_markup')
-        @formmaker_include($Field->view_namespace.'::pieces.label')
+        @eloquentforms_include($Field->view_namespace.'::pieces.label')
 
         @if($view_only)
             <div class="value">
@@ -15,15 +15,15 @@
         <div class="{{ $Field->input_wrapper_class }}{{ $Field->multiple ? ' is-multiple' : '' }}">
                 <select {!! $Field->attributes !!}>
                 @foreach($Field->options as $key => $value)
-                    @formmaker_include($Field->view_namespace.'::fields.select_option')
+                    @eloquentforms_include($Field->view_namespace.'::fields.select_option')
                 @endforeach
             </select>
         </div>
         @endif
 
-        @formmaker_include($Field->view_namespace.'::pieces.example')
-        @formmaker_include($Field->view_namespace.'::pieces.error')
-        @formmaker_include($Field->view_namespace.'::pieces.note')
+        @eloquentforms_include($Field->view_namespace.'::pieces.example')
+        @eloquentforms_include($Field->view_namespace.'::pieces.error')
+        @eloquentforms_include($Field->view_namespace.'::pieces.note')
     @endslot
 
 @endcomponent

@@ -1,7 +1,7 @@
 <?php namespace Nickwest\EloquentForms;
 
-use \Illuminate\Database\Eloquent\Model;
-use \Illuminate\Support\Facades\Event;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Event;
 
 class FormObserver {
 

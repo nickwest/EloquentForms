@@ -20,7 +20,7 @@ class EloquentFormsServiceProvider extends ServiceProvider {
      */
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__.'/views', 'Nickwest\EloquentForms');
+        $this->loadViewsFrom(__DIR__.'/views', 'Nickwest\\EloquentForms');
 
         Blade::directive('eloquentform_include', function($expression) {
             if(strpos($expression, ',') !== false) {
@@ -35,7 +35,7 @@ class EloquentFormsServiceProvider extends ServiceProvider {
             return '<?php if(View::exists('.$view.')){
                 echo $__env->make('.$expression.', array_except(get_defined_vars(), array(\'__data\', \'__path\')))->render();
             }else{
-                echo $__env->make(\'Nickwest\EloquentForms::'.$template.$remainder.', array_except(get_defined_vars(), array(\'__data\', \'__path\')))->render();
+                echo $__env->make(\'Nickwest\\EloquentForms::'.$template.$remainder.', array_except(get_defined_vars(), array(\'__data\', \'__path\')))->render();
             } ?>';
         });
 
@@ -52,7 +52,7 @@ class EloquentFormsServiceProvider extends ServiceProvider {
             return '<?php if(View::exists('.$view.')){
                 $__env->startComponent('.$expression.');
             }else{
-                $__env->startComponent(\'Nickwest\EloquentForms::'.$template.$remainder.');
+                $__env->startComponent(\'Nickwest\\EloquentForms::'.$template.$remainder.');
             } ?>';
         });
 
