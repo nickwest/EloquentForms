@@ -244,7 +244,10 @@ class Form{
 
         foreach($this->Fields as $Field)
         {
-            $values[$Field->Attributes->name] = $Field->Attributes->value;
+            // Don't return subforms as fields they don't really have a valueaddDataList
+            if(!$Field->isSubform()){
+                $values[$Field->Attributes->name] = $Field->Attributes->value;
+            }
         }
 
         return $values;
@@ -751,7 +754,7 @@ class Form{
             if($Field->Attributes->type == 'file'){
                 $this->Attributes->enctype = 'multipart/form-data';
             }elseif($Field->isSubform()){
-                foreach($Field->subform->Fields as $SubField){
+                foreach($Field->Subform->Fields as $SubField){
                     if($SubField->Attributes->type == 'file'){
                         $this->Attributes->enctype = 'multipart/form-data';
                     }

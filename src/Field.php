@@ -417,8 +417,9 @@ class Field{
      */
     public function setDisabledOptions(array $options)
     {
+        $this->disabled_options = [];
+
         if($options == null) {
-            $this->options = [];
             return;
         }
 
