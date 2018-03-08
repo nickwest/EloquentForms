@@ -64,6 +64,8 @@ class Form{
 
         // Set the action to default to the current path
         $this->Attributes->action = Request::url();
+
+        $this->addSubmitButton('submit', 'Save');
     }
 
     /**
@@ -667,7 +669,7 @@ class Form{
     public function removeSubmitButton(string $name)
     {
         if(!isset($this->SubmitFields[$name])){
-            throw new InvalidFieldException($field_name.' is not part of the Form');
+            throw new InvalidFieldException($name.' is not part of the Form');
         }
 
         unset($this->SubmitFields[$name]);
@@ -683,7 +685,7 @@ class Form{
     public function getSubmitButton(string $name)
     {
         if(!isset($this->SubmitFields[$name])){
-            throw new InvalidFieldException($field_name.' is not part of the Form');
+            throw new InvalidFieldException($name.' is not part of the Form');
         }
 
         return $this->SubmitFields[$name];

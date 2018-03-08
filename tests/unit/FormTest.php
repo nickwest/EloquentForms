@@ -732,44 +732,56 @@ class FormTest extends TestCase
 
     public function test_form_starts_with_a_save_submit_button()
     {
-        $fields = $this->getFieldData(5);
-
         $Form = new Form();
-        $Form->addFields(array_column($fields, 'name'));
 
+        $this->assertInstanceOf(\Nickwest\EloquentForms\Field::class, $Form->getSubmitButton('submit'));
+        $this->assertArrayHasKey('submit', $Form->getSubmitButtons());
     }
 
 
     public function test_form_addSubmitButton_adds_a_submit_button()
     {
-        $fields = $this->getFieldData(5);
-
         $Form = new Form();
-        $Form->addFields(array_column($fields, 'name'));
 
         $Form->addSubmitButton('resubmit', 'Resubmit', 'is-warning');
 
         $this->assertInstanceOf(\Nickwest\EloquentForms\Field::class, $Form->getSubmitButton('resubmit'));
         $this->assertArrayHasKey('resubmit', $Form->getSubmitButtons());
-
     }
 
     public function test_form_removeSubmitButton_removes_a_submit_button()
     {
-        $fields = $this->getFieldData(5);
-
         $Form = new Form();
-        $Form->addFields(array_column($fields, 'name'));
 
+        $Form->addSubmitButton('resubmit', 'Resubmit', 'is-warning');
+        $Form->removeSubmitButton('submit');
+
+        $this->expectException(InvalidFieldException::class);
+        $Field = $Form->getSubmitButton('submit');
+    }
+
+    public function test_form_removeSubmitButton_throws_an_exception_when_invalid_name_passed()
+    {
+        $Form = new Form();
+
+        $this->expectException(InvalidFieldException::class);
+        $Field = $Form->getSubmitButton('not_a_button');
     }
 
     public function test_form_getSubmitButton_gets_a_submit_button()
     {
-        $fields = $this->getFieldData(5);
-
         $Form = new Form();
-        $Form->addFields(array_column($fields, 'name'));
 
+        // Test against the default submit button
+        $this->assertInstanceOf(\Nickwest\EloquentForms\Field::class, $Form->getSubmitButton('submit'));
+    }
+
+    public function test_form_getSubmitButton_throws_exception_when_invalid_field_name()
+    {
+        $Form = new Form();
+
+        $this->expectException(InvalidFieldException::class);
+        $Form->getSubmitButton('no_a_field_valid');
     }
 
     public function test_form_setTheme_sets_the_theme_on_the_form()
