@@ -730,12 +730,47 @@ class FormTest extends TestCase
         $this->assertAttributeContains('my_data', 'display_fields', $Form);
     }
 
-    public function test_form_something_about_submit_buttons()
+    public function test_form_starts_with_a_save_submit_button()
     {
+        $fields = $this->getFieldData(5);
+
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
 
     }
 
 
+    public function test_form_addSubmitButton_adds_a_submit_button()
+    {
+        $fields = $this->getFieldData(5);
+
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
+
+        $Form->addSubmitButton('resubmit', 'Resubmit', 'is-warning');
+
+        $this->assertInstanceOf(\Nickwest\EloquentForms\Field::class, $Form->getSubmitButton('resubmit'));
+        $this->assertArrayHasKey('resubmit', $Form->getSubmitButtons());
+
+    }
+
+    public function test_form_removeSubmitButton_removes_a_submit_button()
+    {
+        $fields = $this->getFieldData(5);
+
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
+
+    }
+
+    public function test_form_getSubmitButton_gets_a_submit_button()
+    {
+        $fields = $this->getFieldData(5);
+
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
+
+    }
 
     public function test_form_setTheme_sets_the_theme_on_the_form()
     {

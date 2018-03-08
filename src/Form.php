@@ -640,22 +640,64 @@ class Form{
         return $success;
     }
 
-
-    public function addSubmitButton(string $name, string $value)
+    /**
+     * Add a submit button to the bottom of the form
+     *
+     * @param string $name
+     * @param string $value
+     * @param string $classes
+     * @return void
+     */
+    public function addSubmitButton(string $name, string $value, string $classes='')
     {
-
+        $this->SubmitFields[$name] = new Field($name);
+        $this->SubmitFields[$name]->Attributes->value = $value;
+        if($classes != ''){
+            $this->SubmitFields[$name]->Attributes->class = $classes;
+        }
     }
 
-    public function removeSubmitButton(string $name, string $value)
+    /**
+     * Remove a submit button to the bottom of the form
+     *
+     * @param string $name
+     * @return void
+     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
+     */
+    public function removeSubmitButton(string $name)
     {
+        if(!isset($this->SubmitFields[$name])){
+            throw new InvalidFieldException($field_name.' is not part of the Form');
+        }
 
+        unset($this->SubmitFields[$name]);
     }
 
-    public function getSubmitField(string $name, string $value)
+    /**
+     * Get a submit button from the bottom of the form
+     *
+     * @param string $name
+     * @return Nickwest\EloquentForms\Field
+     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
+     */
+    public function getSubmitButton(string $name)
     {
+        if(!isset($this->SubmitFields[$name])){
+            throw new InvalidFieldException($field_name.' is not part of the Form');
+        }
 
+        return $this->SubmitFields[$name];
     }
 
+    /**
+     * Get all submit button Fields
+     *
+     * @return array
+     */
+    public function getSubmitButtons()
+    {
+        return $this->SubmitFields;
+    }
 
     /**
      * Set the theme
