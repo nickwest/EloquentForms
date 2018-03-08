@@ -81,7 +81,21 @@ class AttributesTest extends TestCase
         $Attributes->method = 'POST';
         $Attributes->{'v-for'} = 'something for JS stuff';
 
-        $this->assertEquals('disabled id="my-id" method="POST" v-for="something for JS stuff"', (string)$Attributes);
+        $this->assertEquals('disabled id="input-my-id" method="POST" v-for="something for JS stuff"', (string)$Attributes);
+    }
+
+    public function test_attributes_id_prefix_can_be_changed()
+    {
+        $Attributes = new Attributes();
+
+        // Set some attributes
+        $Attributes->disabled = null;
+        $Attributes->id = 'my id';
+        $Attributes->id_prefix = 'secret-';
+        $Attributes->method = 'POST';
+        $Attributes->{'v-for'} = 'something for JS stuff';
+
+        $this->assertEquals('disabled id="secret-my-id" method="POST" v-for="something for JS stuff"', (string)$Attributes);
     }
 
     public function test_attributes_addClass_adds_a_class_to_the_class_attribute()

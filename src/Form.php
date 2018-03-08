@@ -38,6 +38,13 @@ class Form{
     protected $display_fields = [];
 
     /**
+     * Array of Field Objects
+     *
+     * @var array
+     */
+    protected $SubmitFields = [];
+
+    /**
      * Theme to use
      *
      * @var string
@@ -110,6 +117,16 @@ class Form{
         }
 
         return $this->Fields[$field_name];
+    }
+
+     /**
+     * get an array of all Fields
+     *
+     * @return array
+     */
+    public function getFields(): array
+    {
+        return $this->Fields;
     }
 
     /**
@@ -281,6 +298,26 @@ class Form{
 
             } elseif(!$ignore_invalid) {
                 throw new InvalidFieldException($field_name.' is not part of the Form');
+            }
+        }
+    }
+
+    /**
+     * Set multiple field names at once [original_name] => new_name
+     * Simple way to change all buttons to have the same name attribute in HTML
+     *
+     * @param array $names [original_name] => new_name
+     * @return void
+     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
+     */
+    public function setNames(array $names)
+    {
+        foreach($names as $original_name => $name) {
+            if(isset($this->Fields[$original_name])) {
+                $this->Fields[$original_name]->Attributes->name = $name;
+
+            } else {
+                throw new InvalidFieldException($original_name.' is not part of the Form');
             }
         }
     }
@@ -601,6 +638,22 @@ class Form{
         }
 
         return $success;
+    }
+
+
+    public function addSubmitButton(string $name, string $value)
+    {
+
+    }
+
+    public function removeSubmitButton(string $name, string $value)
+    {
+
+    }
+
+    public function getSubmitField(string $name, string $value)
+    {
+
     }
 
 

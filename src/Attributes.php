@@ -10,6 +10,13 @@ class Attributes{
     public $multi_key = null;
 
     /**
+     * prefix for IDs when writing HTML
+     *
+     * @var string
+     */
+    public $id_prefix = 'input-';
+
+    /**
      * Keep track of classes separately so we can build it all pretty like
      *
      * @var array
@@ -162,6 +169,10 @@ class Attributes{
                 if($this->multi_key !== null && $this->multi_key !== false){
                     $value .= '['.($this->multi_key !== true ? $this->multi_key : '').']';
                 }
+            }
+
+            if($key == 'id' && $this->id_prefix != ''){
+                $value = $this->id_prefix.$value;
             }
 
             $output[] = ($value === null ? $key : $key.'="'.$value.'"');

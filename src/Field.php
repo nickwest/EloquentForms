@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Validator;
 
 use Nickwest\EloquentForms\Attributes;
+use Nickwest\EloquentForms\Exceptions\OptionValueException;
 
 class Field{
 
@@ -172,14 +173,6 @@ class Field{
      */
     protected $disabled_options = [];
 
-    // /**
-    //  * Blade data to pass through to the subform
-    //  *
-    //  * @var array
-    //  */
-    // protected $subform_data = [];
-
-
 
     /**
      * Constructor
@@ -195,7 +188,7 @@ class Field{
         // Set some base attributes for the field
         $this->Attributes->name = $field_name;
         $this->Attributes->type = $type != null ? $type : 'text';
-        $this->Attributes->id = 'input-'.$field_name;
+        $this->Attributes->id = $field_name;
         $this->Attributes->class = '';
 
         // Set some basic properties
@@ -256,13 +249,13 @@ class Field{
      *
      * @return string Json
      */
-    public function toJson()
+    public function toJson(): string
     {
         $array = [
             'Attributes' => json_decode($this->Attributes->toJson()),
             'Theme' => (is_object($this->Theme) ? '\\'.get_class($this->Theme) : null),
-            'Subform' => is_object($this->Subform) ? json_decode($this->Subform->toJson()) : $this->Subform,
-            'CustomField' => (is_object($this->CustomField) ? serialize($this->CustomField) : null),
+            'Subform' => is_object($this->Subform) ? $this->Subform->toJson() : $this->Subform,
+            'CustomField' => (is_object($this->CustomField) ? serialize($this->CustomField) : $this->CustomField),
             'label' => $this->label,
             'label_suffix' => $this->label_suffix,
             'example' => $this->example,
@@ -308,8 +301,8 @@ class Field{
                 $this->Subform = new Form();
                 $this->Subform->fromJson($value);
 
-            } elseif($key == 'CustomeField') {
-                $this->CustomeField = new $value(); // TODO: make a to/from JSON method on this? is it necessary?
+            } elseif($key == 'CustomField') {
+                $this->CustomField = unserialize($value); // TODO: make a to/from JSON method on this? is it necessary?
 
             } elseif(is_object($value)) {
                 $this->$key = (array)$value;
@@ -325,7 +318,7 @@ class Field{
      *
      * @return string
      */
-    public function getTemplate()
+    public function getTemplate(): string
     {
         // If this is a radio or checkbox switch between multiples or single
         if($this->Attributes->type == 'checkbox' && is_array($this->options)) {
@@ -350,12 +343,11 @@ class Field{
     }
 
     /**
-     * Add, change, or remove an option
+     * Add or change an option
      *
      * @param string $key
      * @param string $value
      * @return void
-     * @throws \Exception
      */
     public function setOption(string $key, string $value)
     {
@@ -364,37 +356,78 @@ class Field{
             return;
         }
 
-        if(is_array($value) || is_object($value) || is_resource($value)) {
-            throw new \Exception('Option values must text');
+        $this->options[$key] = $value;
+    }
+
+    /**
+     * Remove an option
+     *
+     * @param string $key
+     * @return void
+     * @throws Nickwest\EloquentForms\Exceptions\OptionValueException
+     */
+    public function removeOption(string $key)
+    {
+        if(!isset($this->options[$key])){
+            throw new OptionValueException('Cannot disable '.$key.'. It\'s not currently in the options array');
         }
 
-        $this->options[$key] = $value;
+        unset($this->options[$key]);
+    }
+
+    /**
+     * Returns options set to this field
+     *
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
     }
 
     /**
      * Set options replacing all current options with those in the given array
      *
-     * @param mixed $options
+     * @param array $options
      * @return void
-     * @throws \Exception
+     * @throws Nickwest\EloquentForms\Exceptions\OptionValueException
      */
-    public function setOptions($options)
+    public function setOptions(array $options)
     {
         if($options == null) {
             $this->options = [];
             return;
         }
 
-        if(!is_array($options)) {
-            throw new \Exception('$options must be an array or null');
-        }
-
         foreach($options as $key => $value) {
             if(is_array($value) || is_object($value) || is_resource($value)) {
-                throw new \Exception('Option values must text');
+                throw new OptionValueException('Option values must be strings');
             }
 
             $this->options[$key] = $value;
+        }
+    }
+
+    /**
+     * Set options that should be disabled on the input field
+     *
+     * @param array $options
+     * @return void
+     * @throws Nickwest\EloquentForms\Exceptions\OptionValueException
+     */
+    public function setDisabledOptions(array $options)
+    {
+        if($options == null) {
+            $this->options = [];
+            return;
+        }
+
+        foreach($options as $key) {
+            if(!isset($this->options[$key])){
+                throw new OptionValueException('Cannot disable '.$key.'. It\'s not currently in the options array');
+            }
+
+            $this->disabled_options[] = $key;
         }
     }
 
@@ -403,7 +436,7 @@ class Field{
      *
      * @return string
      */
-    public function getFormattedValue()
+    public function getFormattedValue(): string
     {
         return $this->formatValue($this->value);
     }
@@ -475,25 +508,6 @@ class Field{
 //// HELPERS
 
     // TODO: Add isValid() method that uses validation_rules and Validator
-
-
-    /**
-     * Make sure the field has all required options and stuff set
-     *
-     * @return void
-     * @throws \Exception
-     */
-    public function validateFieldStructure()
-    {
-        switch($this->attribute['type']) {
-            // TODO: Expand on this so it's more comprehensive
-
-            case 'select':
-                if(!is_array($this->options) || count($this->options) == 0) {
-                    throw new \Exception('Field validation error: Field "'.$this->Attributes->name.'" must have options set');
-                }
-        }
-    }
 
     /**
      * Make a label for the given field, uses $this->label if available, otherwises generates based on field name

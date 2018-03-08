@@ -300,6 +300,26 @@ class FormTest extends TestCase
         $this->assertEquals($fields[0]['value'], $Form->{$fields[0]['name']}->Attributes->value);
     }
 
+    public function test_form_setNames_sets_field_name_attribute_on_multiple_fields()
+    {
+        $fields = $this->getFieldData(5);
+
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
+
+        // Change all the names to my_buttons
+        $new_names = [];
+        foreach($fields as $field){
+            $new_names[$field['name']] = 'my_buttons';
+        }
+
+        $Form->setNames($new_names);
+
+        foreach($Form->getFields() as $Field){
+            $this->assertEquals('my_buttons', $Field->Attributes->name);
+        }
+    }
+
     public function test_form_setTypes_sets_multiple_field_types()
     {
         $fields = $this->getFieldData(5);
@@ -733,11 +753,46 @@ class FormTest extends TestCase
         $this->assertInstanceOf(\Nickwest\EloquentForms\bulma\Theme::class, $Form->getTheme());
     }
 
+    public function test_form_toJson_creates_valid_json()
+    {
+        $field_names = ['first', 'second'];
+
+        $Form = new Form();
+        $Form->addFields($field_names);
+
+        // Add a subform
+        $subForm = new Form();
+        $subForm->addFields(['sub1', 'sub2']);
+
+        $Form->addSubform('my_subby', $subForm);
+
+        $json = $Form->toJson();
+
+        $this->assertJson($json);
+    }
 
     public function test_form_toJson_converts_a_form_to_json_and_back_again()
     {
+        $field_names = ['first', 'second'];
+
+        $Form = new Form();
+        $Form->addFields($field_names);
+
+        // Add a subform
+        $subForm = new Form();
+        $subForm->addFields(['sub1', 'sub2']);
+
+        $Form->addSubform('my_subby', $subForm);
+
+        $json = $Form->toJson();
+
+        $newForm = new Form;
+        $newForm->fromJson($json);
+
+        $this->assertEquals($Form, $newForm);
 
     }
+
 
 
     public function test_form_can_make_a_view()
