@@ -15,109 +15,134 @@ class Field{
     public $Attributes = null;
 
     /**
-     * Human readable formatted name
+     * Class(es) for the field's containing div
      *
-     * @var string
+     * @var \Nickwest\EloquentForms\Theme
      */
-    protected $label = '';
-
-    /**
-     * Suffix for every label (typically ":")
-     *
-     * @var string
-     */
-    protected $label_suffix = '';
-
-    /**
-     * An example to show by the field
-     *
-     * @var string
-     */
-    protected $example = '';
-
-    /**
-     * A default value (prepopulated if field is blank)
-     *
-     * @var string
-     */
-    protected $default_value = '';
-
-    /**
-     * The values when the field allows multiples
-     *
-     * @var array
-     */
-    protected $multi_value = [];
-
-    /**
-     * Error message to show on the field
-     *
-     * @var string
-     */
-    protected $error_message = '';
-
-    /**
-     * Blade data to pass through to the subform
-     *
-     * @var array
-     */
-    protected $subform_data = [];
-
-    /**
-     * Validation rules used by Validator object.
-     *
-     * @var array
-     */
-    protected $validation_rules = [];
+    public $Theme = null;
 
     /**
      * Blade data to pass through to the subform
      *
      * @var Nickwest\EloquentForms\Form
      */
-    protected $subform = null;
+    public $Subform = null;
 
     /**
-     * Blade data to pass through to the subform
+     * Name of the custom field (if this is one)
      *
-     * @var bool
+     * @var \Nickwest\EloquentForms\CustomField
      */
-    protected $is_subform = false;
+    public $CustomField = null;
+
 
     /**
-     * Options to that are disabled inside of a radio, checkbox or other multi-option field
+     * Human readable formatted name
      *
-     * @var array
+     * @var string
      */
-    protected $disabled_options = [];
+    public $label = '';
+
+    /**
+     * Suffix for every label (typically ":")
+     *
+     * @var string
+     */
+    public $label_suffix = '';
+
+    /**
+     * An example to show by the field
+     *
+     * @var string
+     */
+    public $example = '';
 
     /**
      * A note to display below the field (Accepts HTML markup)
      *
      * @var string
      */
-    protected $note;
-
-    /**
-     * Should this field be displayed inline?
-     *
-     * @var bool
-     */
-    protected $is_inline;
+    public $note;
 
     /**
      * Add a link below the field. Link's name will be equal to field's value
      *
      * @var string
      */
-    protected $link = '';
+    public $link = '';
 
     /**
-     * The template that this field should use
+     * Error message to show on the field
      *
      * @var string
      */
-    protected $template = '';
+    public $error_message = '';
+
+    /**
+     * A default value (prepopulated if field is blank)
+     *
+     * @var string
+     */
+    public $default_value = null;
+
+    /**
+     * Should this field be displayed inline?
+     *
+     * @var bool
+     */
+    public $is_inline;
+
+    /**
+     * Validation rules used by Validator object.
+     *
+     * @var array
+     */
+    public $validation_rules = [];
+
+
+    /**
+     * Class(es) for the field's label
+     *
+     * @var string
+     */
+    public $label_class = '';
+
+    /**
+     * Class(es) for the field's containing div
+     *
+     * @var string
+     */
+    public $container_class = '';
+
+    /**
+     * Class(es) for the input wrapper
+     *
+     * @var string
+     */
+    public $input_wrapper_class = '';
+
+    /**
+     * Class(es) for the field's containing div
+     *
+     * @var string
+     */
+    public $options_container_class = ''; // was 'checkbox'
+
+    /**
+     * Class(es) for the field's containing div
+     *
+     * @var string
+     */
+    public $option_wrapper_class = 'option';
+
+    /**
+     * Class(es) for the field's containing div
+     *
+     * @var string
+     */
+    public $option_label_class = '';
+
+
 
     /**
      * Original name when field created
@@ -138,74 +163,23 @@ class Field{
      *
      * @var array
      */
-    protected $options;
+    protected $options = [];
 
     /**
-     * Class(es) for the field's containing div
+     * Options to that are disabled inside of a radio, checkbox or other multi-option field
      *
-     * @var string
+     * @var array
      */
-    protected $container_class = '';
+    protected $disabled_options = [];
 
-    /**
-     * Class(es) for the field's label
-     *
-     * @var string
-     */
-    protected $label_class = '';
+    // /**
+    //  * Blade data to pass through to the subform
+    //  *
+    //  * @var array
+    //  */
+    // protected $subform_data = [];
 
-    /**
-     * Class(es) for the input wrapper
-     *
-     * @var string
-     */
-    protected $input_wrapper_class = '';
 
-    /**
-     * Class(es) for the field's containing div
-     *
-     * @var string
-     */
-    protected $options_container_class = 'checkbox';
-
-    /**
-     * Class(es) for the field's containing div
-     *
-     * @var string
-     */
-    protected $option_wrapper_class = 'option';
-
-    /**
-     * Class(es) for the field's containing div
-     *
-     * @var string
-     */
-    protected $option_label_class = '';
-
-    /**
-     * Value of Delete button for file fields
-     *
-     * @var string
-     */
-    protected $delete_button_value = 'Delete';
-
-    /**
-     * Class(es) for the field's containing div
-     *
-     * @var \Nickwest\EloquentForms\Theme
-     */
-    protected $Theme = null;
-
-    /**
-     * Name of the custom field (if this is one)
-     *
-     * @var \Nickwest\EloquentForms\CustomField
-     */
-    protected $CustomField = null;
-
-    protected $legacy_properties = [
-        'is_required' => 'required',
-    ];
 
     /**
      * Constructor
@@ -218,164 +192,128 @@ class Field{
     {
         $this->Attributes = new Attributes();
 
+        // Set some base attributes for the field
         $this->Attributes->name = $field_name;
         $this->Attributes->type = $type != null ? $type : 'text';
         $this->Attributes->id = 'input-'.$field_name;
         $this->Attributes->class = '';
 
+        // Set some basic properties
         $this->original_name = $this->Attributes->name;
         $this->original_id = $this->Attributes->id;
         $this->label = $this->makeLabel();
 
-        // Options for multi-choice fields
-        $this->options = [];
-        $this->subform_data = [];
+        // TODO: Make config and set default theme in config
+        $this->Theme = new DefaultTheme();
     }
 
 
 //// ACCESSORS AND MUTATORS
 
     /**
-     * Field property and attribute accessor
+     * Get the View Namespace
      *
-     * @param string $property
-     * @return mixed
+     * @return string
      */
-    public function __get($property)
+    public function getViewNamespace(): string
     {
-        if($property == 'view_namespace') {
-            return $this->Theme->view_namespace();
-        }
-
-        if(isset($this->Attributes->$property)) {
-            return $this->Attributes->$property;
-        }
-
-        if(property_exists(__CLASS__, $property)) {
-            if($property == 'Attributes'){
-                if(($this->type == 'checkbox' || $this->type == 'radio') && count($this->options) > 1 && $this->multi_key == ''){
-                    $this->multi_key = true;
-                }
-            }
-            return $this->{$property};
-        }
-
-        return null;
+        return $this->Theme->view_namespace();
     }
 
     /**
-     * Field property and attribute mutator
+     * Is this field a subform?
      *
-     * @param string $property
-     * @param mixed $value
-     * @return void
-     * @throws \Exception
-     */
-    public function __set(string $property, $value)
-    {
-        if(isset($this->legacy_properties[$property])){
-            $property = $this->legacy_properties[$property];
-        }
-
-        if($property == 'options') {
-            throw new \Exception('Options must be set with setOption and setOptions methods');
-        }
-
-        if(property_exists(__CLASS__, $property)) {
-            $this->{$property} = $value;
-            return;
-        }
-
-        // Whenever setting value, also record the value to $this->multi_value
-        if($property == 'value') {
-            if($value == '') {
-                $this->multi_value = [];
-            } else {
-                $this->multi_value = is_array($value) ? $value : [$value];
-            }
-        }
-
-        if(property_exists($this->Attributes, $property)){
-            $this->Attributes->$property = $value;
-            return;
-        }
-
-        if(isset($this->Attributes->$property)) {
-            $this->Attributes->$property = $value;
-
-            return;
-        }
-
-        throw new \Exception('"'.$property.'" is not a valid property.');
-    }
-
-    /**
-     * Field property isset method
-     *
-     * @param string $property
      * @return bool
      */
-    public function __isset(string $property)
+    public function isSubform(): bool
     {
-        if($property == 'view_namespace') {
-            return true;
-        }
-
-        if(isset($this->Attributes->$property)) {
-            return true;
-        }
-
-        if(property_exists(__CLASS__, $property)) {
-            return true;
-        }
-
-        return false;
-
+        return is_object($this->Subform);
     }
 
+    /**
+     * Get the original name of this field
+     *
+     * @return string
+     */
+    public function getOriginalName(): string
+    {
+        return $this->original_name;
+    }
+
+    /**
+     * Get the original name of this field
+     *
+     * @return string
+     */
+    public function getOriginalId(): string
+    {
+        return $this->original_id;
+    }
+
+
+    /**
+     * Convert this object to a simple JSON representation
+     *
+     * @return string Json
+     */
     public function toJson()
     {
         $array = [
             'Attributes' => json_decode($this->Attributes->toJson()),
+            'Theme' => (is_object($this->Theme) ? '\\'.get_class($this->Theme) : null),
+            'Subform' => is_object($this->Subform) ? json_decode($this->Subform->toJson()) : $this->Subform,
+            'CustomField' => (is_object($this->CustomField) ? serialize($this->CustomField) : null),
             'label' => $this->label,
             'label_suffix' => $this->label_suffix,
             'example' => $this->example,
-            'default_value' => $this->default_value,
-            'multi_value' => $this->multi_value,
-            'error_message' => $this->error_message,
-            'subform_data' => $this->subform_data,
-            'subform' => is_object($this->subform) ? json_decode($this->subform->toJson()) : $this->subform,
-            'is_subform' => $this->is_subform,
-            'disabled_options' => $this->disabled_options,
             'note' => $this->note,
+            'link' => $this->link,
+            'error_message' => $this->error_message,
+            'default_value' => $this->default_value,
             'is_inline' => $this->is_inline,
-            'template' => $this->template,
-            'original_name' => $this->original_name,
-            'original_id' => $this->original_id,
-            'options' => $this->options,
-            'container_class' => $this->container_class,
+            'validation_rules' => $this->validation_rules,
             'label_class' => $this->label_class,
+            'container_class' => $this->container_class,
             'input_wrapper_class' => $this->input_wrapper_class,
             'options_container_class' => $this->options_container_class,
             'option_wrapper_class' => $this->option_wrapper_class,
             'option_label_class' => $this->option_label_class,
-            'delete_button_value' => $this->delete_button_value,
+            'original_name' => $this->original_name,
+            'original_id' => $this->original_id,
+            'options' => $this->options,
+            'disabled_options' => $this->disabled_options,
         ];
 
         return json_encode($array);
     }
 
+    /**
+     * Populate Field from Json representation
+     *
+     * @param string $json
+     * @return void
+     */
     public function fromJson($json)
     {
         $array = json_decode($json);
         foreach($array as $key => $value) {
             if($key == 'Attributes') {
-                $Attributes = new Attributes();
-                $Attributes->fromJson(json_encode($value));
+                $this->Attributes = new Attributes();
+                $this->Attributes->fromJson(json_encode($value));
 
-                $this->$key = $Attributes;
+            } elseif($key == 'Theme' && $value !== null) {
+                $this->Theme = new $value(); // TODO: make a to/from JSON method on this? is it necessary?
+
+            } elseif($key == 'Subform' && $value !== null) {
+                $this->Subform = new Form();
+                $this->Subform->fromJson($value);
+
+            } elseif($key == 'CustomeField') {
+                $this->CustomeField = new $value(); // TODO: make a to/from JSON method on this? is it necessary?
+
             } elseif(is_object($value)) {
                 $this->$key = (array)$value;
+
             } else {
                 $this->$key = $value;
             }
@@ -389,84 +327,26 @@ class Field{
      */
     public function getTemplate()
     {
-        // Use an override template if set
-        if($this->template) {
-            return $this->template;
-        }
-
         // If this is a radio or checkbox switch between multiples or single
         if($this->Attributes->type == 'checkbox' && is_array($this->options)) {
-            if($this->view_namespace != '' && View::exists($this->view_namespace.'::fields.checkboxes')) {
-                return $this->view_namespace.'::fields.checkboxes';
+            if($this->getViewNamespace() != '' && View::exists($this->getViewNamespace().'::fields.checkboxes')) {
+                return $this->getViewNamespace().'::fields.checkboxes';
             }
             return 'Nickwest\\EloquentForms::fields.checkboxes';
         }
 
         // If this is a radio or checkbox switch between multiples or single
         if($this->Attributes->type == 'radio' && is_array($this->options)) {
-            if($this->view_namespace != '' && View::exists($this->view_namespace.'::fields.radios')) {
-                return $this->view_namespace.'::fields.radios';
+            if($this->getViewNamespace() != '' && View::exists($this->getViewNamespace().'::fields.radios')) {
+                return $this->getViewNamespace().'::fields.radios';
             }
             return 'Nickwest\\EloquentForms::fields.radios';
         }
 
-        if($this->view_namespace != '' && View::exists($this->view_namespace.'::fields.'.$this->Attributes->type)) {
-            return $this->view_namespace.'::fields.'.$this->Attributes->type;
+        if($this->getViewNamespace() != '' && View::exists($this->getViewNamespace().'::fields.'.$this->Attributes->type)) {
+            return $this->getViewNamespace().'::fields.'.$this->Attributes->type;
         }
         return 'Nickwest\\EloquentForms::fields.'.$this->Attributes->type;
-    }
-
-    /**
-     * Set a Field attribute
-     *
-     * @param string $property
-     * @param mixed $value
-     * @return void
-     */
-    public function setAttribute(string $attribute, $value)
-    {
-        if(isset($this->Attributes->$attribute)) {
-            $this->Attributes->$attribute = $value;
-            return;
-        }
-
-        throw new \Exception('"'.$attribute.'" is not a valid attribute.');
-    }
-
-    /**
-     * Get an attribute of the Field
-     *
-     * @param string $attribute
-     * @return string
-     * @throws \Exception
-     */
-    public function getAttribute(string $attribute)
-    {
-        return $this->Attributes->$attribute;
-    }
-
-    /**
-     * Add a css class to the attributes
-     *
-     * @param string $class
-     * @return void
-     */
-    public function addClass(string $class)
-    {
-        if(trim($class) != '') {
-            $this->Attributes->addClass($class);
-        }
-    }
-
-    /**
-     * Remove a cs  class to the attributes
-     *
-     * @param string $class
-     * @return void
-     */
-    public function removeClass(string $class)
-    {
-        $this->Attributes->removeClass($class);
     }
 
     /**
@@ -562,8 +442,8 @@ class Field{
     public function makeDisplayView(bool $prev_inline = false)
     {
         $this->Theme->prepareFieldView($this);
-        if($this->view_namespace != '' && View::exists($this->view_namespace.'::fields.display')) {
-            return View::make($this->view_namespace.'::fields.display', ['Field' => $this, 'prev_inline' => $prev_inline]);
+        if($this->getViewNamespace() != '' && View::exists($this->getViewNamespace().'::fields.display')) {
+            return View::make($this->getViewNamespace().'::fields.display', ['Field' => $this, 'prev_inline' => $prev_inline]);
         }
 
         return View::make('Nickwest\\EloquentForms::fields.display', ['Field' => $this, 'prev_inline' => $prev_inline]);
@@ -585,8 +465,8 @@ class Field{
 
         $this->Theme->prepareFieldView($this);
 
-        if($this->view_namespace != '' && View::exists($this->view_namespace.'::fields.'.$this->Attributes->type.'_option')) {
-            return View::make($this->view_namespace.'::fields.'.$this->Attributes->type.'_option', array('Field' => $this, 'key' => $key, 'view_only' => $view_only));
+        if($this->getViewNamespace() != '' && View::exists($this->getViewNamespace().'::fields.'.$this->Attributes->type.'_option')) {
+            return View::make($this->getViewNamespace().'::fields.'.$this->Attributes->type.'_option', array('Field' => $this, 'key' => $key, 'view_only' => $view_only));
         }
         return View::make('Nickwest\\EloquentForms::fields.'.$this->Attributes->type.'_option', array('Field' => $this, 'key' => $key, 'view_only' => $view_only));
     }

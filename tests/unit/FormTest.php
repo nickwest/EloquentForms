@@ -11,9 +11,8 @@ use Nickwest\EloquentForms\Test\TestCase;
 
 class FormTest extends TestCase
 {
-    protected $test_fields;
-
-    public function setUp(){
+    public function setUp()
+    {
         parent::setUp();
     }
 
@@ -58,7 +57,7 @@ class FormTest extends TestCase
         $Form->addField($field['name']);
 
         // Make sure it added properly
-        $this->assertEquals($field['name'], $Form->getField($field['name'])->name);
+        $this->assertEquals($field['name'], $Form->getField($field['name'])->Attributes->name);
 
         // Remove it
         $Form->removeField($field['name']);
@@ -116,8 +115,8 @@ class FormTest extends TestCase
         $Form->first = 'MyValue1234';
         $Form->second = 'DifferentValue4321';
 
-        $this->assertEquals('MyValue1234', $Form->first->value);
-        $this->assertEquals('DifferentValue4321', $Form->second->value);
+        $this->assertEquals('MyValue1234', $Form->first->Attributes->value);
+        $this->assertEquals('DifferentValue4321', $Form->second->Attributes->value);
     }
 
     public function test_form_magic_set_method_will_throw_exception_on_invalid_field()
@@ -177,7 +176,7 @@ class FormTest extends TestCase
         $Form->addSubForm('my_subform', $SubForm);
 
         $this->assertTrue(isset($Form->my_subform));
-        $this->assertInstanceOf(\Nickwest\EloquentForms\Form::class, $Form->my_subform->subform);
+        $this->assertInstanceOf(\Nickwest\EloquentForms\Form::class, $Form->my_subform->Subform);
     }
 
     public function test_form_SubForm_fields_are_accessible()
@@ -192,7 +191,7 @@ class FormTest extends TestCase
 
         $Form->addSubForm('my_subform', $SubForm);
 
-        $this->assertInstanceOf(\Nickwest\EloquentForms\Field::class, $Form->my_subform->subform->sub1);
+        $this->assertInstanceOf(\Nickwest\EloquentForms\Field::class, $Form->my_subform->Subform->sub1);
     }
 
     public function test_form_addSubForm_adds_form_before_specific_field()
@@ -234,7 +233,7 @@ class FormTest extends TestCase
 
         $Form->setValue('test_field', 'abc1234');
 
-        $this->assertEquals('abc1234', $Form->test_field->value);
+        $this->assertEquals('abc1234', $Form->test_field->Attributes->value);
     }
 
     public function test_form_setValue_throws_an_exception_on_invalid_field()
@@ -298,7 +297,7 @@ class FormTest extends TestCase
         $field_values = ['not_a_real_field' => 1234, $fields[0]['name'] => $fields[0]['value']];
         $Form->setValues($field_values, true);
 
-        $this->assertEquals($fields[0]['value'], $Form->{$fields[0]['name']}->value);
+        $this->assertEquals($fields[0]['value'], $Form->{$fields[0]['name']}->Attributes->value);
     }
 
     public function test_form_setTypes_sets_multiple_field_types()
@@ -311,8 +310,8 @@ class FormTest extends TestCase
         $field_types = [$fields[0]['name'] => 'checkbox', $fields[1]['name'] => 'textarea'];
         $Form->setTypes($field_types);
 
-        $this->assertEquals($Form->{$fields[0]['name']}->type, 'checkbox');
-        $this->assertEquals($Form->{$fields[1]['name']}->type, 'textarea');
+        $this->assertEquals($Form->{$fields[0]['name']}->Attributes->type, 'checkbox');
+        $this->assertEquals($Form->{$fields[1]['name']}->Attributes->type, 'textarea');
     }
 
     public function test_form_setTypes_throws_an_exception_on_invalid_field()
@@ -709,6 +708,11 @@ class FormTest extends TestCase
 
         // It's in the display array
         $this->assertAttributeContains('my_data', 'display_fields', $Form);
+    }
+
+    public function test_form_something_about_submit_buttons()
+    {
+
     }
 
 

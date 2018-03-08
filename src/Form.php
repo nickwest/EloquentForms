@@ -64,15 +64,11 @@ class Form{
      *
      * @param string $field_name
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
-     * @return mixed
+     * @return Nickwest\EloquentForms\Field
      */
     public function __get(string $field_name)
     {
-        if(!isset($this->Fields[$field_name])){
-            throw new InvalidFieldException($field_name.' is not part of the Form');
-        }
-
-        return $this->Fields[$field_name];
+        return $this->getField($field_name);
     }
 
      /**
@@ -90,7 +86,7 @@ class Form{
     /**
      * Field value mutator
      *
-     * @param string $key
+     * @param string $field_name
      * @param mixed $value
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      * @return void
@@ -197,8 +193,7 @@ class Form{
     public function addSubform(string $name, \Nickwest\EloquentForms\Form $Form, string $before_field = '')
     {
         $this->addField($name);
-        $this->Fields[$name]->is_subform = true;
-        $this->Fields[$name]->subform = $Form;
+        $this->Fields[$name]->Subform = $Form;
 
         // Insert it at a specific place in this form
         if($before_field != null) {
@@ -230,7 +225,7 @@ class Form{
 
         foreach($this->Fields as $Field)
         {
-            $values[$Field->name] = $Field->value;
+            $values[$Field->Attributes->name] = $Field->Attributes->value;
         }
 
         return $values;
@@ -312,7 +307,7 @@ class Form{
                 }
                 // It's probably just a string so set it
                 else {
-                    $this->Fields[$field_name]->type = $type;
+                    $this->Fields[$field_name]->Attributes->type = $type;
                 }
             } else {
                 throw new InvalidFieldException($field_name.' is not part of the Form');
@@ -365,6 +360,7 @@ class Form{
      */
     public function setRequiredFields(array $required_fields)
     {
+        //TODO: This should unset required from fields not in $required_fields
         foreach($required_fields as $field_name) {
             if(isset($this->Fields[$field_name])) {
                 $this->Fields[$field_name]->Attributes->required = true;
@@ -373,6 +369,8 @@ class Form{
             }
         }
     }
+
+    // TODO: addRequiredFields(array)
 
     /**
      * set inline fields
@@ -501,6 +499,7 @@ class Form{
             return $Fields;
         }
 
+        // TODO: should this return null instead?
         return $this->Fields;
     }
 
@@ -574,15 +573,15 @@ class Form{
     {
         $rules = [];
         foreach($this->Fields as $Field) {
-            $rules[$Field->original_name] = [];
+            $rules[$Field->getOriginalName()] = [];
 
             if(isset($Field->validation_rules)) {
-                $rules[$Field->original_name] = $Field->validation_rules;
+                $rules[$Field->getOriginalName()] = $Field->validation_rules;
             }
 
             // Set required rule on all required fields
             if($Field->Attributes->required && !in_array('required', $rules)) {
-                $rules[$Field->original_name][] = 'required';
+                $rules[$Field->getOriginalName()][] = 'required';
             }
 
             // TODO: Could add more auto validation based on HTML field types (email, phone, etc)
@@ -654,7 +653,7 @@ class Form{
 
             if($Field->Attributes->type == 'file'){
                 $this->Attributes->enctype = 'multipart/form-data';
-            }elseif($Field->is_subform){
+            }elseif($Field->isSubform()){
                 foreach($Field->subform->Fields as $SubField){
                     if($SubField->Attributes->type == 'file'){
                         $this->Attributes->enctype = 'multipart/form-data';
@@ -733,14 +732,13 @@ class Form{
         foreach($array as $key => $value) {
             if($key == 'Fields') {
                 foreach($value as $key2 => $array) {
-                    $Field = new Field($key2);
-                    $Field->fromJson(json_encode($array));
-                    $this->$key[$key2] = $Field;
+                    $this->$key[$key2] = new Field($key2);
+                    $this->$key[$key2]->fromJson(json_encode($array));
                 }
 
             } elseif($key == 'Attributes') {
-                $Attributes = new Attributes;
-                $this->key = Attributes::fromJson($value);
+                $this->Attributes = new Attributes();
+                $this->Attributes->fromJson(json_encode($value));
 
             } elseif($key == 'Theme' && $value != null) {
                 $this->Theme = new $value(); // TODO: make a to/from JSON method on this? is it necessary?
