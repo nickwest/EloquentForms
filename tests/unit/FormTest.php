@@ -840,23 +840,16 @@ class FormTest extends TestCase
 
     }
 
-
-
-    public function test_form_can_make_a_view()
+    public function test_form_can_make_a_view_without_breaking()
     {
-        // $fields = $this->getFieldData(5);
+        $fields = $this->getFieldData(5);
 
-        // $Form = new Form();
-        // $Form->addFields(array_column($fields, 'name'));
+        $Form = new Form();
+        $Form->addFields(array_column($fields, 'name'));
 
-        // $view = $Form->MakeView();
-        // $this->assertInstanceOf(\Illuminate\View\View::class, $view);
-
-        // // Test that the rendered view is as expected?
-        // $view = $view->render();
-
+        $view = $Form->MakeView();
+        $this->assertInstanceOf(\Illuminate\View\View::class, $view);
     }
-
 
 
 

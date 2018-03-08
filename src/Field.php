@@ -455,7 +455,7 @@ class Field{
     public function makeView(bool $prev_inline = false, bool $view_only = false)
     {
         if($this->error_message) {
-            $this->addClass('error');
+            $this->Attributes->addClass('error');
         }
 
         $this->Theme->prepareFieldView($this);
@@ -475,6 +475,7 @@ class Field{
     public function makeDisplayView(bool $prev_inline = false)
     {
         $this->Theme->prepareFieldView($this);
+
         if($this->getViewNamespace() != '' && View::exists($this->getViewNamespace().'::fields.display')) {
             return View::make($this->getViewNamespace().'::fields.display', ['Field' => $this, 'prev_inline' => $prev_inline]);
         }

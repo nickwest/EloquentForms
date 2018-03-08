@@ -229,7 +229,39 @@ class FieldTest extends TestCase
         $newField->fromJson($json);
 
         $this->assertEquals($Field, $newField);
-
     }
+
+    public function test_field_can_make_a_view_without_breaking()
+    {
+        $Field = new Field('my_field');
+
+        $Field->CustomField = new \Nickwest\EloquentForms\CustomFields\daysofweek\CustomField;
+
+        $test_options = [1 => 'one', 2 => 'two', 44 => 'Fourtyfour'];
+        $Field->setOptions($test_options);
+
+        $Field->setDisabledOptions([1,44]);
+
+        $Field->label_suffix = ':';
+        $Field->example = 'This is an example';
+        $Field->note = 'This is a note';
+        $Field->link = 'https://google.com';
+        $Field->error_message = 'Oh no it\'s an error';
+        $Field->example = 'This is an example';
+        $Field->default_value = 44;
+        $Field->is_inline = true;
+        $Field->validation_rules = 'required|integer';
+        $Field->label_class = 'label_class_goes_here';
+        $Field->container_class = 'yay';
+        $Field->options_container_class = 'options';
+        $Field->input_wrapper_class = 'Snoop-Dogg';
+        $Field->option_wrapper_class = 'Macklemore';
+        $Field->option_label_class = 'so_many_classes';
+
+        $view = $Field->MakeView();
+
+        $this->assertInstanceOf(\Illuminate\View\View::class, $view);
+    }
+
 
 }
