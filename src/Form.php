@@ -204,7 +204,7 @@ class Form{
      * Add a Subform into the current form
      *
      * @param string $name
-     * @param \Nickwest\FormMaker\Form $form
+     * @param \Nickwest\EloquentForms\Form $form
      * @param string $before_field
      * @return void
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
@@ -785,11 +785,6 @@ class Form{
     {
         $blade_data['Form'] = $this;
         $blade_data['view_only'] = $view_only;
-
-        // foreach($this->display_fields as $field)
-        // {
-        //     $this->Fields[$field]->setupAttributes();
-        // }
 
         if($this->Theme->view_namespace != '' && View::exists($this->Theme->view_namespace.'::subform')) {
             return View::make($this->Theme->view_namespace.'::subform', $blade_data);

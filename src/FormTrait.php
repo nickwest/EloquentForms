@@ -296,10 +296,12 @@ trait FormTrait{
 
         foreach($columns as $column) {
             $this->Form()->addField($column['name']);
-            $this->Form()->{$column['name']}->setOptions($column['values']);
-            $this->Form()->{$column['name']}->attributes->maxlength = $column['length'];
+            $this->Form()->{$column['name']}->Attributes->maxlength = $column['length'];
             $this->Form()->{$column['name']}->default_value = $column['default'];
-            $this->Form()->{$column['name']}->attributes->type = $this->getFormTypeFromColumnType($column['type']);
+            $this->Form()->{$column['name']}->Attributes->type = $this->getFormTypeFromColumnType($column['type']);
+            if(is_array($column['values'])){
+                $this->Form()->{$column['name']}->setOptions($column['values']);
+            }
             $this->Form()->addDisplayFields([$column['name']]);
         }
     }
@@ -315,41 +317,44 @@ trait FormTrait{
             return $this->columns;
         }
 
-        $query = 'SHOW COLUMNS FROM '.$this->getTable();
+        // If we have a MySQL Driver, then query directly to get Enum option values
+        if(DB::connection()->getDriverName() == 'mysql'){
+            $query = 'SHOW COLUMNS FROM '.$this->getTable();
 
-        foreach(DB::connection($this->connection)->select($query) as $column) {
-            $this->addColumn(
-                $column->Field,
-                $this->getType($column->Type),
-                $column->Default,
-                $this->getLength($column->Type),
-                $this->getEnumOptions($column->Type, $column->Null == 'YES')
-            );
-            $this->valid_columns[$column->Field] = $column->Field;
+            foreach(DB::connection($this->connection)->select($query) as $column) {
+                $this->columns[$column->Field] = [
+                    'name' => $column->Field,
+                    'type' => $this->getSQLType($column->Type),
+                    'default' => $column->Default,
+                    'length' => $this->getLength($column->Type),
+                    'values' => $this->getEnumOptions($column->Type, $column->Null == 'YES')
+                ];
+                $this->valid_columns[$column->Field] = $column->Field;
+            }
         }
+        // Otherwise query through Doctrine so we can get something still.
+        else{
+            $columns = DB::connection()->getSchemaBuilder()->getColumnListing($this->table);
+
+            foreach($columns as $column_name){
+                $DoctrineColumn = DB::connection()->getDoctrineColumn($this->getTable(), $column_name);
+                //dump($DoctrineColumn->getColumnDefinition());
+                $this->columns[$column_name] = [
+                    'name' => $column_name,
+                    'type' => $DoctrineColumn->getType()->getName(),
+                    'default' => $DoctrineColumn->getDefault(),
+                    'length' => $DoctrineColumn->getLength(),
+                    'values' => null,
+                ];
+                $this->valid_columns[$column_name] = $column_name;
+
+            }
+
+        }
+        //dd($this->columns);
+
 
         return $this->columns;
-    }
-
-    /**
-     * Get a list of all valid columns on the model using this trait
-     *
-     * @param string $name
-     * @param string $type
-     * @param string $default
-     * @param int $length
-     * @param mixed $values
-     * @return void
-     */
-    protected function addColumn($name, $type, $default, $length, $values)
-    {
-        $this->columns[$name] = array(
-            'name' => $name,
-            'type' => $type,
-            'default' => $default,
-            'length' => $length,
-            'values' => $values,
-        );
     }
 
     /**
@@ -358,7 +363,7 @@ trait FormTrait{
      * @param string $type
      * @return string
      */
-    private function getType($type)
+    private function getSQLType($type)
     {
         $types = array(
             'int', 'tinyint', 'smallint', 'mediumint', 'bigint',
@@ -372,13 +377,19 @@ trait FormTrait{
             'enum', 'set',
         );
 
-
         foreach($types as $key) {
             if(strpos($type, $key) === 0) {
                 return $key;
             }
         }
     }
+
+    // private function getDoctrineType($type)
+    // {
+    //     $types = array(
+
+    //     )
+    // }
 
     /**
      * Isolate and return the column length
