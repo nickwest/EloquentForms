@@ -154,7 +154,7 @@ class FormTest extends TestCase
         $this->Form->addSubForm('another_subform', $SubForm, $this->fields[4]['name']);
 
         // Make sure it's in the second spot, rather than the end
-        $this->assertEquals('another_subform', current(array_slice($this->Form->getDisplayFields(), 4, 1)));
+        $this->assertEquals('another_subform', current(array_slice($this->Form->getDisplayFieldNames(), 4, 1)));
     }
 
     public function test_form_getFieldValues_returns_all_field_values()
@@ -366,11 +366,11 @@ class FormTest extends TestCase
 
         // Empty out the display fields
         $this->Form->setDisplayFields([]);
-        $this->assertEquals([], $this->Form->getDisplayFields());
+        $this->assertEquals([], $this->Form->getDisplayFieldNames());
 
         // Set all fields as display fields
         $this->Form->setDisplayFields($field_names);
-        $this->assertEquals($field_names, $this->Form->getDisplayFields());
+        $this->assertEquals($field_names, $this->Form->getDisplayFieldNames());
 
         // Remove one field
         $key = array_rand($field_names);
@@ -378,7 +378,7 @@ class FormTest extends TestCase
         unset($field_names[$key]);
 
         $this->Form->removeDisplayFields($removed1);
-        $this->assertEquals($field_names, $this->Form->getDisplayFields());
+        $this->assertEquals($field_names, $this->Form->getDisplayFieldNames());
 
         // Remove many fields
         $keys = array_rand($field_names, 3);
@@ -389,18 +389,18 @@ class FormTest extends TestCase
         }
 
         $this->Form->removeDisplayFields($removed);
-        $this->assertEquals($field_names, $this->Form->getDisplayFields());
+        $this->assertEquals($field_names, $this->Form->getDisplayFieldNames());
 
         // Add the last fields we removed back in
         $this->Form->addDisplayFields($removed);
         $field_names = array_merge($field_names, array_combine($removed, $removed));
-        $this->assertEquals($field_names, $this->Form->getDisplayFields());
+        $this->assertEquals($field_names, $this->Form->getDisplayFieldNames());
 
         // Inject the first field we removed back in after the 3rd
         $key = current(array_slice($field_names, 3, 1));
         $this->Form->setDisplayAfter(current($removed1), $field_names[$key]);
         $field_names = array_slice($field_names, 0, 3, true) + [current($removed1) => current($removed1)] + array_slice($field_names, 3, null, true);
-        $this->assertEquals($field_names, $this->Form->getDisplayFields());
+        $this->assertEquals($field_names, $this->Form->getDisplayFieldNames());
     }
 
     public function test_form_setDisplayFields_overwrites_existing_display_fields()
@@ -411,12 +411,12 @@ class FormTest extends TestCase
 
         // Set all fields as display fields
         $this->Form->setDisplayFields($field_names);
-        $this->assertEquals($field_names, $this->Form->getDisplayFields());
+        $this->assertEquals($field_names, $this->Form->getDisplayFieldNames());
 
         // Take only a subset of fields and set those as display
         $field_names = array_slice($field_names, 2, 4, true);
         $this->Form->setDisplayFields($field_names);
-        $this->assertEquals($field_names, $this->Form->getDisplayFields());
+        $this->assertEquals($field_names, $this->Form->getDisplayFieldNames());
     }
 
     public function test_form_setLabels_sets_labels_on_multiple_fields()

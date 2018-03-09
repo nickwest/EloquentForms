@@ -11,7 +11,8 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
      */
     protected function getEnvironmentSetUp($app)
     {
-        $app['config']->set('database.default', 'testing');
+        // SQLite
+        $app['config']->set('database.default', env('DB_CONNECTION'));
     }
 
     public function setUp() {

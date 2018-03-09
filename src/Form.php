@@ -75,7 +75,7 @@ class Form{
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      * @return Nickwest\EloquentForms\Field
      */
-    public function __get(string $field_name)
+    public function __get(string $field_name): Field
     {
         return $this->getField($field_name);
     }
@@ -100,9 +100,9 @@ class Form{
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      * @return void
      */
-    public function __set(string $field_name, $value)
+    public function __set(string $field_name, $value): void
     {
-        return $this->setValue($field_name, $value);
+        $this->setValue($field_name, $value);
     }
 
     /**
@@ -137,7 +137,7 @@ class Form{
      * @param string $field_name
      * @return void
      */
-    public function addField(string $field_name)
+    public function addField(string $field_name): void
     {
         $this->Fields[$field_name] = new Field($field_name);
 
@@ -151,7 +151,7 @@ class Form{
      * @param array $field_names
      * @return void
      */
-    public function addFields(array $field_names)
+    public function addFields(array $field_names): void
     {
         foreach($field_names as $field_name) {
             $this->Fields[$field_name] = new Field($field_name);
@@ -167,7 +167,7 @@ class Form{
      * @param string $field_name
      * @return void
      */
-    public function removeField(string $field_name)
+    public function removeField(string $field_name): void
     {
         if(isset($this->Fields[$field_name])) {
             unset($this->Fields[$field_name]);
@@ -180,7 +180,7 @@ class Form{
      * @param array $field_names
      * @return void
      */
-    public function removeFields(array $field_names)
+    public function removeFields(array $field_names): void
     {
         foreach($field_names as $field_name) {
             if(isset($this->Fields[$field_name])) {
@@ -204,12 +204,12 @@ class Form{
      * Add a Subform into the current form
      *
      * @param string $name
-     * @param \Nickwest\EloquentForms\Form $form
+     * @param Nickwest\EloquentForms\Form $form
      * @param string $before_field
      * @return void
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
-    public function addSubform(string $name, \Nickwest\EloquentForms\Form $Form, string $before_field = '')
+    public function addSubform(string $name, Form $Form, string $before_field = ''): void
     {
         $this->addField($name);
         $this->Fields[$name]->Subform = $Form;
@@ -246,7 +246,7 @@ class Form{
         {
             // Don't return subforms as fields they don't really have a valueaddDataList
             if(!$Field->isSubform()){
-                $values[$Field->Attributes->name] = $Field->Attributes->value;
+                $values[$Field->getOriginalName()] = $Field->Attributes->value;
             }
         }
 
@@ -261,7 +261,7 @@ class Form{
      * @return void
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
-    public function setValue(string $field_name, string $value)
+    public function setValue(string $field_name, string $value): void
     {
         if(isset($this->Fields[$field_name])) {
             $this->Fields[$field_name]->Attributes->value = $value;
@@ -274,7 +274,7 @@ class Form{
      * Get a single field's value
      *
      * @param string $field_name
-     * @return void
+     * @return mixed
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function getValue(string $field_name)
@@ -286,7 +286,6 @@ class Form{
         return $this->Fields[$field_name]->Attributes->value;
     }
 
-
     /**
      * Set multiple field values at once [field_name] => value
      *
@@ -295,7 +294,7 @@ class Form{
      * @return void
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
-    public function setValues(array $values, bool $ignore_invalid = false)
+    public function setValues(array $values, bool $ignore_invalid = false): void
     {
         foreach($values as $field_name => $value) {
             if(isset($this->Fields[$field_name])) {
@@ -315,7 +314,7 @@ class Form{
      * @return void
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
-    public function setNames(array $names)
+    public function setNames(array $names): void
     {
         foreach($names as $original_name => $name) {
             if(isset($this->Fields[$original_name])) {
@@ -335,17 +334,17 @@ class Form{
      * @throws Nickwest\EloquentForms\Exceptions\InvalidCustomFieldObjectException
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
-    public function setTypes(array $types)
+    public function setTypes(array $types): void
     {
         foreach($types as $field_name => $type) {
             if(isset($this->Fields[$field_name])) {
                 // If it's a custom type, it'll be an object
-                if(is_object($type) && is_a($type, '\Nickwest\EloquentForms\CustomField')) {
+                if(is_object($type) && is_a($type, 'Nickwest\EloquentForms\CustomField')) {
                     $this->Fields[$field_name]->CustomField = $type;
                 }
                 // If it's some other object, it's not a valid type
                 elseif(is_object($type)) {
-                    throw new InvalidCustomFieldObjectException($field_name.' CustomField object need to extend \Nickwest\EloquentForms\CustomField');
+                    throw new InvalidCustomFieldObjectException($field_name.' CustomField object need to extend Nickwest\EloquentForms\CustomField');
                 }
                 // It's probably just a string so set it
                 else {
@@ -364,7 +363,7 @@ class Form{
      * @return void
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
-    public function setExamples($examples)
+    public function setExamples($examples): void
     {
         foreach($examples as $field_name => $example) {
             if(isset($this->Fields[$field_name])) {
@@ -382,7 +381,7 @@ class Form{
      * @return void
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
-    public function setDefaultValues(array $default_values)
+    public function setDefaultValues(array $default_values): void
     {
         foreach($default_values as $field_name => $default_value) {
             if(isset($this->Fields[$field_name])) {
@@ -400,7 +399,7 @@ class Form{
      * @return void
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
-    public function setRequiredFields(array $required_fields)
+    public function setRequiredFields(array $required_fields): void
     {
         //TODO: This should unset required from fields not in $required_fields
         foreach($required_fields as $field_name) {
@@ -421,7 +420,7 @@ class Form{
      * @return void
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
-    public function setInline(array $fields)
+    public function setInline(array $fields): void
     {
         foreach($fields as $field_name) {
             if(isset($this->Fields[$field_name])) {
@@ -458,7 +457,7 @@ class Form{
      * @return void
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
-    public function setDisplayFields(array $field_names)
+    public function setDisplayFields(array $field_names): void
     {
         $fields = [];
         // TODO: add validation on field_names?
@@ -478,7 +477,7 @@ class Form{
      * @param array $field_names
      * @return void
      */
-    public function addDisplayFields(array $field_names)
+    public function addDisplayFields(array $field_names): void
     {
         foreach($field_names as $field) {
             $this->display_fields[$field] = $field;
@@ -491,7 +490,7 @@ class Form{
      * @param array $field_names
      * @return void
      */
-    public function removeDisplayFields(array $field_names)
+    public function removeDisplayFields(array $field_names): void
     {
         foreach($field_names as $field) {
             if(isset($this->display_fields[$field])) {
@@ -508,7 +507,7 @@ class Form{
      * @return void
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
-    public function setDisplayAfter(string $display_field, string $after_field)
+    public function setDisplayAfter(string $display_field, string $after_field): void
     {
         $i = 0;
         foreach($this->display_fields as $key => $value) {
@@ -523,27 +522,34 @@ class Form{
     }
 
     /**
-     * Remove a single field from the form
+     * Get an array of Display Field Names
      *
-     * @param array $field_name
      * @return array
      */
-    public function getDisplayFields()
+    public function getDisplayFieldNames(): array
     {
         return $this->display_fields;
+    }
 
+    /**
+     * Get an array of Field Objects (where those fields are set to display)
+     *
+     * @return array
+     */
+    public function getDisplayFields(): array
+    {
         if(is_array($this->display_fields) && sizeof($this->display_fields) > 0) {
             $Fields = [];
             foreach($this->display_fields as $field_name) {
-                $Fields[$field_name] = $this->{$field_name};
+                $Fields[$field_name] = $this->Fields[$field_name];
             }
-
             return $Fields;
         }
 
-        // TODO: should this return null instead?
+        // TODO: should this return null instead? (Not if all fields are displayed with $this->display_fields is empty)
         return $this->Fields;
     }
+
 
     /**
      * Add field labels to the existing labels
@@ -552,7 +558,7 @@ class Form{
      * @return void
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
-    public function setLabels(array $labels)
+    public function setLabels(array $labels): void
     {
         foreach($labels as $field_name => $label) {
             if(isset($this->Fields[$field_name])) {
@@ -570,7 +576,7 @@ class Form{
      * @return array
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
-    public function getLabels(array $field_names = [])
+    public function getLabels(array $field_names = []): array
     {
         if(count($field_names) == 0) {
             $field_names = array_keys($this->Fields);
@@ -594,7 +600,7 @@ class Form{
      * @param array $validation_rules [field_name] => rules
      * @return void
      */
-    public function setValidationRules(array $validation_rules)
+    public function setValidationRules(array $validation_rules): void
     {
         foreach($validation_rules as $field_name => $rules)
         {
@@ -611,7 +617,7 @@ class Form{
      *
      * @return bool
      */
-    public function isValid()
+    public function isValid(): bool
     {
         $rules = [];
         foreach($this->Fields as $Field) {
@@ -653,7 +659,7 @@ class Form{
      * @param string $classes
      * @return void
      */
-    public function addSubmitButton(string $name, string $value, string $classes='')
+    public function addSubmitButton(string $name, string $value, string $classes=''): void
     {
         $this->SubmitFields[$name] = new Field($name);
         $this->SubmitFields[$name]->Attributes->value = $value;
@@ -669,7 +675,7 @@ class Form{
      * @return void
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
-    public function removeSubmitButton(string $name)
+    public function removeSubmitButton(string $name): void
     {
         if(!isset($this->SubmitFields[$name])){
             throw new InvalidFieldException($name.' is not part of the Form');
@@ -685,7 +691,7 @@ class Form{
      * @return Nickwest\EloquentForms\Field
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
-    public function getSubmitButton(string $name)
+    public function getSubmitButton(string $name): Field
     {
         if(!isset($this->SubmitFields[$name])){
             throw new InvalidFieldException($name.' is not part of the Form');
@@ -699,7 +705,7 @@ class Form{
      *
      * @return array
      */
-    public function getSubmitButtons()
+    public function getSubmitButtons(): array
     {
         return $this->SubmitFields;
     }
@@ -707,10 +713,10 @@ class Form{
     /**
      * Set the theme
      *
-     * @param \Nickwest\EloquentForms\Theme $Theme
+     * @param Nickwest\EloquentForms\Theme $Theme
      * @return void
      */
-    public function setTheme(\Nickwest\EloquentForms\Theme &$Theme)
+    public function setTheme(Theme &$Theme): void
     {
         $this->Theme = $Theme;
         foreach($this->Fields as $key => $Field) {
@@ -721,7 +727,7 @@ class Form{
     /**
      * Get the theme
      *
-     * @return \Nickwest\EloquentForms\Theme $Theme
+     * @return Nickwest\EloquentForms\Theme $Theme
      */
     public function getTheme(): Theme
     {
@@ -736,9 +742,9 @@ class Form{
      * @param string $extends
      * @param string $section
      * @param bool $view_only
-     * @return View
+     * @return Illuminate\View\View
      */
-    public function makeView(array $blade_data = [], string $extends = '', string $section = '', bool $view_only = false)
+    public function makeView(array $blade_data = [], string $extends = '', string $section = '', bool $view_only = false): \Illuminate\View\View
     {
         $blade_data['Form'] = $this;
         $blade_data['extends'] = $extends;

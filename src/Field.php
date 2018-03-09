@@ -11,14 +11,14 @@ class Field{
     /**
      * Field Attributes (defaults are set in constructor)
      *
-     * @var \Nickwest\EloquentForms\Attributes
+     * @var Nickwest\EloquentForms\Attributes
      */
     public $Attributes = null;
 
     /**
      * Class(es) for the field's containing div
      *
-     * @var \Nickwest\EloquentForms\Theme
+     * @var Nickwest\EloquentForms\Theme
      */
     public $Theme = null;
 
@@ -32,7 +32,7 @@ class Field{
     /**
      * Name of the custom field (if this is one)
      *
-     * @var \Nickwest\EloquentForms\CustomField
+     * @var Nickwest\EloquentForms\CustomField
      */
     public $CustomField = null;
 
@@ -190,6 +190,7 @@ class Field{
         $this->Attributes->type = $type != null ? $type : 'text';
         $this->Attributes->id = $field_name;
         $this->Attributes->class = '';
+        $this->Attributes->value = null;
 
         // Set some basic properties
         $this->original_name = $this->Attributes->name;
@@ -286,7 +287,7 @@ class Field{
      * @param string $json
      * @return void
      */
-    public function fromJson($json)
+    public function fromJson($json): void
     {
         $array = json_decode($json);
         foreach($array as $key => $value) {
@@ -349,7 +350,7 @@ class Field{
      * @param string $value
      * @return void
      */
-    public function setOption(string $key, string $value)
+    public function setOption(string $key, string $value): void
     {
         if($value == null) {
             unset($this->options[$key]);
@@ -366,7 +367,7 @@ class Field{
      * @return void
      * @throws Nickwest\EloquentForms\Exceptions\OptionValueException
      */
-    public function removeOption(string $key)
+    public function removeOption(string $key): void
     {
         if(!isset($this->options[$key])){
             throw new OptionValueException('Cannot disable '.$key.'. It\'s not currently in the options array');
@@ -392,7 +393,7 @@ class Field{
      * @return void
      * @throws Nickwest\EloquentForms\Exceptions\OptionValueException
      */
-    public function setOptions(array $options)
+    public function setOptions(array $options): void
     {
         if($options == null) {
             $this->options = [];
@@ -415,7 +416,7 @@ class Field{
      * @return void
      * @throws Nickwest\EloquentForms\Exceptions\OptionValueException
      */
-    public function setDisabledOptions(array $options)
+    public function setDisabledOptions(array $options): void
     {
         $this->disabled_options = [];
 
@@ -451,9 +452,9 @@ class Field{
      *
      * @var bool $prev_inline Was the previous field inline?
      * @var bool $view_only
-     * @return View
+     * @return Illuminate\View\View
      */
-    public function makeView(bool $prev_inline = false, bool $view_only = false)
+    public function makeView(bool $prev_inline = false, bool $view_only = false): \Illuminate\View\View
     {
         if($this->error_message) {
             $this->Attributes->addClass('error');
@@ -471,9 +472,9 @@ class Field{
     /**
      * Make a display only view for this field
      *
-     * @return View
+     * @return Illuminate\View\View
      */
-    public function makeDisplayView(bool $prev_inline = false)
+    public function makeDisplayView(bool $prev_inline = false): \Illuminate\View\View
     {
         $this->Theme->prepareFieldView($this);
 
@@ -489,9 +490,9 @@ class Field{
      *
      * @param string $key
      * @param bool $view_only
-     * @return View
+     * @return Illuminate\View\View
      */
-    public function makeOptionView(string $key, bool $view_only = false)
+    public function makeOptionView(string $key, bool $view_only = false): \Illuminate\View\View
     {
         $this->Attributes->id = $this->original_id.'-'.$key;
         $this->Attributes->value = $key;
@@ -516,7 +517,7 @@ class Field{
      *
      * @return string
      */
-    protected function makeLabel()
+    protected function makeLabel(): string
     {
         // If no label use the field's name, but replace _ with spaces
         if (trim($this->label) == '') {
@@ -533,7 +534,7 @@ class Field{
      * @param string $value
      * @return string
      */
-    protected function formatValue(string $value)
+    protected function formatValue(string $value): string
     {
         if(is_array($this->options) && isset($this->options[$value])) {
             return $this->options[$value];
