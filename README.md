@@ -39,7 +39,7 @@ class Sample extends Model{
     public function prepareForm()
     {
         // Set a default Form Field label postfix
-        $this->label_postfix = ':';
+        $this->label_suffix = ':';
 
         // This comes from the FormTrait. It generates form field data by looking at
         // the model's table columns
@@ -132,7 +132,8 @@ class Sample extends Model{
         // Include a delete button?
         $this->Form()->allow_delete = false;
 
-
+        // Set an arbitrary attribute on the field (This example adds a Vue.js attribute)
+        $this->Form()->first_name->attributes->{'v-if'} = 'seen';
 
     }
 

@@ -36,7 +36,6 @@ class Field{
      */
     public $CustomField = null;
 
-
     /**
      * Human readable formatted name
      *
@@ -100,7 +99,6 @@ class Field{
      */
     public $validation_rules = '';
 
-
     /**
      * Class(es) for the field's label
      *
@@ -143,7 +141,19 @@ class Field{
      */
     public $option_label_class = '';
 
+    /**
+     * Blade data to be passed to subForm
+     *
+     * @var string
+     */
+    public $subform_data = [];
 
+    /**
+     * The name of the delete button on a file field when there is a file
+     *
+     * @var string
+     */
+    public $file_delete_button_value = 'Remove';
 
     /**
      * Original name when field created
@@ -211,7 +221,7 @@ class Field{
      */
     public function getViewNamespace(): string
     {
-        return $this->Theme->view_namespace();
+        return $this->Theme->getViewNamespace();
     }
 
     /**

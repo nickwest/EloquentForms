@@ -8,17 +8,17 @@
 
 @yield('above_form')
 
-<form method="{{ $Form->method }}" action="{{ $Form->url }}" id="{{ $Form->id_attr }}"{!! ($Form->multipart ? ' enctype="multipart/form-data"' : '') !!}>
+<form {!! $Form->attributes !!}>
     @if($Form->laravel_csrf && function_exists('csrf_field'))
         {{ csrf_field() }}
     @endif
     <div class="fields">
         @php($prev_inline = false)
         @foreach($Form->getDisplayFields() as $Field)
-            @if(!$Field->is_subform)
+            @if(!$Field->isSubform())
                 {!! $Field->makeView($prev_inline, $view_only) !!}
             @else
-                {!! $Field->subform->makeSubformView($Field->subform_data, $view_only)->render() !!}
+                {!! $Field->Subform->makeSubformView($Field->subform_data, $view_only)->render() !!}
             @endif
 
             @php($prev_inline = $Field->is_inline ? true: false)

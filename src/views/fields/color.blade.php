@@ -5,16 +5,16 @@
 
 {{--  Custom view only view  --}}
 @if($view_only)
-    @eloquentforms_component($Field->view_namespace.'::components.field', ['Field' => $Field, 'prev_inline' => $prev_inline])
+    @eloquentforms_component($Field->getViewNamespace().'::components.field', ['Field' => $Field, 'prev_inline' => $prev_inline])
 
         @slot('field_markup')
-            @eloquentforms_include($Field->view_namespace.'::pieces.label', ['Field' => $Field])
+            @eloquentforms_include($Field->getViewNamespace().'::pieces.label', ['Field' => $Field])
 
             <div class="value">
                 <div style="display: inline-block; padding: 2px; border: 10px solid {{ $Field->value }}">{{ $Field->value }}</div>
             </div>
 
-            @eloquentforms_include($Field->view_namespace.'::pieces.note')
+            @eloquentforms_include($Field->getViewNamespace().'::pieces.note')
         @endslot
 
     @endcomponent

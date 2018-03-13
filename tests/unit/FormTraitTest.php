@@ -350,7 +350,7 @@ class Sample extends Model
     public function prepareForm()
     {
         // Default Form Field label postfix
-        $this->label_postfix = ':';
+        $this->label_suffix = ':';
 
         // This is magical and comes from the FormTrait. It generates form field data by looking at the model's table columns
         $this->generateFormData();

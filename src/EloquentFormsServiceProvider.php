@@ -22,7 +22,7 @@ class EloquentFormsServiceProvider extends ServiceProvider {
     {
         $this->loadViewsFrom(__DIR__.'/views', 'Nickwest\\EloquentForms');
 
-        Blade::directive('eloquentform_include', function($expression) {
+        Blade::directive('eloquentforms_include', function($expression) {
             if(strpos($expression, ',') !== false) {
                 $view = substr($expression, 0, strpos($expression, ','));
                 $remainder = substr($expression, strpos($expression, ','));
@@ -39,7 +39,7 @@ class EloquentFormsServiceProvider extends ServiceProvider {
             } ?>';
         });
 
-        Blade::directive('eloquentform_component', function($expression) {
+        Blade::directive('eloquentforms_component', function($expression) {
             if(strpos($expression, ',') !== false) {
                 $view = substr($expression, 0, strpos($expression, ','));
                 $remainder = substr($expression, strpos($expression, ','));

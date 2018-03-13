@@ -5,7 +5,7 @@ use Nickwest\EloquentForms\Table;
 
 class Theme extends \Nickwest\EloquentForms\Theme
 {
-    public function view_namespace() : string
+    public function getViewNamespace() : string
     {
         return 'Nickwest\\EloquentForms';
     }
@@ -13,22 +13,22 @@ class Theme extends \Nickwest\EloquentForms\Theme
     public function prepareFieldView(Field &$Field)
     {
         $Field->label_class = 'label';
-        switch($Field->type) {
+        switch($Field->attributes->type) {
             case 'text':
             case 'email':
             case 'tel':
             case 'url':
             case 'password':
-                $Field->addClass('input');
+                $Field->attributes->addClass('input');
             break;
             case 'file':
-                $Field->addClass('file-input');
+                $Field->attributes->addClass('file-input');
             break;
             case 'select':
                 $Field->input_wrapper_class = 'select';
             break;
             case 'textarea':
-                $Field->addClass('textarea');
+                $Field->attributes->addClass('textarea');
             break;
 
             // These are less than perfect, but Bulma doesn't have unique style for them yet.
@@ -39,13 +39,13 @@ class Theme extends \Nickwest\EloquentForms\Theme
             case 'time':
             case 'week':
             case 'color':
-                $Field->addClass('input');
+                $Field->attributes->addClass('input');
             break;
         }
 
         // Add danger style to fields with errors
         if($Field->error_message) {
-            $Field->addClass('is-danger');
+            $Field->attributes->addClass('is-danger');
             $Field->input_wrapper_class .= ' is-danger';
         }
 
@@ -55,7 +55,7 @@ class Theme extends \Nickwest\EloquentForms\Theme
 
     public function prepareTableView(Table &$Table)
     {
-        $Table->addClass('table');
+        $Table->attributes->addClass('table');
 
         return;
     }

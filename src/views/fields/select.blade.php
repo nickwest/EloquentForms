@@ -1,7 +1,7 @@
-@eloquentforms_component($Field->view_namespace.'::components.field', ['Field' => $Field, 'prev_inline' => $prev_inline])
+@eloquentforms_component($Field->getViewNamespace().'::components.field', ['Field' => $Field, 'prev_inline' => $prev_inline])
 
     @slot('field_markup')
-        @eloquentforms_include($Field->view_namespace.'::pieces.label')
+        @eloquentforms_include($Field->getViewNamespace().'::pieces.label')
 
         @if($view_only)
             <div class="value">
@@ -14,14 +14,14 @@
         @else
             <select {!! $Field->attributes !!}>
                 @foreach($Field->options as $key => $value)
-                    @eloquentforms_include($Field->view_namespace.'::fields.select_option')
+                    @eloquentforms_include($Field->getViewNamespace().'::fields.select_option')
                 @endforeach
             </select>
         @endif
 
-        @eloquentforms_include($Field->view_namespace.'::pieces.example')
-        @eloquentforms_include($Field->view_namespace.'::pieces.error')
-        @eloquentforms_include($Field->view_namespace.'::pieces.note')
+        @eloquentforms_include($Field->getViewNamespace().'::pieces.example')
+        @eloquentforms_include($Field->getViewNamespace().'::pieces.error')
+        @eloquentforms_include($Field->getViewNamespace().'::pieces.note')
     @endslot
 
 @endcomponent

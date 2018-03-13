@@ -2,7 +2,7 @@
 
 class DefaultTheme extends Theme
 {
-	public function view_namespace() : string
+	public function getViewNamespace() : string
 	{
 		return 'Nickwest\\EloquentForms';
 	}

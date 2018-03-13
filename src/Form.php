@@ -64,6 +64,7 @@ class Form{
 
         // Set the action to default to the current path
         $this->attributes->action = Request::url();
+        $this->attributes->method = 'POST';
 
         $this->addSubmitButton('submit', 'Save');
     }
@@ -787,13 +788,13 @@ class Form{
         }
 
         if($extends != '') {
-            if($this->Theme->view_namespace != '' && View::exists($this->Theme->view_namespace.'::form-extend')) {
-                return View::make($this->Theme->view_namespace.'::form-extend', $blade_data);
+            if($this->Theme->getViewNamespace() != '' && View::exists($this->Theme->getViewNamespace().'::form-extend')) {
+                return View::make($this->Theme->getViewNamespace().'::form-extend', $blade_data);
             }
             return View::make('form-maker::form-extend', $blade_data);
         }
-        if($this->Theme->view_namespace != '' && View::exists($this->Theme->view_namespace.'::form')) {
-            return View::make($this->Theme->view_namespace.'::form', $blade_data);
+        if($this->Theme->getViewNamespace() != '' && View::exists($this->Theme->getViewNamespace().'::form')) {
+            return View::make($this->Theme->getViewNamespace().'::form', $blade_data);
         }
         return View::make('form-maker::form', $blade_data);
     }
@@ -810,8 +811,8 @@ class Form{
         $blade_data['Form'] = $this;
         $blade_data['view_only'] = $view_only;
 
-        if($this->Theme->view_namespace != '' && View::exists($this->Theme->view_namespace.'::subform')) {
-            return View::make($this->Theme->view_namespace.'::subform', $blade_data);
+        if($this->Theme->getViewNamespace() != '' && View::exists($this->Theme->getViewNamespace().'::subform')) {
+            return View::make($this->Theme->getViewNamespace().'::subform', $blade_data);
         }
         return View::make('form-maker::subform', $blade_data);
     }

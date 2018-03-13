@@ -1,4 +1,4 @@
-@eloquentforms_component($Field->view_namespace.'::components.field', ['Field' => $Field])
+@eloquentforms_component($Field->getViewNamespace().'::components.field', ['Field' => $Field])
 
     @slot('field_markup')
 
@@ -17,11 +17,11 @@
                 </label>
             </div>
 
-            @eloquentforms_include($Field->view_namespace.'::pieces.example')
-            @eloquentforms_include($Field->view_namespace.'::pieces.error')
+            @eloquentforms_include($Field->getViewNamespace().'::pieces.example')
+            @eloquentforms_include($Field->getViewNamespace().'::pieces.error')
         @endif
 
-        @eloquentforms_include($Field->view_namespace.'::pieces.note')
+        @eloquentforms_include($Field->getViewNamespace().'::pieces.note')
     @endslot
 
 @endcomponent

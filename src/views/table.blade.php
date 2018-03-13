@@ -10,7 +10,7 @@
         @foreach($Table->Collection as $row)
         <tr>
             @foreach($Table->display_fields as $field_name)
-                @eloquentforms_include($Table->view_namespace.'::pieces.table-cell', ['row' => $row, 'field_name' => $field_name, 'Table' => $Table])
+                @eloquentforms_include($Table->getViewNamespace().'::pieces.table-cell', ['row' => $row, 'field_name' => $field_name, 'Table' => $Table])
             @endforeach
         </tr>
         @endforeach

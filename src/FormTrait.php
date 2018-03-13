@@ -19,7 +19,6 @@ trait FormTrait{
     protected $columns = [];
 
     protected $blank_select_text = '-- Select One --';
-    protected $label_postfix = '';
 
     protected $multi_delimiter = '|';
 
