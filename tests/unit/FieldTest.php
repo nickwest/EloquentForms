@@ -20,9 +20,9 @@ class FieldTest extends TestCase
 
     public function test_field_has_some_stuff_set_on_construct()
     {
-        $this->assertEquals('my_field', $this->Field->Attributes->name);
-        $this->assertEquals('text', $this->Field->Attributes->type);
-        $this->assertEquals('my_field', $this->Field->Attributes->id);
+        $this->assertEquals('my_field', $this->Field->attributes->name);
+        $this->assertEquals('text', $this->Field->attributes->type);
+        $this->assertEquals('my_field', $this->Field->attributes->id);
 
         $this->assertEquals('my_field', $this->Field->getOriginalName());
         $this->assertEquals('my_field', $this->Field->getOriginalId());
@@ -46,10 +46,10 @@ class FieldTest extends TestCase
 
     public function test_field_getTemplate_returns_the_correct_template_for_fields()
     {
-        $this->Field->Attributes->type = 'textarea';
+        $this->Field->attributes->type = 'textarea';
         $this->assertEquals('Nickwest\EloquentForms::fields.textarea', $this->Field->getTemplate());
 
-        $this->Field->Attributes->type = 'select';
+        $this->Field->attributes->type = 'select';
         $this->assertEquals('Nickwest\EloquentForms::fields.select', $this->Field->getTemplate());
 
         // And with a different theme

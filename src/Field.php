@@ -13,7 +13,7 @@ class Field{
      *
      * @var Nickwest\EloquentForms\Attributes
      */
-    public $Attributes = null;
+    public $attributes = null;
 
     /**
      * Class(es) for the field's containing div
@@ -183,18 +183,18 @@ class Field{
      */
     public function __construct(string $field_name, string $type = null)
     {
-        $this->Attributes = new Attributes();
+        $this->attributes = new Attributes();
 
         // Set some base attributes for the field
-        $this->Attributes->name = $field_name;
-        $this->Attributes->type = $type != null ? $type : 'text';
-        $this->Attributes->id = $field_name;
-        $this->Attributes->class = '';
-        $this->Attributes->value = null;
+        $this->attributes->name = $field_name;
+        $this->attributes->type = $type != null ? $type : 'text';
+        $this->attributes->id = $field_name;
+        $this->attributes->class = '';
+        $this->attributes->value = null;
 
         // Set some basic properties
-        $this->original_name = $this->Attributes->name;
-        $this->original_id = $this->Attributes->id;
+        $this->original_name = $this->attributes->name;
+        $this->original_id = $this->attributes->id;
         $this->label = $this->makeLabel();
 
         // TODO: Make config and set default theme in config
@@ -253,7 +253,7 @@ class Field{
     public function toJson(): string
     {
         $array = [
-            'Attributes' => json_decode($this->Attributes->toJson()),
+            'attributes' => json_decode($this->attributes->toJson()),
             'Theme' => (is_object($this->Theme) ? '\\'.get_class($this->Theme) : null),
             'Subform' => is_object($this->Subform) ? $this->Subform->toJson() : $this->Subform,
             'CustomField' => (is_object($this->CustomField) ? serialize($this->CustomField) : $this->CustomField),
@@ -291,9 +291,9 @@ class Field{
     {
         $array = json_decode($json);
         foreach($array as $key => $value) {
-            if($key == 'Attributes') {
-                $this->Attributes = new Attributes();
-                $this->Attributes->fromJson(json_encode($value));
+            if($key == 'attributes') {
+                $this->attributes = new Attributes();
+                $this->attributes->fromJson(json_encode($value));
 
             } elseif($key == 'Theme' && $value !== null) {
                 $this->Theme = new $value(); // TODO: make a to/from JSON method on this? is it necessary?
@@ -322,7 +322,7 @@ class Field{
     public function getTemplate(): string
     {
         // If this is a radio or checkbox switch between multiples or single
-        if($this->Attributes->type == 'checkbox' && is_array($this->options)) {
+        if($this->attributes->type == 'checkbox' && is_array($this->options)) {
             if($this->getViewNamespace() != '' && View::exists($this->getViewNamespace().'::fields.checkboxes')) {
                 return $this->getViewNamespace().'::fields.checkboxes';
             }
@@ -330,17 +330,17 @@ class Field{
         }
 
         // If this is a radio or checkbox switch between multiples or single
-        if($this->Attributes->type == 'radio' && is_array($this->options)) {
+        if($this->attributes->type == 'radio' && is_array($this->options)) {
             if($this->getViewNamespace() != '' && View::exists($this->getViewNamespace().'::fields.radios')) {
                 return $this->getViewNamespace().'::fields.radios';
             }
             return 'Nickwest\\EloquentForms::fields.radios';
         }
 
-        if($this->getViewNamespace() != '' && View::exists($this->getViewNamespace().'::fields.'.$this->Attributes->type)) {
-            return $this->getViewNamespace().'::fields.'.$this->Attributes->type;
+        if($this->getViewNamespace() != '' && View::exists($this->getViewNamespace().'::fields.'.$this->attributes->type)) {
+            return $this->getViewNamespace().'::fields.'.$this->attributes->type;
         }
-        return 'Nickwest\\EloquentForms::fields.'.$this->Attributes->type;
+        return 'Nickwest\\EloquentForms::fields.'.$this->attributes->type;
     }
 
     /**
@@ -457,7 +457,7 @@ class Field{
     public function makeView(bool $prev_inline = false, bool $view_only = false): \Illuminate\View\View
     {
         if($this->error_message) {
-            $this->Attributes->addClass('error');
+            $this->attributes->addClass('error');
         }
 
         $this->Theme->prepareFieldView($this);
@@ -494,17 +494,17 @@ class Field{
      */
     public function makeOptionView(string $key, bool $view_only = false): \Illuminate\View\View
     {
-        $this->Attributes->id = $this->original_id.'-'.$key;
-        $this->Attributes->value = $key;
+        $this->attributes->id = $this->original_id.'-'.$key;
+        $this->attributes->value = $key;
 
-        $this->Attributes->checked = in_array($key, $this->multi_value) ? true : false;
+        $this->attributes->checked = in_array($key, $this->multi_value) ? true : false;
 
         $this->Theme->prepareFieldView($this);
 
-        if($this->getViewNamespace() != '' && View::exists($this->getViewNamespace().'::fields.'.$this->Attributes->type.'_option')) {
-            return View::make($this->getViewNamespace().'::fields.'.$this->Attributes->type.'_option', array('Field' => $this, 'key' => $key, 'view_only' => $view_only));
+        if($this->getViewNamespace() != '' && View::exists($this->getViewNamespace().'::fields.'.$this->attributes->type.'_option')) {
+            return View::make($this->getViewNamespace().'::fields.'.$this->attributes->type.'_option', array('Field' => $this, 'key' => $key, 'view_only' => $view_only));
         }
-        return View::make('Nickwest\\EloquentForms::fields.'.$this->Attributes->type.'_option', array('Field' => $this, 'key' => $key, 'view_only' => $view_only));
+        return View::make('Nickwest\\EloquentForms::fields.'.$this->attributes->type.'_option', array('Field' => $this, 'key' => $key, 'view_only' => $view_only));
     }
 
 
@@ -522,7 +522,7 @@ class Field{
         // If no label use the field's name, but replace _ with spaces
         if (trim($this->label) == '') {
             // If this is changed Table::getLabel() should be updated to match
-            $this->label = ucfirst(str_replace('_', ' ', $this->Attributes->name));
+            $this->label = ucfirst(str_replace('_', ' ', $this->attributes->name));
         }
 
         return $this->label;

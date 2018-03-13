@@ -77,14 +77,14 @@ class FormTraitTest extends TestCase
     public function test_formtrait_getFieldView_returns_a_view()
     {
         foreach($this->Model->Form()->getFields() as $Field){
-            $this->assertInstanceOf(View::class, $this->Model->getFieldView($Field->Attributes->name));
+            $this->assertInstanceOf(View::class, $this->Model->getFieldView($Field->attributes->name));
         }
     }
 
     public function test_formtrait_getFieldDisplayView_returns_a_view()
     {
         foreach($this->Model->Form()->getFields() as $Field){
-            $this->assertInstanceOf(View::class, $this->Model->getFieldDisplayView($Field->Attributes->name));
+            $this->assertInstanceOf(View::class, $this->Model->getFieldDisplayView($Field->attributes->name));
         }
     }
 
@@ -124,7 +124,7 @@ class FormTraitTest extends TestCase
 
         // If ID got set, these be equal and fail
         $this->assertNotEquals(100, $this->Model->id);
-        $this->assertNotEquals(100, $this->Model->Form()->id->Attributes->value);
+        $this->assertNotEquals(100, $this->Model->Form()->id->attributes->value);
     }
 
     public function test_formtrait_setPostValues_obeys_model_fillable_settings()
@@ -134,7 +134,7 @@ class FormTraitTest extends TestCase
         $this->Model->setPostValues($post_data);
 
         foreach($post_data as $field => $value) {
-            $this->assertEquals($value, $this->Model->Form()->{$field}->Attributes->value);
+            $this->assertEquals($value, $this->Model->Form()->{$field}->attributes->value);
             $this->assertEquals($value, $this->Model->{$field});
         }
     }

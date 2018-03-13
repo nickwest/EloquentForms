@@ -100,7 +100,7 @@ class FormTest extends TestCase
     {
         foreach($this->fields as $field){
             $this->Form->{$field['name']} = $field['value'];
-            $this->assertEquals($field['value'], $this->Form->{$field['name']}->Attributes->value);
+            $this->assertEquals($field['value'], $this->Form->{$field['name']}->attributes->value);
         }
     }
 
@@ -170,7 +170,7 @@ class FormTest extends TestCase
         // Set all fields to a simple value
         foreach($this->fields as $field){
             $this->Form->setValue($field['name'], 'abc1234');
-            $this->assertEquals('abc1234', $this->Form->{$field['name']}->Attributes->value);
+            $this->assertEquals('abc1234', $this->Form->{$field['name']}->attributes->value);
         }
     }
 
@@ -226,7 +226,7 @@ class FormTest extends TestCase
 
         $this->Form->setValues($values, true);
 
-        $this->assertEquals('zyx4321', $this->Form->{$this->fields[0]['name']}->Attributes->value);
+        $this->assertEquals('zyx4321', $this->Form->{$this->fields[0]['name']}->attributes->value);
     }
 
     public function test_form_setNames_sets_field_name_attribute_on_multiple_fields()
@@ -242,7 +242,7 @@ class FormTest extends TestCase
         $this->Form->setNames($new_names);
 
         foreach($this->Form->getFields() as $Field){
-            $this->assertEquals('my_buttons', $Field->Attributes->name);
+            $this->assertEquals('my_buttons', $Field->attributes->name);
         }
     }
 
@@ -251,8 +251,8 @@ class FormTest extends TestCase
         $field_types = [$this->fields[0]['name'] => 'checkbox', $this->fields[1]['name'] => 'textarea'];
         $this->Form->setTypes($field_types);
 
-        $this->assertEquals($this->Form->{$this->fields[0]['name']}->Attributes->type, 'checkbox');
-        $this->assertEquals($this->Form->{$this->fields[1]['name']}->Attributes->type, 'textarea');
+        $this->assertEquals($this->Form->{$this->fields[0]['name']}->attributes->type, 'checkbox');
+        $this->assertEquals($this->Form->{$this->fields[1]['name']}->attributes->type, 'textarea');
     }
 
     public function test_form_setTypes_throws_an_exception_on_invalid_field()
@@ -316,7 +316,7 @@ class FormTest extends TestCase
     {
         // Make sure they start out as Null
         foreach($this->fields as $field) {
-            $this->assertFalse(isset($this->Form->{$field['name']}->Attributes->required));
+            $this->assertFalse(isset($this->Form->{$field['name']}->attributes->required));
         }
 
         // Set required
@@ -324,7 +324,7 @@ class FormTest extends TestCase
 
         // Make sure they gained the required attribute, and it's set to true
         foreach($this->fields as $field) {
-            $this->assertTrue(isset($this->Form->{$field['name']}->Attributes->required));
+            $this->assertTrue(isset($this->Form->{$field['name']}->attributes->required));
         }
     }
 
@@ -506,9 +506,9 @@ class FormTest extends TestCase
         ];
 
         // Set some values so it paasses
-        $this->Form->{$this->fields[6]['name']}->Attributes->value = '2120-05-10';
-        $this->Form->{$this->fields[7]['name']}->Attributes->value = '';
-        $this->Form->{$this->fields[9]['name']}->Attributes->value = 'test2@test.com';
+        $this->Form->{$this->fields[6]['name']}->attributes->value = '2120-05-10';
+        $this->Form->{$this->fields[7]['name']}->attributes->value = '';
+        $this->Form->{$this->fields[9]['name']}->attributes->value = 'test2@test.com';
 
         $this->Form->setValidationRules($this->validation_rules);
 
@@ -523,9 +523,9 @@ class FormTest extends TestCase
             $this->fields[9]['name'] => 'required|email',
         ];
 
-        $this->Form->{$this->fields[6]['name']}->Attributes->value = '2120-05-10';
-        $this->Form->{$this->fields[7]['name']}->Attributes->value = 'testtest.com';
-        $this->Form->{$this->fields[9]['name']}->Attributes->value = 'test@test.com';
+        $this->Form->{$this->fields[6]['name']}->attributes->value = '2120-05-10';
+        $this->Form->{$this->fields[7]['name']}->attributes->value = 'testtest.com';
+        $this->Form->{$this->fields[9]['name']}->attributes->value = 'test@test.com';
 
         $this->Form->setValidationRules($this->validation_rules);
 
@@ -540,9 +540,9 @@ class FormTest extends TestCase
             $this->fields[9]['name'] => 'required|email',
         ];
 
-        $this->Form->{$this->fields[6]['name']}->Attributes->value = '2120-05-10'; // Valid
-        $this->Form->{$this->fields[7]['name']}->Attributes->value = 'testcom'; // invalid
-        $this->Form->{$this->fields[9]['name']}->Attributes->value = ''; // invalid
+        $this->Form->{$this->fields[6]['name']}->attributes->value = '2120-05-10'; // Valid
+        $this->Form->{$this->fields[7]['name']}->attributes->value = 'testcom'; // invalid
+        $this->Form->{$this->fields[9]['name']}->attributes->value = ''; // invalid
 
         $this->Form->setValidationRules($this->validation_rules);
         $this->assertFalse($this->Form->isValid());
@@ -556,15 +556,15 @@ class FormTest extends TestCase
 
     public function test_form_has_Attributes()
     {
-        $this->assertClassHasAttribute('Attributes', Form::class);
+        $this->assertClassHasAttribute('attributes', Form::class);
 
-        $this->assertInstanceOf(\Nickwest\EloquentForms\Attributes::class, $this->Form->Attributes);
+        $this->assertInstanceOf(\Nickwest\EloquentForms\Attributes::class, $this->Form->attributes);
     }
 
     public function test_form_Attributes_can_be_set_they_are_public()
     {
-        $this->Form->Attributes->action = 'http://google.com';
-        $this->assertEquals($this->Form->Attributes->action, 'http://google.com');
+        $this->Form->attributes->action = 'http://google.com';
+        $this->assertEquals($this->Form->attributes->action, 'http://google.com');
     }
 
     public function test_form_addDatalist_adds_a_datalist_to_the_form_and_sets_it_for_display()
@@ -700,7 +700,7 @@ class FormTest extends TestCase
 
         // Set all field values
         foreach($this->fields as $field) {
-            $Form->{$field['name']}->Attributes->value = $field['value'];
+            $Form->{$field['name']}->attributes->value = $field['value'];
         }
 
         // Add a subform

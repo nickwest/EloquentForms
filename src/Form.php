@@ -21,7 +21,7 @@ class Form{
      *
      * @var Nickwest\EloquentForms\Attributes
      */
-    public $Attributes = null;
+    public $attributes = null;
 
     /**
      * Array of Field Objects
@@ -60,10 +60,10 @@ class Form{
     {
         // Instantiate objects
         $this->Theme = new DefaultTheme();
-        $this->Attributes = new Attributes;
+        $this->attributes = new Attributes;
 
         // Set the action to default to the current path
-        $this->Attributes->action = Request::url();
+        $this->attributes->action = Request::url();
 
         $this->addSubmitButton('submit', 'Save');
     }
@@ -246,7 +246,7 @@ class Form{
         {
             // Don't return subforms as fields they don't really have a valueaddDataList
             if(!$Field->isSubform()){
-                $values[$Field->getOriginalName()] = $Field->Attributes->value;
+                $values[$Field->getOriginalName()] = $Field->attributes->value;
             }
         }
 
@@ -264,7 +264,7 @@ class Form{
     public function setValue(string $field_name, string $value): void
     {
         if(isset($this->Fields[$field_name])) {
-            $this->Fields[$field_name]->Attributes->value = $value;
+            $this->Fields[$field_name]->attributes->value = $value;
         } else {
             throw new InvalidFieldException($field_name.' is not part of the Form');
         }
@@ -283,7 +283,7 @@ class Form{
             throw new InvalidFieldException($field_name.' is not part of the Form');
         }
 
-        return $this->Fields[$field_name]->Attributes->value;
+        return $this->Fields[$field_name]->attributes->value;
     }
 
     /**
@@ -298,7 +298,7 @@ class Form{
     {
         foreach($values as $field_name => $value) {
             if(isset($this->Fields[$field_name])) {
-                $this->Fields[$field_name]->Attributes->value = $value;
+                $this->Fields[$field_name]->attributes->value = $value;
 
             } elseif(!$ignore_invalid) {
                 throw new InvalidFieldException($field_name.' is not part of the Form');
@@ -318,7 +318,7 @@ class Form{
     {
         foreach($names as $original_name => $name) {
             if(isset($this->Fields[$original_name])) {
-                $this->Fields[$original_name]->Attributes->name = $name;
+                $this->Fields[$original_name]->attributes->name = $name;
 
             } else {
                 throw new InvalidFieldException($original_name.' is not part of the Form');
@@ -348,7 +348,7 @@ class Form{
                 }
                 // It's probably just a string so set it
                 else {
-                    $this->Fields[$field_name]->Attributes->type = $type;
+                    $this->Fields[$field_name]->attributes->type = $type;
                 }
             } else {
                 throw new InvalidFieldException($field_name.' is not part of the Form');
@@ -404,7 +404,7 @@ class Form{
         //TODO: This should unset required from fields not in $required_fields
         foreach($required_fields as $field_name) {
             if(isset($this->Fields[$field_name])) {
-                $this->Fields[$field_name]->Attributes->required = true;
+                $this->Fields[$field_name]->attributes->required = true;
             } else {
                 throw new InvalidFieldException($field_name.' is not part of the Form');
             }
@@ -443,8 +443,8 @@ class Form{
     {
         $this->addField($name);
 
-        $this->{$name}->Attributes->type = 'datalist';
-        $this->{$name}->Attributes->id = $name;
+        $this->{$name}->attributes->type = 'datalist';
+        $this->{$name}->attributes->id = $name;
         $this->{$name}->setOptions($options);
 
         $this->addDisplayFields([$name]);
@@ -646,7 +646,7 @@ class Form{
             }
 
             // Set required rule on all required fields
-            if($Field->Attributes->required && !in_array('required', $rules)) {
+            if($Field->attributes->required && !in_array('required', $rules)) {
                 $rules[$Field->getOriginalName()][] = 'required';
             }
 
@@ -680,9 +680,9 @@ class Form{
     public function addSubmitButton(string $name, string $value, string $classes=''): void
     {
         $this->SubmitFields[$name] = new Field($name);
-        $this->SubmitFields[$name]->Attributes->value = $value;
+        $this->SubmitFields[$name]->attributes->value = $value;
         if($classes != ''){
-            $this->SubmitFields[$name]->Attributes->class = $classes;
+            $this->SubmitFields[$name]->attributes->class = $classes;
         }
     }
 
@@ -734,7 +734,7 @@ class Form{
      * @param Nickwest\EloquentForms\Theme $Theme
      * @return void
      */
-    public function setTheme(Theme &$Theme): void
+    public function setTheme(Theme $Theme): void
     {
         $this->Theme = $Theme;
         foreach($this->Fields as $key => $Field) {
@@ -771,16 +771,16 @@ class Form{
 
         // Check if this form should be multipart
         foreach($this->Fields as $Field){
-            if(isset($this->Attributes->enctype)){
+            if(isset($this->attributes->enctype)){
                 break;
             }
 
-            if($Field->Attributes->type == 'file'){
-                $this->Attributes->enctype = 'multipart/form-data';
+            if($Field->attributes->type == 'file'){
+                $this->attributes->enctype = 'multipart/form-data';
             }elseif($Field->isSubform()){
                 foreach($Field->Subform->Fields as $SubField){
-                    if($SubField->Attributes->type == 'file'){
-                        $this->Attributes->enctype = 'multipart/form-data';
+                    if($SubField->attributes->type == 'file'){
+                        $this->attributes->enctype = 'multipart/form-data';
                     }
                 }
             }
@@ -825,7 +825,7 @@ class Form{
     {
         $array = [
             'laravel_csrf' => $this->laravel_csrf,
-            'Attributes' => json_decode($this->Attributes->toJson()),
+            'attributes' => json_decode($this->attributes->toJson()),
             'Fields' => [],
             'display_fields' => $this->display_fields,
             'Theme' => (is_object($this->Theme) ? '\\'.get_class($this->Theme) : null),
@@ -855,9 +855,9 @@ class Form{
                     $this->$key[$key2]->fromJson(json_encode($array));
                 }
 
-            } elseif($key == 'Attributes') {
-                $this->Attributes = new Attributes();
-                $this->Attributes->fromJson(json_encode($value));
+            } elseif($key == 'attributes') {
+                $this->attributes = new Attributes();
+                $this->attributes->fromJson(json_encode($value));
 
             } elseif($key == 'Theme' && $value != null) {
                 $this->Theme = new $value(); // TODO: make a to/from JSON method on this? is it necessary?

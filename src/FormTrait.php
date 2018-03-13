@@ -135,7 +135,7 @@ trait FormTrait{
                     catch(NotImplementedException $e){}
                 }
 
-                $this->Form()->{$field_name}->Attributes->value = $value;
+                $this->Form()->{$field_name}->attributes->value = $value;
                 if(is_array($value)) {
                     $this->{$field_name} = implode($this->multi_delimiter, $value);
                 } else {
@@ -146,7 +146,7 @@ trait FormTrait{
 
         // Make sure no Form fields were omitted from the post array (checkboxes can be when none are set)
         foreach($this->Form()->getDisplayFields() as $Field) {
-            if(isset($post_data[$Field->Attributes->name]) || !$this->isFillable($Field->getOriginalName())) {
+            if(isset($post_data[$Field->attributes->name]) || !$this->isFillable($Field->getOriginalName())) {
                 continue;
             }
 
@@ -179,9 +179,9 @@ trait FormTrait{
                 catch(NotImplementedException $e){}
             }
 
-            if($Field->Attributes->type == 'checkbox' || $Field->Attributes->multi_key) {
+            if($Field->attributes->type == 'checkbox' || $Field->attributes->multi_key) {
                 if((!isset($this->{$Field->getOriginalName()}) || ($this->{$Field->getOriginalName()} == '' && $this->{$Field->getOriginalName()} !== 0)) && $this->Form()->{$Field->getOriginalName()}->default_value != '') {
-                    $this->Form()->{$Field->getOriginalName()}->Attributes->value = $this->Form()->{$Field->getOriginalName()}->default_value;
+                    $this->Form()->{$Field->getOriginalName()}->attributes->value = $this->Form()->{$Field->getOriginalName()}->default_value;
                 } else {
                     if(!is_array($this->{$Field->getOriginalName()})){
                         $values = array();
@@ -189,17 +189,17 @@ trait FormTrait{
                             $values[$value] = $value;
                         }
                     }else{
-                        $values = $this->{$Field->getOriginalName()}->Attributes->value;
+                        $values = $this->{$Field->getOriginalName()}->attributes->value;
                     }
 
-                    $this->Form()->{$Field->getOriginalName()}->Attributes->value = $values;
+                    $this->Form()->{$Field->getOriginalName()}->attributes->value = $values;
                 }
             } else {
                 // If the model doesn't have this field, then use default or empty string as the starting value
                 if(isset($this->{$Field->getOriginalName()})){
-                    $this->Form()->{$Field->getOriginalName()}->Attributes->value = $this->{$Field->getOriginalName()};
+                    $this->Form()->{$Field->getOriginalName()}->attributes->value = $this->{$Field->getOriginalName()};
                 } else {
-                    $this->Form()->{$Field->getOriginalName()}->Attributes->value = $this->Form()->{$Field->getOriginalName()}->default_value != null ? $this->Form()->{$Field->getOriginalName()}->default_value : '';
+                    $this->Form()->{$Field->getOriginalName()}->attributes->value = $this->Form()->{$Field->getOriginalName()}->default_value != null ? $this->Form()->{$Field->getOriginalName()}->default_value : '';
                 }
             }
         }
@@ -260,7 +260,7 @@ trait FormTrait{
 
             // We need to do this here because we're not using Form::isValid() we're using the values on the model itself
             // And validating against those using the Form rules + some extra from the table if possible
-            if($Field->Attributes->required && !in_array('required', $rules)) {
+            if($Field->attributes->required && !in_array('required', $rules)) {
                 $rules[$Field->getOriginalName()][] = 'required';
             }
 
@@ -312,9 +312,9 @@ trait FormTrait{
 
         foreach($columns as $column) {
             $this->Form()->addField($column['name']);
-            $this->Form()->{$column['name']}->Attributes->maxlength = $column['length'];
+            $this->Form()->{$column['name']}->attributes->maxlength = $column['length'];
             $this->Form()->{$column['name']}->default_value = $column['default'];
-            $this->Form()->{$column['name']}->Attributes->type = $this->getFormTypeFromColumnType($column['type']);
+            $this->Form()->{$column['name']}->attributes->type = $this->getFormTypeFromColumnType($column['type']);
             if(is_array($column['values'])){
                 $this->Form()->{$column['name']}->setOptions($column['values']);
             }
