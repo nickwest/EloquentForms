@@ -98,7 +98,7 @@ class Field{
      *
      * @var array
      */
-    public $validation_rules = [];
+    public $validation_rules = '';
 
 
     /**
@@ -265,7 +265,7 @@ class Field{
             'error_message' => $this->error_message,
             'default_value' => $this->default_value,
             'is_inline' => $this->is_inline,
-            'validation_rules' => $this->validation_rules,
+            'validation_rules' => serialize($this->validation_rules),
             'label_class' => $this->label_class,
             'container_class' => $this->container_class,
             'input_wrapper_class' => $this->input_wrapper_class,
@@ -302,8 +302,8 @@ class Field{
                 $this->Subform = new Form();
                 $this->Subform->fromJson($value);
 
-            } elseif($key == 'CustomField') {
-                $this->CustomField = unserialize($value); // TODO: make a to/from JSON method on this? is it necessary?
+            } elseif($key == 'CustomField' || $key == 'validation_rules') {
+                $this->$key = unserialize($value);
 
             } elseif(is_object($value)) {
                 $this->$key = (array)$value;

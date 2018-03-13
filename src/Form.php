@@ -613,6 +613,24 @@ class Form{
     }
 
     /**
+     * Get validation rules from Field(s).
+     *
+     * @return array $validation_rules
+     */
+    public function getValidationRules(): array
+    {
+        $validation_rules = [];
+        foreach($this->Fields as $key => $Field){
+            if($Field->validation_rules != ''){
+                $validation_rules[$key] = $Field->validation_rules;
+            }
+        }
+
+        return $validation_rules;
+    }
+
+
+    /**
      * Using validation rules, determine if form values are valid.
      *
      * @return bool

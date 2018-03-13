@@ -2,6 +2,8 @@
 
 use Faker;
 
+use Illuminate\Validation\Rule;
+
 use Nickwest\EloquentForms\Form;
 use Nickwest\EloquentForms\Field;
 use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
@@ -17,6 +19,7 @@ class FormTest extends TestCase
 
         $this->fields = [];
         $this->sub_fields = [];
+        $this->validation_rules = [];
 
         $this->Faker = Faker\Factory::create();
 
@@ -445,24 +448,41 @@ class FormTest extends TestCase
     public function test_form_setValidationRules_adds_rules_to_fields()
     {
         // Change some validation rules
-        $validation_rules = [
+        $this->validation_rules += [
             $this->fields[6]['name'] => 'required,date,after:tomorrow',
             $this->fields[7]['name'] => 'exists:connection.staff,email',
             $this->fields[9]['name'] => 'exists:connection.staff,image',
         ];
 
-        $this->Form->setValidationRules($validation_rules);
+        $this->Form->setValidationRules($this->validation_rules);
 
         foreach(array_column($this->fields, 'name') as $field_name) {
-            if(isset($validation_rules[$field_name])){
-                $this->assertEquals($validation_rules[$field_name], $this->Form->getField($field_name)->validation_rules);
+            if(isset($this->validation_rules[$field_name])){
+                $this->assertEquals($this->validation_rules[$field_name], $this->Form->getField($field_name)->validation_rules);
             }
         }
     }
 
+    public function test_form_getValidationn_rules_returns_same_rules_that_are_set()
+    {
+        // Change some validation rules
+        $this->validation_rules += [
+            $this->fields[6]['name'] => 'required,date,after:tomorrow',
+            $this->fields[7]['name'] => 'exists:connection.staff,email',
+            $this->fields[9]['name'] => 'exists:connection.staff,image',
+        ];
+
+        $this->Form->setValidationRules($this->validation_rules);
+
+        $form_validation_rules = $this->Form->getValidationRules();
+
+        $this->assertEquals($this->validation_rules, $form_validation_rules);
+
+    }
+
     public function test_form_setValidationRules_throws_exception_on_invalid_field()
     {
-        $validation_rules = [
+        $this->validation_rules += [
             $this->fields[6]['name'] => 'required|date|after:tomorrow',
             $this->fields[7]['name'] => 'exists:connection.staff|email',
             $this->fields[9]['name'] => 'exists:connection.staff|image',
@@ -470,7 +490,7 @@ class FormTest extends TestCase
         ];
 
         $this->expectException(InvalidFieldException::class);
-        $this->Form->setValidationRules($validation_rules);
+        $this->Form->setValidationRules($this->validation_rules);
     }
 
     public function test_form_isValid_can_pass_validation()
@@ -479,7 +499,7 @@ class FormTest extends TestCase
         $this->assertTrue($this->Form->isValid());
 
         // Change rules
-        $validation_rules = [
+        $this->validation_rules += [
             $this->fields[6]['name'] => 'required|date|after:tomorrow',
             $this->fields[7]['name'] => 'email',
             $this->fields[9]['name'] => 'required|email',
@@ -490,14 +510,14 @@ class FormTest extends TestCase
         $this->Form->{$this->fields[7]['name']}->Attributes->value = '';
         $this->Form->{$this->fields[9]['name']}->Attributes->value = 'test2@test.com';
 
-        $this->Form->setValidationRules($validation_rules);
+        $this->Form->setValidationRules($this->validation_rules);
 
         $this->assertTrue($this->Form->isValid());
     }
 
     public function test_form_isValid_can_fail_validation()
     {
-        $validation_rules = [
+        $this->validation_rules += [
             $this->fields[6]['name'] => 'required|date|after:tomorrow',
             $this->fields[7]['name'] => 'email',
             $this->fields[9]['name'] => 'required|email',
@@ -507,14 +527,14 @@ class FormTest extends TestCase
         $this->Form->{$this->fields[7]['name']}->Attributes->value = 'testtest.com';
         $this->Form->{$this->fields[9]['name']}->Attributes->value = 'test@test.com';
 
-        $this->Form->setValidationRules($validation_rules);
+        $this->Form->setValidationRules($this->validation_rules);
 
         $this->assertFalse($this->Form->isValid());
     }
 
     public function test_form_isValid_sets_errors_on_invalid_fields()
     {
-        $validation_rules = [
+        $this->validation_rules += [
             $this->fields[6]['name'] => 'required|date|after:tomorrow',
             $this->fields[7]['name'] => 'email',
             $this->fields[9]['name'] => 'required|email',
@@ -524,9 +544,10 @@ class FormTest extends TestCase
         $this->Form->{$this->fields[7]['name']}->Attributes->value = 'testcom'; // invalid
         $this->Form->{$this->fields[9]['name']}->Attributes->value = ''; // invalid
 
-        $this->Form->setValidationRules($validation_rules);
-        $this->Form->isValid();
+        $this->Form->setValidationRules($this->validation_rules);
+        $this->assertFalse($this->Form->isValid());
 
+        // Make sure messages are set
         $this->assertEmpty($this->Form->{$this->fields[6]['name']}->error_message);
         $this->assertNotEmpty($this->Form->{$this->fields[7]['name']}->error_message);
         $this->assertNotEmpty($this->Form->{$this->fields[9]['name']}->error_message);
@@ -658,17 +679,24 @@ class FormTest extends TestCase
         $Form = new Form();
         $Form->addFields(array_column($this->fields, 'name'));
 
+        $Form->{$this->fields[3]['name']}->setOptions(['Yes', 'No']);
+
         // Set some validation rules
-        $validation_rules = [
+        $this->validation_rules = [
             $this->fields[0]['name'] => 'required|date|after:tomorrow',
             $this->fields[1]['name'] => 'email',
             $this->fields[2]['name'] => 'required|email',
+            $this->fields[3]['name'] => [
+                'required',
+                Rule::in($Form->{$this->fields[3]['name']}->getOptions()),
+            ],
         ];
-        $Form->setValidationRules($validation_rules);
+        $Form->setValidationRules($this->validation_rules);
 
         $this->fields[0]['value'] = date('Y-m-d', strtotime('now +14 days'));
         $this->fields[1]['value'] = ''; // Not set, should still pass
         $this->fields[2]['value'] = $this->Faker->email;
+        $this->fields[3]['value'] = 'Yes';
 
         // Set all field values
         foreach($this->fields as $field) {

@@ -23,9 +23,7 @@ trait FormTrait{
 
     protected $multi_delimiter = '|';
 
-    protected $validation_rules = [];
-
-    protected $validate_on_save = true;
+    public $validate_on_save = true;
 
     /**
      * Boot the trait. Adds an observer class for form
@@ -34,15 +32,24 @@ trait FormTrait{
      */
     public static function bootFormTrait()
     {
-        // function save() method is hooked by FormObserver and runs validation
-        if($this->validate_on_save){
-            static::observe(new FormObserver);
-        }
+        static::observe(new FormObserver);
     }
 
-    public function __construct(bool $validate_on_save = true)
+    public function __construct(array $attributes = [], bool $validate_on_save = true)
     {
         $this->validate_on_save = $validate_on_save;
+
+        return parent::__construct($attributes);
+    }
+
+    /**
+     * Access for validate_on_save
+     *
+     * @return bool
+     */
+    public function validateOnSave()
+    {
+        return $this->validate_on_save;
     }
 
     /**
@@ -152,18 +159,6 @@ trait FormTrait{
     }
 
     /**
-     * Validation of form, based on requirements & extra rules
-     *
-     * @var bool
-     */
-    public function formIsValid(): bool
-    {
-        $this->Form()->setValidationRules($this->validation_rules);
-
-        return $this->Form()->isValid();
-    }
-
-    /**
      * Set all of the form values to whatever the value on that attribute of the model is
      *
      * @return void
@@ -244,25 +239,33 @@ trait FormTrait{
     /**
      * Validation of model, based on field requirements & table structure & extra rules
      *
+     * TODO: this could be re-written to use Form::isValid with extra rules injected and values set from Model
+     *
      * @var bool
      */
-    protected function isValid(): bool
+    public function isFormValid(): bool
     {
         // Add required fields to field_rules
         $columns = $this->getAllColumns();
+
         $rules = [];
         foreach($this->Form()->getFields() as $Field) {
             $rules[$Field->getOriginalName()] = [];
 
-            if(isset($this->validation_rules[$Field->getOriginalName()]) && $this->validation_rules[$Field->getOriginalName()] != '') {
-                $rules[$Field->getOriginalName()] = explode('|', $this->validation_rules[$Field->getOriginalName()]);
+            if(!is_array($Field->validation_rules)){
+                $rules[$Field->getOriginalName()] = explode('|', $Field->validation_rules);
+            }else{
+                $rules[$Field->getOriginalName()] = $Field->validation_rules;
             }
 
+            // We need to do this here because we're not using Form::isValid() we're using the values on the model itself
+            // And validating against those using the Form rules + some extra from the table if possible
             if($Field->Attributes->required && !in_array('required', $rules)) {
                 $rules[$Field->getOriginalName()][] = 'required';
             }
 
-            if(isset($columns[$Field->getOriginalName()]) && isset($columns[$Field->getOriginalName()]['length'])) {
+            // Set max length rule based on column length if available
+            if(isset($columns[$Field->getOriginalName()]) && isset($columns[$Field->getOriginalName()]['length']) && $columns[$Field->getOriginalName()]['length'] != '') {
                 $found = false;
                 foreach($rules[$Field->getOriginalName()] as $key => $rule) {
                     if(strpos($rule, 'max') === 0) {

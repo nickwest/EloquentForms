@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 
 use Nickwest\EloquentForms\FormTrait;
@@ -87,13 +88,6 @@ class FormTraitTest extends TestCase
         }
     }
 
-    public function test_formtrait_formIsValid_returns_validity_of_form()
-    {
-        // We only need to test that this functions, we don't need to test the validation, that's done in form tests
-        // Since there are no validation rules, it should return true.
-        $this->assertTrue($this->Model->formIsValid());
-    }
-
     public function test_formtrait_setAllFormValues_sets_values_to_the_form_from_the_model()
     {
         $post_data = $this->getSimulatedPostValues();
@@ -150,6 +144,71 @@ class FormTraitTest extends TestCase
         $this->assertAttributeEquals(true, 'validate_on_save', $this->Model);
     }
 
+    public function test_formtrait_adds_extra_validation_and_that_works()
+    {
+        $post_data = $this->getSimulatedPostValues();
+
+        $this->Model->setPostValues($this->getSimulatedPostValues());
+
+        // Simple case, completely valid
+        $this->assertTrue($this->Model->isFormValid());
+    }
+
+    public function test_formtrait_models_validate_on_save_will_run_validation_before_saving()
+    {
+        $post_data = $this->getSimulatedPostValues();
+
+        $this->Model->setPostValues($post_data);
+
+        // Make it invalid
+        $this->Model->email = 'NotEmail';
+
+        // Make sure it's not valid
+        $this->assertFalse($this->Model->isFormValid());
+
+        // Trying to save should fail and return false
+        $this->assertFalse($this->Model->save());
+    }
+
+    public function test_formtrait_models_can_block_validation_on_save()
+    {
+        $post_data = $this->getSimulatedPostValues();
+
+        $this->Model->setPostValues($post_data);
+
+        // Make it invalid
+        $this->Model->email = 'not_an_email1234';
+
+        $this->Model->validate_on_save = false;
+
+        $this->assertTrue($this->Model->save());
+    }
+
+    public function test_formtrait_save_works_when_form_not_prepared()
+    {
+        $Sample = new Sample;
+
+        // Set the two not-nullable fields
+        $Sample->first_name = 'Tester';
+        $Sample->last_name = 'McTesting';
+
+        // Save without preparing the form
+        $this->assertTrue($Sample->save());
+    }
+
+    public function test_formtrait_save_works_when_form_not_prepared_but_form_validation_doesnt_work()
+    {
+        $Sample = new Sample;
+
+        // Set the two not-nullable fields
+        $Sample->first_name = 'Tester';
+        $Sample->last_name = 'McTesting';
+        $Sample->email = 'not_an_email_address';
+
+        // Save without preparing the form
+        $this->assertTrue($Sample->save());
+    }
+
     public function test_formtrait_generateFormFromJson_works()
     {
         // This is testing in FormTests
@@ -161,6 +220,7 @@ class FormTraitTest extends TestCase
         // Their forms should be equal
         $this->assertEquals($this->Model->Form(), $newModel->Form());
     }
+
 
 
     ////// Helpers
@@ -178,7 +238,7 @@ class FormTraitTest extends TestCase
             'favorite_number' => $this->Faker->numberBetween(10, 5000),
             'is_hidden' => $this->Faker->numberBetween(0,1),
             'favorite_season' => $this->Faker->randomElement(['', 'Winter', 'Spring', 'Summer', 'Autumn']),
-            'beverage' => $this->Faker->randomElement(['', 'Beer', 'Wine', 'Water']),
+            'beverage' => '',
             'fruits_liked' => $this->Faker->word,
             'actors_liked' => $this->Faker->name,
             'favorite_color' => $this->Faker->hexcolor,
@@ -271,8 +331,6 @@ class FormTraitTest extends TestCase
             'values' => $values
         ];
     }
-
-
 }
 
 
@@ -296,5 +354,25 @@ class Sample extends Model
 
         // This is magical and comes from the FormTrait. It generates form field data by looking at the model's table columns
         $this->generateFormData();
+
+        $this->Form()->good_day->setOptions(['Yes' => 'Yes', 'No' => 'No']);
+        $this->Form()->beverage->setOptions(['Beer' => 'Beer', 'Wine' => 'Wine', 'Water' => 'Water']);
+
+        // Set some validation rules
+        $this->Form->setValidationRules([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'email',
+            'good_day' => [
+                Rule::in($this->Form()->good_day->getOptions()),
+            ],
+            'beverage' => [
+                Rule::in($this->Form()->beverage->getOptions()),
+            ],
+            'volume' => 'numeric',
+        ]);
+
     }
+
+
 }
