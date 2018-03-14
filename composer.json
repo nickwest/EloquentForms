@@ -20,7 +20,8 @@
             "src/migrations"
         ],
         "psr-4": {
-            "Nickwest\\EloquentForms\\": "src/"
+            "Nickwest\\EloquentForms\\": "src/",
+            "Nickwest\\EloquentForms\\Test\\": "tests/"
         }
     },
     "minimum-stability": "stable",

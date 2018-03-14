@@ -1,4 +1,4 @@
-<?php namespace Nickwest\EloquentForms\Test\view;
+<?php namespace Nickwest\EloquentForms\Test;
 
 use Sunra\PhpSimple\HtmlDomParser;
 
@@ -7,13 +7,19 @@ use Nickwest\EloquentForms\Field;
 
 use Nickwest\EloquentForms\Test\TestCase;
 
-class textFieldTest extends TestCase
+abstract class FieldViewTestCase extends TestCase
 {
+    protected $test_value = 'My test string & cool stuff!';
+    protected $test_type = 'text';
+    protected $test_tag = 'input';
+
     public function setUp()
     {
         parent::setUp();
 
         $this->Field = new Field('my_test_field');
+
+        $this->Field->attributes->type = $this->test_type;
     }
 
     // Attributes
@@ -21,50 +27,50 @@ class textFieldTest extends TestCase
     public function test_field_has_correct_type_attribute()
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
-        $input = current($dom->find('input'));
+        $input = current($dom->find($this->test_tag));
 
-        $this->assertEquals('text', $input->type);
+        $this->assertEquals($this->test_type, $input->type);
     }
 
     public function test_field_has_correct_name_attribute()
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
-        $input = current($dom->find('input'));
+        $input = current($dom->find($this->test_tag));
 
         $this->assertEquals('my_test_field', $input->name);
     }
 
     public function test_field_has_correct_name_attribute_when_changed()
     {
-        $this->Field->attributes->name = 'first_name';
+        $this->Field->attributes->name = 'new_name';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
-        $input = current($dom->find('input'));
+        $input = current($dom->find($this->test_tag));
 
-        $this->assertEquals('first_name', $input->name);
+        $this->assertEquals('new_name', $input->name);
     }
 
     public function test_field_has_correct_id_attribute()
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
-        $input = current($dom->find('input'));
+        $input = current($dom->find($this->test_tag));
 
         $this->assertEquals('input-my_test_field', $input->id);
     }
 
     public function test_field_has_correct_id_attribute_when_changed()
     {
-        $this->Field->attributes->id = 'first_name';
+        $this->Field->attributes->id = 'new_id';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
-        $input = current($dom->find('input'));
+        $input = current($dom->find($this->test_tag));
 
-        $this->assertEquals('input-first_name', $input->id);
+        $this->assertEquals('input-new_id', $input->id);
     }
 
     public function test_field_has_correct_id_attribute_when_prefix_changed()
     {
         $this->Field->attributes->id_prefix = 'myprefix_';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
-        $input = current($dom->find('input'));
+        $input = current($dom->find($this->test_tag));
 
         $this->assertEquals('myprefix_my_test_field', $input->id);
     }
@@ -72,7 +78,7 @@ class textFieldTest extends TestCase
     public function test_field_has_correct_class_attribute()
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
-        $input = current($dom->find('input'));
+        $input = current($dom->find($this->test_tag));
 
         $this->assertEmpty($input->class);
     }
@@ -81,7 +87,7 @@ class textFieldTest extends TestCase
     {
         $this->Field->attributes->addClass('my-class');
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
-        $input = current($dom->find('input'));
+        $input = current($dom->find($this->test_tag));
 
         $this->assertEquals('my-class', trim($input->class));
     }
@@ -92,7 +98,7 @@ class textFieldTest extends TestCase
         $this->Field->attributes->addClass('two');
         $this->Field->attributes->addClass('three');
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
-        $input = current($dom->find('input'));
+        $input = current($dom->find($this->test_tag));
 
         $this->assertEquals('my-class two three', trim($input->class));
     }
@@ -104,7 +110,7 @@ class textFieldTest extends TestCase
         $this->Field->attributes->addClass('three');
         $this->Field->attributes->removeClass('two');
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
-        $input = current($dom->find('input'));
+        $input = current($dom->find($this->test_tag));
 
         $this->assertEquals('my-class three', trim($input->class));
     }
@@ -112,7 +118,7 @@ class textFieldTest extends TestCase
     public function test_field_has_correct_value_attribute()
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
-        $input = current($dom->find('input'));
+        $input = current($dom->find($this->test_tag));
 
         // Blank by deafult (no value set)
         $this->assertSame(true, $input->value);
@@ -120,19 +126,19 @@ class textFieldTest extends TestCase
 
     public function test_field_has_correct_value_attribute_when_changed()
     {
-        $this->Field->attributes->value = 'My string value 123&';
+        $this->Field->attributes->value = $this->test_value;
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
-        $input = current($dom->find('input'));
+        $input = current($dom->find($this->test_tag));
 
         // & for good measure
-        $this->assertEquals('My string value 123&', $input->value);
+        $this->assertEquals($this->test_value, $input->value);
     }
 
     public function test_field_can_have_valueless_attributes()
     {
         $this->Field->attributes->required = null;
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
-        $input = current($dom->find('input'));
+        $input = current($dom->find($this->test_tag));
 
         $this->assertSame(true, $input->required);
     }
@@ -141,7 +147,7 @@ class textFieldTest extends TestCase
     {
         $this->Field->attributes->{'data-mydata'} = 42;
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
-        $input = current($dom->find('input'));
+        $input = current($dom->find($this->test_tag));
 
         $this->assertEquals('42', $input->{'data-mydata'});
     }
@@ -150,7 +156,7 @@ class textFieldTest extends TestCase
     {
         $this->Field->attributes->{'data-mydata'} = '{\'testing\':42}';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
-        $input = current($dom->find('input'));
+        $input = current($dom->find($this->test_tag));
 
         $this->assertEquals('{\'testing\':42}', $input->{'data-mydata'});
     }
@@ -159,7 +165,7 @@ class textFieldTest extends TestCase
     {
         $this->Field->attributes->unreal_attr = 'Unreal!';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
-        $input = current($dom->find('input'));
+        $input = current($dom->find($this->test_tag));
 
         $this->assertEquals('Unreal!', $input->unreal_attr);
     }
@@ -184,7 +190,7 @@ class textFieldTest extends TestCase
         $this->Field->attributes->{'v-else'} = null;
 
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
-        $input = current($dom->find('input'));
+        $input = current($dom->find($this->test_tag));
 
         $this->assertEquals('[activeClass, errorClass]', $input->{'v-bind:class'});
         $this->assertEquals("{ display: ['-webkit-box', '-ms-flexbox', 'flex'] }", $input->{'v-bind:style'});
@@ -247,7 +253,7 @@ class textFieldTest extends TestCase
     {
         $this->Field->attributes->multi_key = 4;
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
-        $input = current($dom->find('input'));
+        $input = current($dom->find($this->test_tag));
 
         $this->assertEquals('my_test_field[4]', trim($input->name));
     }

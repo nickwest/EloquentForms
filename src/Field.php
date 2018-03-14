@@ -156,6 +156,13 @@ class Field{
     public $file_delete_button_value = 'Remove';
 
     /**
+     * Extra stuff accessible in blade templates, used by certain field types
+     *
+     * @var array
+     */
+    public $extra_blade_data = [];
+
+    /**
      * Original name when field created
      *
      * @var string
@@ -496,6 +503,14 @@ class Field{
 
         if(is_object($this->CustomField)) {
             return $this->CustomField->makeView($this, $prev_inline, $view_only);
+        }
+
+        // Never output the password value, ever.
+        if($this->attributes->type == 'password'){
+            $this->attributes->value = null;
+        }elseif($this->attributes->type == 'textarea'){
+            $this->extra_blade_data['value'] = $this->attributes->value;
+            unset($this->attributes->value);
         }
 
         return View::make($this->getTemplate(), ['Field' => $this, 'prev_inline' => $prev_inline, 'view_only' => $view_only]);

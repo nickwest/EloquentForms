@@ -5,10 +5,10 @@
 
         @if($view_only)
             <div class="{{ $Field->input_wrapper_class.($view_only ? ' value' : '') }}">
-                {!! nl2br($Field->attributes->value) !!}
+                {!! nl2br($Field->extra_blade_data['value']) !!}
             </div>
         @else
-            <textarea {!! $Field->attributes !!}>{!! $Field->attributes->value !!}</textarea>
+            <textarea {!! $Field->attributes !!}>{!! $Field->extra_blade_data['value'] !!}</textarea>
         @endif
 
         @eloquentforms_include($Field->getViewNamespace().'::pieces.example')
