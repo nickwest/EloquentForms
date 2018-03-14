@@ -69,7 +69,11 @@ class Attributes{
     {
         // If it's a class, save it as an array so we can manipulate single classes
         if($attribute == 'class') {
-            $this->classes = explode(' ', $value);
+            if(trim($value) != ''){
+                $this->classes = explode(' ', trim($value));
+            }else{
+                $this->classes = [];
+            }
             return;
         }
 
@@ -175,7 +179,7 @@ class Attributes{
     public function getString(){
         $output = [];
 
-        if(count($this->classes) > 0 && isset($this->attributes['class'])) {
+        if(count($this->classes) == 0 && isset($this->attributes['class'])) {
             unset($this->attributes['class']);
         }elseif(count($this->classes) > 0){
             $this->attributes['class'] = implode(' ', $this->classes);

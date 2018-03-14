@@ -533,8 +533,9 @@ class Field{
      */
     public function makeOptionView(string $key, $value, bool $view_only = false): \Illuminate\View\View
     {
-        // Clone the field so we don't screw up it's properties when making the option
+        // Clone the field & attributes so we don't screw up it's properties when making the option
         $Field = clone $this;
+        $Field->attributes = clone $Field->attributes;
 
         $Field->attributes->id_suffix = '-'.$key;
         $Field->attributes->value = $key;
