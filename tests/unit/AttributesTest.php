@@ -84,6 +84,18 @@ class AttributesTest extends TestCase
         $this->assertEquals('disabled id="input-my-id" method="POST" v-for="something for JS stuff"', (string)$Attributes);
     }
 
+    public function test_attributes_getRawID_returns_unmodified_id()
+    {
+        $Attributes = new Attributes();
+
+        // Set some attributes
+        $Attributes->id = 'my_id';
+        $Attributes->id_prefix = 'secret-';
+
+        $this->assertEquals('my_id', $Attributes->getRawID());
+        $this->assertEquals('secret-my_id', $Attributes->id);
+    }
+
     public function test_attributes_id_prefix_can_be_changed()
     {
         $Attributes = new Attributes();
@@ -96,6 +108,27 @@ class AttributesTest extends TestCase
         $Attributes->{'v-for'} = 'something for JS stuff';
 
         $this->assertEquals('disabled id="secret-my-id" method="POST" v-for="something for JS stuff"', (string)$Attributes);
+    }
+
+    public function test_attributes_id_suffix_can_be_set_and_shows_up()
+    {
+        $Attributes = new Attributes();
+
+        $Attributes->id = 'my_id';
+        $Attributes->id_suffix = '-42';
+
+        $this->assertEquals('id="input-my_id-42"', (string)$Attributes);
+    }
+
+    public function test_attributes_get_method_for_id_obeys_prefix_and_suffix()
+    {
+        $Attributes = new Attributes();
+
+        $Attributes->id = 'my_id';
+        $Attributes->id_suffix = '-42';
+        $Attributes->id_prefix = 'secret-';
+
+        $this->assertEquals('secret-my_id-42', $Attributes->id);
     }
 
     public function test_attributes_addClass_adds_a_class_to_the_class_attribute()

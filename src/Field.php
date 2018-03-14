@@ -170,13 +170,6 @@ class Field{
     protected $original_name = '';
 
     /**
-     * Original id when field created
-     *
-     * @var string
-     */
-    protected $original_id = '';
-
-    /**
      * Options to populate select, radio, checkbox, and other multi-option fields
      *
      * @var array
@@ -211,7 +204,6 @@ class Field{
 
         // Set some basic properties
         $this->original_name = $this->attributes->name;
-        $this->original_id = $field_name;
         $this->label = $this->makeLabel();
 
         // TODO: Make config and set default theme in config
@@ -258,7 +250,7 @@ class Field{
      */
     public function getOriginalId(): string
     {
-        return $this->original_id;
+        return $this->attributes->getRawID();
     }
 
 
@@ -290,7 +282,6 @@ class Field{
             'option_wrapper_class' => $this->option_wrapper_class,
             'option_label_class' => $this->option_label_class,
             'original_name' => $this->original_name,
-            'original_id' => $this->original_id,
             'options' => $this->options,
             'disabled_options' => $this->disabled_options,
         ];
@@ -541,7 +532,7 @@ class Field{
      */
     public function makeOptionView(string $key, bool $view_only = false): \Illuminate\View\View
     {
-        $this->attributes->id = $this->original_id.'-'.$key;
+        $this->attributes->id_suffix = '-'.$key;
         $this->attributes->value = $key;
 
         $this->attributes->checked = ($key == $this->attributes->multi_key ? true : false);

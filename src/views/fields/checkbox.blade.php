@@ -10,7 +10,8 @@
                 <div class="value">{{ $Field->attributes->value }}</div>
             </div>
         @else
-            <input {!! $Field->attributes !!}>
+
+        <input {!! $Field->attributes !!}>
             <label class="{{ $Field->option_label_class }}" for={{ $Field->attributes->id }}>
                 {{ $Field->label }}
             </label>

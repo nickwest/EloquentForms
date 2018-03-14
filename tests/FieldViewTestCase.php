@@ -4,7 +4,10 @@
  * FieldViewTestCase includes basic field tests
  * Each Field view uses different templates and ruins different logic
  * It's necessary to test each field type for completely coverage
- * Some fields will have differences that will require test overrides *
+ * Some fields will have differences that will require test overrides
+ *
+ * NOTE: These fields do not extend this TestCase class:
+ *    contentblock, datalist,
  */
 
 use Sunra\PhpSimple\HtmlDomParser;
@@ -19,6 +22,8 @@ abstract class FieldViewTestCase extends TestCase
     protected $test_value = 'My test string & cool stuff!';
     protected $test_type = 'text';
     protected $test_tag = 'input';
+    protected $test_id_suffix = '';
+    protected $test_options = null;
 
     public function setUp()
     {
@@ -27,6 +32,10 @@ abstract class FieldViewTestCase extends TestCase
         $this->Field = new Field('my_test_field');
 
         $this->Field->attributes->type = $this->test_type;
+
+        if(is_array($this->test_options)){
+            $this->Field->setOptions($this->test_options);
+        }
     }
 
     // Attributes
@@ -61,16 +70,17 @@ abstract class FieldViewTestCase extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
 
-        $this->assertEquals('input-my_test_field', $input->id);
+        $this->assertEquals('input-my_test_field'.$this->test_id_suffix, $input->id);
     }
 
     public function test_field_has_correct_id_attribute_when_changed()
     {
         $this->Field->attributes->id = 'new_id';
+
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
 
-        $this->assertEquals('input-new_id', $input->id);
+        $this->assertEquals('input-new_id'.$this->test_id_suffix, $input->id);
     }
 
     public function test_field_has_correct_id_attribute_when_prefix_changed()
@@ -79,7 +89,7 @@ abstract class FieldViewTestCase extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
 
-        $this->assertEquals('myprefix_my_test_field', $input->id);
+        $this->assertEquals('myprefix_my_test_field'.$this->test_id_suffix, $input->id);
     }
 
     public function test_field_has_correct_class_attribute()

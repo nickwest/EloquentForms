@@ -17,6 +17,13 @@ class Attributes{
     public $id_prefix = 'input-';
 
     /**
+     * prefix for IDs when writing HTML (used when multi_key is set)
+     *
+     * @var string
+     */
+    public $id_suffix = '';
+
+    /**
      * Keep track of classes separately so we can build it all pretty like
      *
      * @var array
@@ -41,7 +48,7 @@ class Attributes{
         if($attribute == 'class') {
             return implode(' ', $this->classes);
         }elseif($attribute == 'id'){
-            return $this->id_prefix.$this->attributes['id'];
+            return $this->id_prefix.$this->attributes['id'].$this->id_suffix;
         }
 
         if(isset($this->attributes[$attribute])) {
@@ -116,6 +123,16 @@ class Attributes{
     }
 
     /**
+     * Get the unmodified ID value
+     *
+     * @return mixed
+     */
+    public function getRawID()
+    {
+        return $this->attributes['id'];
+    }
+
+    /**
      * Add a css class
      *
      * @param string $class_name
@@ -174,7 +191,7 @@ class Attributes{
             }
 
             if($key == 'id'){
-                $value = $this->id_prefix.$value;
+                $value = $this->id_prefix.$value.$this->id_suffix;
             }
 
             $output[] = ($value === null ? $key : $key.'="'.$value.'"');

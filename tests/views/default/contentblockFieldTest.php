@@ -25,7 +25,7 @@ class contentblockFieldTest extends TestCase
     {
         $this->Field->attributes->value = '';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
-        $input = current($dom->find('div[id=input-my_test_field'));
+        $input = current($dom->find('div[id=input-my_test_field]'));
 
         // Without a value this field shouldn't show up
         $this->assertSame(false, $input);
