@@ -34,7 +34,7 @@ abstract class Theme
      *
      * @return void
      */
-    public function prepareFormView(\Nickwest\EloquentForms\Field &$Field)
+    public function prepareFormView(\Nickwest\EloquentForms\Form &$Form)
     {
         return;
     }

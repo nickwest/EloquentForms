@@ -56,6 +56,17 @@ class Theme extends \Nickwest\EloquentForms\Theme
         return;
     }
 
+    /**
+     * Modify a Form as necessary
+     *
+     * @return void
+     */
+    public function prepareFormView(\Nickwest\EloquentForms\Form &$Form)
+    {
+
+
+    }
+
     public function prepareTableView(Table &$Table)
     {
         $Table->attributes->addClass('table');

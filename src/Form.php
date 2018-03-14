@@ -259,11 +259,11 @@ class Form{
      * Set a single field's value
      *
      * @param string $field_name
-     * @param string $value
+     * @param mixed $value
      * @return void
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
-    public function setValue(string $field_name, string $value): void
+    public function setValue(string $field_name, $value): void
     {
         if(isset($this->Fields[$field_name])) {
             $this->Fields[$field_name]->attributes->value = $value;
