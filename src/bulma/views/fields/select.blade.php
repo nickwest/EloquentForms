@@ -12,7 +12,7 @@
                 @endforeach
             </div>
         @else
-        <div class="{{ $Field->input_wrapper_class }}{{ $Field->multiple ? ' is-multiple' : '' }}">
+        <div class="{{ $Field->input_wrapper_class }}{{ $Field->attributes->multi_key != '' ? ' is-multiple' : '' }}">
                 <select {!! $Field->attributes !!}>
                 @foreach($Field->getOptions() as $key => $value)
                     @eloquentforms_include($Field->getViewNamespace().'::fields.select_option')

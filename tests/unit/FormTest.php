@@ -673,6 +673,15 @@ class FormTest extends TestCase
         $view->render();
     }
 
+    public function test_form_can_make_a_view_and_render_without_breaking_bulma_theme()
+    {
+        $this->Form->setTheme(new \Nickwest\EloquentForms\bulma\Theme());
+        $view = $this->Form->MakeView();
+        $this->assertInstanceOf(\Illuminate\View\View::class, $view);
+
+        $view->render();
+    }
+
 
 
 ///// Test Setup helpers

@@ -7,7 +7,7 @@ class Theme extends \Nickwest\EloquentForms\Theme
 {
     public function getViewNamespace() : string
     {
-        return 'Nickwest\\EloquentForms';
+        return 'Nickwest\\EloquentForms\\bulma';
     }
 
     public function prepareFieldView(Field &$Field)
@@ -48,6 +48,9 @@ class Theme extends \Nickwest\EloquentForms\Theme
             $Field->attributes->addClass('is-danger');
             $Field->input_wrapper_class .= ' is-danger';
         }
+
+        // If there's only one submit button add a is-success class to it
+
 
 
         return;

@@ -2,6 +2,11 @@
 
 abstract class Theme
 {
+    /**
+     * Get this Theme's namespace
+     *
+     * @return string
+     */
     abstract public function getViewNamespace() : string;
 
     /**
@@ -42,6 +47,16 @@ abstract class Theme
     public function prepareTableView(\Nickwest\EloquentForms\Table &$Table)
     {
         return;
+    }
+
+    /**
+     * Get the default namespace
+     *
+     * @return string
+     */
+    static public function getDefaultNamespace(): string
+    {
+        return 'Nickwest\\EloquentForms';
     }
 
 }

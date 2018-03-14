@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
 
+use Nickwest\EloquentForms\DefaultTheme;
 use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
 use Nickwest\EloquentForms\Exceptions\InvalidCustomFieldObjectException;
 
@@ -788,15 +789,16 @@ class Form{
         }
 
         if($extends != '') {
+            // If the custom Theme doesn't have an override use the default instead.
             if($this->Theme->getViewNamespace() != '' && View::exists($this->Theme->getViewNamespace().'::form-extend')) {
                 return View::make($this->Theme->getViewNamespace().'::form-extend', $blade_data);
             }
-            return View::make('form-maker::form-extend', $blade_data);
+            return View::make(DefaultTheme::getDefaultNamespace().'::form-extend', $blade_data);
         }
         if($this->Theme->getViewNamespace() != '' && View::exists($this->Theme->getViewNamespace().'::form')) {
             return View::make($this->Theme->getViewNamespace().'::form', $blade_data);
         }
-        return View::make('form-maker::form', $blade_data);
+        return View::make(DefaultTheme::getDefaultNamespace().'::form', $blade_data);
     }
 
     /**
@@ -814,7 +816,7 @@ class Form{
         if($this->Theme->getViewNamespace() != '' && View::exists($this->Theme->getViewNamespace().'::subform')) {
             return View::make($this->Theme->getViewNamespace().'::subform', $blade_data);
         }
-        return View::make('form-maker::subform', $blade_data);
+        return View::make(DefaultTheme::getDefaultNamespace().'::subform', $blade_data);
     }
 
     /**
