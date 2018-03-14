@@ -222,7 +222,6 @@ class FormTraitTest extends TestCase
     }
 
 
-
     ////// Helpers
 
     private function getSimulatedPostValues()
@@ -349,11 +348,11 @@ class Sample extends Model
 
     public function prepareForm()
     {
-        // Default Form Field label postfix
-        $this->label_suffix = ':';
-
         // This is magical and comes from the FormTrait. It generates form field data by looking at the model's table columns
         $this->generateFormData();
+
+        // Default Form Field label postfix
+        $this->setLabelSuffix(':');
 
         $this->Form()->good_day->setOptions(['Yes' => 'Yes', 'No' => 'No']);
         $this->Form()->beverage->setOptions(['Beer' => 'Beer', 'Wine' => 'Wine', 'Water' => 'Water']);

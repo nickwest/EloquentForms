@@ -5,7 +5,7 @@
         <input {!! $Field->attributes !!}>
     @endif
     <label class="radio {{ $Field->option_label_class }}" for="{{ $Field->attributes->id }}">
-        {{ $Field->options[$key] }}
+        {{ $Field->getOption($key) }}
     </label>
 </div>
 @endif

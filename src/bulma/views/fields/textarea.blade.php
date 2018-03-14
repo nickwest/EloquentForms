@@ -5,9 +5,9 @@
 
         <div class="{{ $Field->input_wrapper_class.($view_only ? ' value' : '') }}">
             @if($view_only)
-                {!! nl2br($Field->value) !!}
+                {!! nl2br($Field->attributes->value) !!}
             @else
-                <textarea class="{{ $Field->attributes->class }}" id="{{ $Field->attributes->id }}" name="{{ $Field->attributes->name }}" class="{{ $Field->attributes->class }}" placeholder="{{ $Field->attributes->placeholder }}">{!! $Field->value !!}</textarea>
+                <textarea class="{{ $Field->attributes->class }}" id="{{ $Field->attributes->id }}" name="{{ $Field->attributes->name }}" class="{{ $Field->attributes->class }}" placeholder="{{ $Field->attributes->placeholder }}">{!! $Field->attributes->value !!}</textarea>
             @endif
         </div>
 

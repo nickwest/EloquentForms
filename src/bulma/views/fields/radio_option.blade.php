@@ -4,6 +4,6 @@
         @if(!$view_only)
             <input {!! $Field->attributes !!}>
         @endif
-        {{ $Field->options[$key] }}
+        {{ $Field->getOption($key) }}
     </label>
 @endif

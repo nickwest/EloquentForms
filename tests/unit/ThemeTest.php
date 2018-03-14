@@ -17,8 +17,7 @@ class ThemeTest extends TestCase
     public function test_theme_returns_view_namespace()
     {
         $Theme = new DefaultTheme();
-
-        $this->assertNotEmpty($Theme->view_namespace);
+        $this->assertEquals('Nickwest\\EloquentForms', $Theme->getViewNamespace());
     }
 
     //TODO: Add Bulma tests to verify function manipulate Field Displays

@@ -3,10 +3,10 @@
 <div class="{{ $Field->option_wrapper_class }}">
     <label class="{{ $Field->option_label_class }}" for="{{ $Field->attributes->id }}">
         @if($view_only)
-            {{ $Field->options[$key] }}
+            {{ $Field->getOption($key) }}
         @else
             <input {!! $Field->attributes !!}>
-            {{ $Field->options[$key] }}
+            {{ $Field->getOption($key) }}
         @endif
     </label>
 </div>

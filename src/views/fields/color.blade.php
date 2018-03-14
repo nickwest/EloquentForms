@@ -11,7 +11,7 @@
             @eloquentforms_include($Field->getViewNamespace().'::pieces.label', ['Field' => $Field])
 
             <div class="value">
-                <div style="display: inline-block; padding: 2px; border: 10px solid {{ $Field->value }}">{{ $Field->value }}</div>
+                <div style="display: inline-block; padding: 2px; border: 10px solid {{ $Field->attributes->value }}">{{ $Field->attributes->value }}</div>
             </div>
 
             @eloquentforms_include($Field->getViewNamespace().'::pieces.note')

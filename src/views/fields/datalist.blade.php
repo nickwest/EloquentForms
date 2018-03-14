@@ -1,5 +1,5 @@
 <datalist id="{{ $Field->attributes->id }}">
-	@foreach($Field->options as $key => $value)
+	@foreach($Field->getOptions() as $key => $value)
 		<option value="{{ $key }}"{!! $value != '' ? ' label="'.$value.'"' : '' !!}">
 	@endforeach
 </datalist>

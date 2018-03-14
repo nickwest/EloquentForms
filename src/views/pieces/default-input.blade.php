@@ -5,7 +5,7 @@
 
         @if($view_only)
             <div class="value">
-                {{ $Field->value }}
+                {{ $Field->attributes->value }}
             </div>
         @else
             <input {!! $Field->attributes !!} />

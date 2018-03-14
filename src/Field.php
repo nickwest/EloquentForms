@@ -371,6 +371,28 @@ class Field{
     }
 
     /**
+     * Returns options set to this field
+     *
+     * @param string $key
+     * @return mixed
+     */
+    public function getOption(string $key)
+    {
+        return $this->options[$key];
+    }
+
+    /**
+     * Checks if an option key is set
+     *
+     * @param string $key
+     * @return bool
+     */
+    public function hasOption($key): bool
+    {
+        return isset($this->options[$key]);
+    }
+
+    /**
      * Remove an option
      *
      * @param string $key
@@ -507,7 +529,7 @@ class Field{
         $this->attributes->id = $this->original_id.'-'.$key;
         $this->attributes->value = $key;
 
-        $this->attributes->checked = in_array($key, $this->multi_value) ? true : false;
+        $this->attributes->checked = ($key == $this->attributes->multi_key ? true : false);
 
         $this->Theme->prepareFieldView($this);
 

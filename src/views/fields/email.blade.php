@@ -11,7 +11,7 @@
             @eloquentforms_include($Field->getViewNamespace().'::pieces.label', ['Field' => $Field])
 
             <div class="value">
-                <a href="mailto:{{ $Field->value }}">{{ $Field->value }}</a>
+                <a href="mailto:{{ $Field->attributes->value }}">{{ $Field->attributes->value }}</a>
             </div>
 
             @eloquentforms_include($Field->getViewNamespace().'::pieces.note')

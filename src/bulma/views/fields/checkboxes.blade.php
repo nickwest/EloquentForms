@@ -5,7 +5,7 @@
             @if($Field->label != '')
                 <label class="{{ $Field->label_class }}">{!! $Field->label.($Field->label_suffix != '' ? $Field->label_suffix : '').(isset($Field->attributes->required) ? ' <em>*</em>' : '') !!}</label>
             @endif
-            @foreach($Field->options as $key => $option)
+            @foreach($Field->getOptions() as $key => $option)
                 {!! $Field->makeOptionView($key, $view_only) !!}
             @endforeach
         </div>

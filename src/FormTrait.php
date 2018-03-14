@@ -113,6 +113,18 @@ trait FormTrait{
         return $this->Form()->$field_name->makeDisplayView();
     }
 
+    /**
+     * String to append to each label
+     *
+     * @param string $suffix
+     * @return void
+     */
+    public function setLabelSuffix(string $suffix)
+    {
+        foreach($this->Form()->getFields() as $Field){
+            $Field->label_suffix = $suffix;
+        }
+    }
 
     /**
      * Set the values from a post data array to $this model,

@@ -77,6 +77,11 @@ class FieldTest extends TestCase
         $this->assertEquals($test_options, $options);
     }
 
+    public function test_field_getOption_will_return_the_correct_single_option()
+    {
+
+    }
+
     public function test_field_setOptions_overwrites_previous_set_values()
     {
         $this->Field->setOption(1, 'Wrong');

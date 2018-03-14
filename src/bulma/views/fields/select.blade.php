@@ -5,8 +5,8 @@
 
         @if($view_only)
             <div class="value">
-                @foreach($Field->options as $key => $value)
-                    @if( ($Field->multiple && in_array($key, $Field->multi_value)) || $Field->value == $key)
+                @foreach($Field->getOptions() as $key => $value)
+                    @if( ($Field->attributes->multi_key != '' && $key == $Field->attributes->multi_key) || $Field->attributes->value == $key)
                         <div>{{ $value }}</div>
                     @endif
                 @endforeach
@@ -14,7 +14,7 @@
         @else
         <div class="{{ $Field->input_wrapper_class }}{{ $Field->multiple ? ' is-multiple' : '' }}">
                 <select {!! $Field->attributes !!}>
-                @foreach($Field->options as $key => $value)
+                @foreach($Field->getOptions() as $key => $value)
                     @eloquentforms_include($Field->getViewNamespace().'::fields.select_option')
                 @endforeach
             </select>

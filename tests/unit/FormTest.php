@@ -665,7 +665,13 @@ class FormTest extends TestCase
         $this->assertInstanceOf(\Illuminate\View\View::class, $view);
     }
 
+    public function test_form_can_make_a_view_and_render_without_breaking()
+    {
+        $view = $this->Form->MakeView();
+        $this->assertInstanceOf(\Illuminate\View\View::class, $view);
 
+        $view->render();
+    }
 
 
 
