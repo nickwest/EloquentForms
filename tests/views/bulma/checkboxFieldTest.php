@@ -12,6 +12,7 @@ class checkboxFieldTest extends FieldViewBulmaTestCase
     protected $test_type = 'checkbox';
     protected $test_id_suffix = '-1';
     protected $test_options = [1 => 'Yes'];
+    protected $expected_type_class = '';
 
     // Run all basic tests
 
@@ -69,6 +70,14 @@ class checkboxFieldTest extends FieldViewBulmaTestCase
 
 
         $this->assertSame(true, $input->checked);
+    }
+
+    public function test_field_has_correct_class_attribute()
+    {
+        $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
+        $input = current($dom->find($this->test_tag));
+
+        $this->assertSame(false, $input->class);
     }
 
 }

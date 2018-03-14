@@ -11,6 +11,7 @@ class checkboxesFieldTest extends FieldViewBulmaTestCase
     protected $test_value = '2';
     protected $test_type = 'checkbox';
     protected $test_options = [1 => 'Yes', 2 => 'No'];
+    protected $expected_type_class = '';
 
     // Run all basic tests
 

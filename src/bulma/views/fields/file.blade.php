@@ -10,7 +10,8 @@
         @else
             <div class="file has-name is-fullwidth">
                 <label class="file-label">
-                    <input {!! $Field->attributes !!} />
+                    @if($Field->attributes->value == '')
+                        <input {!! $Field->attributes !!} />
                     <span class="file-cta">
                         <span class="file-icon">
                             <i class="fa fa-upload"></i>
@@ -19,15 +20,21 @@
                             Choose a file…
                         </span>
                     </span>
+                    @else
                     <span class="file-name">
                         {{ $Field->attributes->value }}
                     </span>
+                    @endif
                     @if($Field->attributes->value != '')
                         <input class="button is-danger" type="submit" value="{{ $Field->file_delete_button_value }}" name="{{ $Field->attributes->name }}" />
                     @endif
                 </label>
             </div>
         @endif
+
+        @eloquentforms_include($Field->getViewNamespace().'::pieces.example')
+        @eloquentforms_include($Field->getViewNamespace().'::pieces.error')
+        @eloquentforms_include($Field->getViewNamespace().'::pieces.note')
     @endslot
 
 @endcomponent

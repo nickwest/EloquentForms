@@ -18,7 +18,7 @@ class fileFieldTest extends FieldViewBulmaTestCase
         $this->Field->attributes->value = $this->test_value;
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $remove_button = current($dom->find($this->test_tag));
-        $file_link = current($dom->find('div[class=file-link]'));
+        $file_link = current($dom->find('span[class=file-name]'));
 
         $this->assertEquals('Remove', $remove_button->value);
         $this->assertEquals('yoda.pdf', trim($file_link->plaintext));
@@ -33,4 +33,46 @@ class fileFieldTest extends FieldViewBulmaTestCase
 
         $this->assertEquals('Obliterate', $remove_button->value);
     }
+
+    public function test_field_has_correct_class_attribute()
+    {
+        $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
+        $input = current($dom->find($this->test_tag));
+
+        $this->assertEquals('file-input', $input->class);
+    }
+
+    public function test_field_has_correct_class_attribute_when_one_class_added()
+    {
+        $this->Field->attributes->addClass('my-class');
+        $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
+        $input = current($dom->find($this->test_tag));
+
+        $this->assertEquals('my-class file-input', trim($input->class));
+    }
+
+    public function test_field_has_correct_class_attribute_when_many_classes_added()
+    {
+        $this->Field->attributes->addClass('my-class');
+        $this->Field->attributes->addClass('two');
+        $this->Field->attributes->addClass('three');
+        $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
+        $input = current($dom->find($this->test_tag));
+
+        $this->assertEquals('my-class two three file-input', trim($input->class));
+    }
+
+    public function test_field_has_correct_class_attribute_when_classes_removed()
+    {
+        $this->Field->attributes->addClass('my-class');
+        $this->Field->attributes->addClass('two');
+        $this->Field->attributes->addClass('three');
+        $this->Field->attributes->removeClass('two');
+        $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
+        $input = current($dom->find($this->test_tag));
+
+        $this->assertEquals('my-class three file-input', trim($input->class));
+    }
+
+
 }

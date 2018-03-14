@@ -25,6 +25,7 @@ abstract class FieldViewBulmaTestCase extends TestCase
     protected $test_tag = 'input';
     protected $test_id_suffix = '';
     protected $test_options = null;
+    protected $expected_type_class = 'input';
 
     public function setUp()
     {
@@ -100,7 +101,7 @@ abstract class FieldViewBulmaTestCase extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
 
-        $this->assertEquals('input', $input->class);
+        $this->assertEquals($this->getExpectedTypeClass(false), $input->class);
     }
 
     public function test_field_has_correct_class_attribute_when_one_class_added()
@@ -109,7 +110,7 @@ abstract class FieldViewBulmaTestCase extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
 
-        $this->assertEquals('my-class input', trim($input->class));
+        $this->assertEquals('my-class'.$this->getExpectedTypeClass(), trim($input->class));
     }
 
     public function test_field_has_correct_class_attribute_when_many_classes_added()
@@ -120,7 +121,7 @@ abstract class FieldViewBulmaTestCase extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
 
-        $this->assertEquals('my-class two three input', trim($input->class));
+        $this->assertEquals('my-class two three'.$this->getExpectedTypeClass(), trim($input->class));
     }
 
     public function test_field_has_correct_class_attribute_when_classes_removed()
@@ -132,7 +133,7 @@ abstract class FieldViewBulmaTestCase extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
 
-        $this->assertEquals('my-class three input', trim($input->class));
+        $this->assertEquals('my-class three'.$this->getExpectedTypeClass(), trim($input->class));
     }
 
     public function test_field_has_correct_value_attribute()
@@ -336,4 +337,10 @@ abstract class FieldViewBulmaTestCase extends TestCase
         $this->assertEquals(sort($expected), $actual = sort($actual));
     }
 
+
+
+    protected function getExpectedTypeClass(bool $space = true)
+    {
+        return ($this->expected_type_class != '' ? ($space ? ' ' : '').$this->expected_type_class : '');
+    }
 }
