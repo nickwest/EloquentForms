@@ -527,22 +527,28 @@ class Field{
      * Make an option view for this field
      *
      * @param string $key
+     * @param mixed $value
      * @param bool $view_only
      * @return Illuminate\View\View
      */
-    public function makeOptionView(string $key, bool $view_only = false): \Illuminate\View\View
+    public function makeOptionView(string $key, $value, bool $view_only = false): \Illuminate\View\View
     {
-        $this->attributes->id_suffix = '-'.$key;
-        $this->attributes->value = $key;
+        // Clone the field so we don't screw up it's properties when making the option
+        $Field = clone $this;
 
-        $this->attributes->checked = ($key == $this->attributes->multi_key ? true : false);
+        $Field->attributes->id_suffix = '-'.$key;
+        $Field->attributes->value = $key;
 
-        $this->Theme->prepareFieldView($this);
-
-        if($this->getViewNamespace() != '' && View::exists($this->getViewNamespace().'::fields.'.$this->attributes->type.'_option')) {
-            return View::make($this->getViewNamespace().'::fields.'.$this->attributes->type.'_option', array('Field' => $this, 'key' => $key, 'view_only' => $view_only));
+        if($key == $value){
+            $Field->attributes->checked = null;
         }
-        return View::make('Nickwest\\EloquentForms::fields.'.$this->attributes->type.'_option', array('Field' => $this, 'key' => $key, 'view_only' => $view_only));
+
+        $Field->Theme->prepareFieldView($Field);
+
+        if($Field->getViewNamespace() != '' && View::exists($Field->getViewNamespace().'::fields.'.$Field->attributes->type.'_option')) {
+            return View::make($Field->getViewNamespace().'::fields.'.$Field->attributes->type.'_option', array('Field' => $Field, 'key' => $key, 'view_only' => $view_only));
+        }
+        return View::make('Nickwest\\EloquentForms::fields.'.$Field->attributes->type.'_option', array('Field' => $Field, 'key' => $key, 'view_only' => $view_only));
     }
 
 

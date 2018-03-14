@@ -6,7 +6,7 @@
         @endif
         @foreach($Field->getOptions() as $key => $option)
             @if($key != '') {{-- Make this optional somehow --}}
-                {!! $Field->makeOptionView($key, $view_only) !!}
+                {!! $Field->makeOptionView($key, $Field->attributes->value, $view_only) !!}
             @endif
         @endforeach
 

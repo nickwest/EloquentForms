@@ -5,7 +5,7 @@
             <label class="{{ $Field->label_class }}">{!! $Field->label.($Field->label_suffix != '' ? $Field->label_suffix : '').(isset($Field->attributes->required) ? ' <em>*</em>' : '') !!}</label>
         @endif
         @foreach($Field->getOptions() as $key => $option)
-            {!! $Field->makeOptionView($key, $view_only) !!}
+            {!! $Field->makeOptionView($key, $Field->attributes->value, $view_only) !!}
         @endforeach
 
         @eloquentforms_include($Field->getViewNamespace().'::pieces.example')

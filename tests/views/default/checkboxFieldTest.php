@@ -60,4 +60,15 @@ class checkboxFieldTest extends FieldViewTestCase
 
     // Add "selected" tests
 
+    public function test_field_has_selected_attribute_when_value_is_equal()
+    {
+        $this->Field->attributes->value = 1;
+
+        $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
+        $input = current($dom->find($this->test_tag));
+
+
+        $this->assertSame(true, $input->checked);
+    }
+
 }
