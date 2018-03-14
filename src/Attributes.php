@@ -40,6 +40,8 @@ class Attributes{
     {
         if($attribute == 'class') {
             return implode(' ', $this->classes);
+        }elseif($attribute == 'id'){
+            return $this->id_prefix.$this->attributes['id'];
         }
 
         if(isset($this->attributes[$attribute])) {
@@ -171,7 +173,7 @@ class Attributes{
                 }
             }
 
-            if($key == 'id' && $this->id_prefix != ''){
+            if($key == 'id'){
                 $value = $this->id_prefix.$value;
             }
 

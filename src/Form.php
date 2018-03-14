@@ -649,6 +649,9 @@ class Form{
 
             // Set required rule on all required fields
             if($Field->attributes->required && !in_array('required', $rules)) {
+                if(!is_array($rules[$Field->getOriginalName()])) {
+                    $rules[$Field->getOriginalName()] = [];
+                }
                 $rules[$Field->getOriginalName()][] = 'required';
             }
 
