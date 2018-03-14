@@ -22,7 +22,7 @@ class FieldTest extends TestCase
     {
         $this->assertEquals('my_field', $this->Field->attributes->name);
         $this->assertEquals('text', $this->Field->attributes->type);
-        $this->assertEquals('my_field', $this->Field->attributes->id);
+        $this->assertEquals('input-my_field', $this->Field->attributes->id);
 
         $this->assertEquals('my_field', $this->Field->getOriginalName());
         $this->assertEquals('my_field', $this->Field->getOriginalId());

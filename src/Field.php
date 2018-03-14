@@ -204,7 +204,7 @@ class Field{
 
         // Set some basic properties
         $this->original_name = $this->attributes->name;
-        $this->original_id = $this->attributes->id;
+        $this->original_id = $field_name;
         $this->label = $this->makeLabel();
 
         // TODO: Make config and set default theme in config
