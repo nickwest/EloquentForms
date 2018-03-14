@@ -14,6 +14,7 @@ use Sunra\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Form;
 use Nickwest\EloquentForms\Field;
+use Nickwest\EloquentForms\bulma\Theme;
 
 use Nickwest\EloquentForms\Test\TestCase;
 
@@ -30,6 +31,8 @@ abstract class FieldViewBulmaTestCase extends TestCase
         parent::setUp();
 
         $this->Field = new Field('my_test_field');
+
+        $this->Field->Theme = new Theme();
 
         $this->Field->attributes->type = $this->test_type;
 
@@ -97,7 +100,7 @@ abstract class FieldViewBulmaTestCase extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
 
-        $this->assertEmpty($input->class);
+        $this->assertEquals('input', $input->class);
     }
 
     public function test_field_has_correct_class_attribute_when_one_class_added()
@@ -106,7 +109,7 @@ abstract class FieldViewBulmaTestCase extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
 
-        $this->assertEquals('my-class', trim($input->class));
+        $this->assertEquals('my-class input', trim($input->class));
     }
 
     public function test_field_has_correct_class_attribute_when_many_classes_added()
@@ -117,7 +120,7 @@ abstract class FieldViewBulmaTestCase extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
 
-        $this->assertEquals('my-class two three', trim($input->class));
+        $this->assertEquals('my-class two three input', trim($input->class));
     }
 
     public function test_field_has_correct_class_attribute_when_classes_removed()
@@ -129,7 +132,7 @@ abstract class FieldViewBulmaTestCase extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
 
-        $this->assertEquals('my-class three', trim($input->class));
+        $this->assertEquals('my-class three input', trim($input->class));
     }
 
     public function test_field_has_correct_value_attribute()
@@ -281,7 +284,7 @@ abstract class FieldViewBulmaTestCase extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $example = current($dom->find('p'));
 
-        $this->assertEquals('example', $example->class);
+        $this->assertEquals('example has-text-grey is-size-7', $example->class);
         $this->assertEquals('This is an <strong>awesome</strong> example', trim($example->innertext));
     }
 
@@ -291,7 +294,7 @@ abstract class FieldViewBulmaTestCase extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $note = current($dom->find('p'));
 
-        $this->assertEquals('note', $note->class);
+        $this->assertEquals('help has-text-primary', $note->class);
         $this->assertEquals('Something <a href="https://google.com">to give</a> more info', trim($note->innertext));
     }
 
