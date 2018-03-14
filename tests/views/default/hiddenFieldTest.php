@@ -72,4 +72,23 @@ class hiddenFieldTest extends FieldViewTestCase
         // Hidden fields will never show a note
         $this->assertSame(false, $note);
     }
+
+    public function test_field_has_a_container_div()
+    {
+        $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
+        $div = current($dom->find('div'));
+
+        // Hidden fields don't have a container, so make sure there isn't one.
+        $this->assertSame(false, $div);
+    }
+
+    public function test_field_container_div_has_valid_attributes()
+    {
+        $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
+        $div = current($dom->find('div'));
+
+        // Hidden fields don't have a container, so we don't care about its attributes, just pass
+        $this->assertSame(false, $div);
+    }
+
 }

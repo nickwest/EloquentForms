@@ -1,5 +1,12 @@
 <?php namespace Nickwest\EloquentForms\Test;
 
+/**
+ * FieldViewTestCase includes basic field tests
+ * Each Field view uses different templates and ruins different logic
+ * It's necessary to test each field type for completely coverage
+ * Some fields will have differences that will require test overrides *
+ */
+
 use Sunra\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Form;
@@ -291,6 +298,29 @@ abstract class FieldViewTestCase extends TestCase
 
         $this->assertNotSame(false, $error);
         $this->assertEquals('The awesome stuff field is required.', $error->plaintext);
+    }
+
+
+    // Container
+
+    public function test_field_has_a_container_div()
+    {
+        $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
+        $div = current($dom->find('div'));
+
+        $this->assertNotSame(false, $div);
+    }
+
+    public function test_field_container_div_has_valid_attributes()
+    {
+        $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
+        $div = current($dom->find('div'));
+
+        $this->assertEquals('field-my_test_field', $div->id);
+        // Order is arbitrary, so sort to make sure they're equal even if not ordered the same way
+        $expected = ['type-'.$this->test_type, 'field', $this->test_type];
+        $actual = explode(' ', $div->class);
+        $this->assertEquals(sort($expected), $actual = sort($actual));
     }
 
 }

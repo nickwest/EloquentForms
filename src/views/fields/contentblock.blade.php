@@ -2,7 +2,7 @@
 
     @slot('field_markup')
         @if($Field->attributes->value != '')
-            <div class="{{ $Field->attributes->class }}" id="{{ $Field->attributes->id }}">
+            <div {!! $Field->attributes !!}>
                 {!! $Field->attributes->value !!}
             </div>
         @endif
