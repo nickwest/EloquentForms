@@ -36,7 +36,7 @@ class FieldTest extends TestCase
 
         // When we apply Bulma
         $this->Field->Theme = new \Nickwest\EloquentForms\bulma\Theme();
-        $this->assertEquals('Nickwest\\EloquentForms', $this->Field->getViewNamespace());
+        $this->assertEquals('Nickwest\\EloquentForms\\bulma', $this->Field->getViewNamespace());
     }
 
     public function test_field_isSubform_returns_if_field_is_a_subform()
@@ -54,7 +54,7 @@ class FieldTest extends TestCase
 
         // And with a different theme
         $this->Field->Theme = new \Nickwest\EloquentForms\bulma\Theme();
-        $this->assertEquals('Nickwest\EloquentForms::fields.select', $this->Field->getTemplate());
+        $this->assertEquals('Nickwest\EloquentForms\\bulma::fields.select', $this->Field->getTemplate());
     }
 
     public function test_field_setOption_will_set_a_sign_option_to_the_field()
@@ -79,7 +79,12 @@ class FieldTest extends TestCase
 
     public function test_field_getOption_will_return_the_correct_single_option()
     {
+        $test_options = [1 => 'different', 2 => 'two', 44 => 'Fourtyfour'];
+        $this->Field->setOptions($test_options);
 
+        foreach($test_options as $key => $value){
+            $this->assertEquals($value, $this->Field->getOption($key));
+        }
     }
 
     public function test_field_setOptions_overwrites_previous_set_values()
