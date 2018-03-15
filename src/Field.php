@@ -333,26 +333,29 @@ class Field{
      */
     public function getTemplate(): string
     {
+        $view_name = 'Nickwest\\EloquentForms::fields.'.$this->attributes->type;
+
         // If this is a radio or checkbox switch between multiples or single
         if($this->attributes->type == 'checkbox' && is_array($this->options)) {
             if($this->getViewNamespace() != '' && View::exists($this->getViewNamespace().'::fields.checkboxes')) {
-                return $this->getViewNamespace().'::fields.checkboxes';
+                $view_name = $this->getViewNamespace().'::fields.checkboxes';
             }
-            return 'Nickwest\\EloquentForms::fields.checkboxes';
+            $view_name = 'Nickwest\\EloquentForms::fields.checkboxes';
         }
 
         // If this is a radio or checkbox switch between multiples or single
-        if($this->attributes->type == 'radio' && is_array($this->options)) {
+        elseif($this->attributes->type == 'radio' && is_array($this->options)) {
             if($this->getViewNamespace() != '' && View::exists($this->getViewNamespace().'::fields.radios')) {
-                return $this->getViewNamespace().'::fields.radios';
+                $view_name = $this->getViewNamespace().'::fields.radios';
             }
-            return 'Nickwest\\EloquentForms::fields.radios';
+            $view_name = 'Nickwest\\EloquentForms::fields.radios';
         }
 
-        if($this->getViewNamespace() != '' && View::exists($this->getViewNamespace().'::fields.'.$this->attributes->type)) {
-            return $this->getViewNamespace().'::fields.'.$this->attributes->type;
+        elseif($this->getViewNamespace() != '' && View::exists($this->getViewNamespace().'::fields.'.$this->attributes->type)) {
+            $view_name = $this->getViewNamespace().'::fields.'.$this->attributes->type;
         }
-        return 'Nickwest\\EloquentForms::fields.'.$this->attributes->type;
+
+        return $view_name;
     }
 
     /**
