@@ -23,14 +23,9 @@ class EloquentFormsServiceProvider extends ServiceProvider {
         $this->loadViewsFrom(__DIR__.'/views', 'Nickwest\\EloquentForms');
 
         Blade::directive('eloquentforms_include', function($expression) {
-            if(strpos($expression, ',') !== false) {
-                $view = substr($expression, 0, strpos($expression, ','));
-                $remainder = substr($expression, strpos($expression, ','));
-            } else {
-                $view = $expression;
-                $remainder = '';
-            }
-            $template = substr($view, strpos($view, '::')+2);
+            $view = \Nickwest\EloquentForms\EloquentFormsServiceProvider::getPartOfExpression($expression, 'view');
+            $template = \Nickwest\EloquentForms\EloquentFormsServiceProvider::getPartOfExpression($expression, 'template');
+            $remainder = \Nickwest\EloquentForms\EloquentFormsServiceProvider::getPartOfExpression($expression, 'remainder');
 
             return '<?php if(View::exists('.$view.')){
                 echo $__env->make('.$expression.', array_except(get_defined_vars(), array(\'__data\', \'__path\')))->render();
@@ -40,14 +35,9 @@ class EloquentFormsServiceProvider extends ServiceProvider {
         });
 
         Blade::directive('eloquentforms_component', function($expression) {
-            if(strpos($expression, ',') !== false) {
-                $view = substr($expression, 0, strpos($expression, ','));
-                $remainder = substr($expression, strpos($expression, ','));
-            } else {
-                $view = $expression;
-                $remainder = '';
-            }
-            $template = substr($view, strpos($view, '::')+2);
+            $view = \Nickwest\EloquentForms\EloquentFormsServiceProvider::getPartOfExpression($expression, 'view');
+            $template = \Nickwest\EloquentForms\EloquentFormsServiceProvider::getPartOfExpression($expression, 'template');
+            $remainder = \Nickwest\EloquentForms\EloquentFormsServiceProvider::getPartOfExpression($expression, 'remainder');
 
             return '<?php if(View::exists('.$view.')){
                 $__env->startComponent('.$expression.');
@@ -55,7 +45,6 @@ class EloquentFormsServiceProvider extends ServiceProvider {
                 $__env->startComponent(\'Nickwest\\EloquentForms::'.$template.$remainder.');
             } ?>';
         });
-
     }
 
     /**
@@ -76,6 +65,27 @@ class EloquentFormsServiceProvider extends ServiceProvider {
     public function provides()
     {
         return [];
+    }
+
+    /**
+     * Extract part of an expression
+     *
+     * @param string $expression
+     * @param string $part
+     * @return string
+     */
+    static public function getPartOfExpression(string $expression, string $part): string
+    {
+        if(strpos($expression, ',') !== false) {
+            $view = substr($expression, 0, strpos($expression, ','));
+            $remainder = substr($expression, strpos($expression, ','));
+        } else {
+            $view = $expression;
+            $remainder = '';
+        }
+        $template = substr($view, strpos($view, '::')+2);
+
+        return $$part;
     }
 
 }
