@@ -61,7 +61,7 @@ class FieldTest extends TestCase
     {
         $test_options = $this->Field->getOptions();
 
-        $test_options[56] = 'Fifty Six';
+        $test_options['56'] = 'Fifty Six';
         $this->Field->setOption(56, 'Fifty Six');
 
         $this->assertEquals($test_options, $this->Field->getOptions());
@@ -69,7 +69,7 @@ class FieldTest extends TestCase
 
     public function test_field_setOptions_will_set_options_to_a_field()
     {
-        $test_options = [1 => 'different', 2 => 'two', 44 => 'Fourtyfour'];
+        $test_options = ['1' => 'different', '2' => 'two', '44' => 'Fourtyfour'];
         $this->Field->setOptions($test_options);
 
         $options = $this->Field->getOptions();
@@ -79,7 +79,7 @@ class FieldTest extends TestCase
 
     public function test_field_getOption_will_return_the_correct_single_option()
     {
-        $test_options = [1 => 'different', 2 => 'two', 44 => 'Fourtyfour'];
+        $test_options = ['1' => 'different', '2' => 'two', '44' => 'Fourtyfour'];
         $this->Field->setOptions($test_options);
 
         foreach($test_options as $key => $value){
@@ -92,7 +92,7 @@ class FieldTest extends TestCase
         $this->Field->setOption(1, 'Wrong');
         $this->Field->setOption(2, 'Option');
 
-        $test_options = [1 => 'one', 2 => 'two', 44 => 'Fourtyfour'];
+        $test_options = ['1' => 'one', '2' => 'two', '44' => 'Fourtyfour'];
         $this->Field->setOptions($test_options);
 
         $this->assertEquals($test_options, $this->Field->getOptions());
@@ -100,7 +100,7 @@ class FieldTest extends TestCase
 
     public function test_field_setOptions_throws_an_exception_when_option_values_are_not_strings()
     {
-        $test_options = [1 => 'different', 2 => 'two', 44 => ['Fourtyfour']];
+        $test_options = ['1' => 'different', '2' => 'two', '44' => ['Fourtyfour']];
 
         $this->expectException(OptionValueException::class);
         $this->Field->setOptions($test_options);
@@ -108,7 +108,7 @@ class FieldTest extends TestCase
 
     public function test_field_removeOption_will_remove_an_option()
     {
-        $test_options = [1 => 'different', 2 => 'two', 44 => 'Fourtyfour'];
+        $test_options = ['1' => 'different', '2' => 'two', '44' => 'Fourtyfour'];
         $this->Field->setOptions($test_options);
 
         $this->Field->removeOption(2);
@@ -127,11 +127,11 @@ class FieldTest extends TestCase
 
     public function test_field_setDisalbedOptions_throws_an_exception_if_invalid_options_are_passed()
     {
-        $test_options = [1 => 'one', 2 => 'two', 44 => 'Fourtyfour'];
+        $test_options = ['1' => 'one', '2' => 'two', '44' => 'Fourtyfour'];
         $this->Field->setOptions($test_options);
 
         $this->expectException(OptionValueException::class);
-        $this->Field->setDisabledOptions([1,44,4]);
+        $this->Field->setDisabledOptions(['1','44','4']);
     }
 
     public function test_field_toJson_returns_a_valid_json_string()
@@ -178,7 +178,7 @@ class FieldTest extends TestCase
 
         $Field->CustomField = new \Nickwest\EloquentForms\CustomFields\daysofweek\CustomField;
 
-        $test_options = [1 => 'one', 2 => 'two', 44 => 'Fourtyfour'];
+        $test_options = ['1' => 'one', '2' => 'two', '44' => 'Fourtyfour'];
         $Field->setOptions($test_options);
 
         $Field->setDisabledOptions([1,44]);
