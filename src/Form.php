@@ -812,23 +812,7 @@ class Form{
         $blade_data['section'] = $section;
         $blade_data['view_only'] = $view_only;
 
-        // Check if this form should be multipart
-        foreach($this->Fields as $Field){
-            if(isset($this->attributes->enctype)){
-                break;
-            }
-
-            if($Field->attributes->type == 'file'){
-                $this->attributes->enctype = 'multipart/form-data';
-            }elseif($Field->isSubform()){
-                foreach($Field->Subform->Fields as $SubField){
-                    if($SubField->attributes->type == 'file'){
-                        $this->attributes->enctype = 'multipart/form-data';
-                    }
-                }
-            }
-        }
-
+        $this->setMultipartIfNeeded();
         $this->Theme->prepareFormView($this);
 
         if($extends != '') {
@@ -842,6 +826,27 @@ class Form{
             return View::make($this->Theme->getViewNamespace().'::form', $blade_data);
         }
         return View::make(DefaultTheme::getDefaultNamespace().'::form', $blade_data);
+    }
+
+    protected function setMultipartIfNeeded()
+    {
+        if(isset($this->attributes->enctype)){
+            return;
+        }
+
+        foreach($this->Fields as $Field){
+            if($Field->attributes->type == 'file'){
+                $this->attributes->enctype = 'multipart/form-data';
+                return;
+            }elseif($Field->isSubform()){
+                foreach($Field->Subform->Fields as $SubField){
+                    if($SubField->attributes->type == 'file'){
+                        $this->attributes->enctype = 'multipart/form-data';
+                        return;
+                    }
+                }
+            }
+        }
     }
 
     /**
