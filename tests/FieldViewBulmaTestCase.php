@@ -33,7 +33,7 @@ abstract class FieldViewBulmaTestCase extends TestCase
 
         $this->Field = new Field('my_test_field');
 
-        $this->Field->Theme = new Theme();
+        $this->Field->setTheme(new Theme());
 
         $this->Field->attributes->type = $this->test_type;
 

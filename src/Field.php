@@ -4,9 +4,12 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Validator;
 
 use Nickwest\EloquentForms\Attributes;
+use Nickwest\EloquentForms\Traits\Themeable;
 use Nickwest\EloquentForms\Exceptions\OptionValueException;
 
 class Field{
+
+    use Themeable;
 
     /**
      * Field Attributes (defaults are set in constructor)
@@ -14,13 +17,6 @@ class Field{
      * @var Nickwest\EloquentForms\Attributes
      */
     public $attributes = null;
-
-    /**
-     * Class(es) for the field's containing div
-     *
-     * @var Nickwest\EloquentForms\Theme
-     */
-    public $Theme = null;
 
     /**
      * Blade data to pass through to the subform

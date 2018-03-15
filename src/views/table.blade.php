@@ -1,4 +1,4 @@
-<table class="{{ $Table->getClassesString() }}">
+<table {!! $Table->attributes !!}>
     <thead>
         <tr>
         @foreach($Table->display_fields as $field_name)

@@ -5,10 +5,16 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
 
 use Nickwest\EloquentForms\DefaultTheme;
+use Nickwest\EloquentForms\Traits\Themeable;
 use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
 use Nickwest\EloquentForms\Exceptions\InvalidCustomFieldObjectException;
 
 class Form{
+
+    use Themeable{
+        setTheme as parentSetTheme;
+    }
+
     /**
      * Use Laravel csrf_field() method for creating a CSRF field in the form?
      * Note: This will elegantly fail if the csrf_field() method is not available.
@@ -61,7 +67,7 @@ class Form{
     {
         // Instantiate objects
         $this->Theme = new DefaultTheme();
-        $this->attributes = new Attributes;
+        $this->attributes = new Attributes();
 
         // Set the action to default to the current path
         $this->attributes->action = Request::url();
@@ -144,7 +150,7 @@ class Form{
         $this->Fields[$field_name] = new Field($field_name);
 
         // Carry over the current theme to the Field
-        $this->Fields[$field_name]->Theme = $this->Theme;
+        $this->Fields[$field_name]->setTheme($this->Theme);
     }
 
     /**
@@ -159,7 +165,7 @@ class Form{
             $this->Fields[$field_name] = new Field($field_name);
 
             // Carry over the current theme to the Field
-            $this->Fields[$field_name]->Theme = $this->Theme;
+            $this->Fields[$field_name]->setTheme($this->Theme);
         }
     }
 
@@ -779,22 +785,12 @@ class Form{
      */
     public function setTheme(Theme $Theme): void
     {
-        $this->Theme = $Theme;
+        $this->parentSetTheme($Theme);
+
         foreach($this->Fields as $key => $Field) {
-            $this->Fields[$key]->Theme = $Theme;
+            $this->Fields[$key]->setTheme($Theme);
         }
     }
-
-    /**
-     * Get the theme
-     *
-     * @return Nickwest\EloquentForms\Theme $Theme
-     */
-    public function getTheme(): Theme
-    {
-        return $this->Theme;
-    }
-
 
     /**
      * Make a view and extend $extends in section $section, $blade_data is the data array to pass to View::make()

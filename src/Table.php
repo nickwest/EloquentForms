@@ -4,9 +4,22 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Collection;
 
+use Nickwest\EloquentForms\Theme;
+use Nickwest\EloquentForms\Traits\Themeable;
+
 use Maatwebsite\Excel\Facades\Excel;
 
 class Table{
+
+    use Themeable;
+
+    /**
+     * Submit Button name (used for first submit button only)
+     *
+     * @var Nickwest\EloquentForms\Attributes
+     */
+    public $attributes = null;
+
     /**
      * Array of field names
      *
@@ -26,7 +39,7 @@ class Table{
      *
      * @var string
      */
-    protected $Theme = 'core';
+    protected $Theme = null;
 
     /**
      * Array of labels, keyed by field_name
@@ -72,21 +85,18 @@ class Table{
     public function __construct()
     {
         $this->Theme = new DefaultTheme();
+        $this->attributes = new Attributes();
     }
 
     /**
-     * Member accessor
+     * Set the Collection data to the Table Object
      *
-     * @param string $property
-     * @return mixed
+     * @param Illuminate\Support\Collection $Collection
+     * @return void
      */
-    public function __get($property)
+    public function setData(Collection $Collection): void
     {
-        if($property == 'view_namespace') {
-            return $this->Theme->view_namespace();
-        }
-
-        return $this->$property;
+        $this->Collection = $Collection;
     }
 
     /**
@@ -95,7 +105,7 @@ class Table{
      * @param array $field_names
      * @return void
      */
-    public function setDisplayFields(array $field_names)
+    public function setDisplayFields(array $field_names): void
     {
         foreach($field_names as $field_name) {
             $this->display_fields[$field_name] = $field_name;
@@ -103,16 +113,13 @@ class Table{
     }
 
     /**
-     * Add a css class to the table
+     * Display Fields Accessor
      *
-     * @param string $class css class
-     * @return void
+     * @return array
      */
-    public function addClass(string $class)
+    public function getDisplayFields(): array
     {
-        if(!in_array($class, $this->classes)) {
-            $this->classes[] = $class;
-        }
+        return $this->display_fields;
     }
 
     /**
@@ -122,7 +129,7 @@ class Table{
      * @param string $html non-escaped text to replace field value in output
      * @return void
      */
-    public function addFieldReplacement(string $field, string $html)
+    public function addFieldReplacement(string $field, string $html): void
     {
         $this->field_replacements[$field] = $html;
     }
@@ -133,7 +140,7 @@ class Table{
      * @param string $field field name
      * @return bool
      */
-    public function hasFieldReplacement(string $field)
+    public function hasFieldReplacement(string $field): bool
     {
         return isset($this->field_replacements[$field]);
     }
@@ -144,7 +151,7 @@ class Table{
      * @param string $field field name
      * @return string
      */
-    public function getFieldReplacement(string $field, &$Object)
+    public function getFieldReplacement(string $field, &$Object): string
     {
         $pattern = '/\{([a-zA-Z0-9_]+)\}/';
         $results = [];
@@ -166,52 +173,13 @@ class Table{
     }
 
     /**
-     * Add css classes to the table
-     *
-     * @param array $classes Array of CSS classes
-     * @return void
-     */
-    public function addClasses(array $classes)
-    {
-        foreach($classes as $class) {
-            if(!in_array($class, $this->classes)) {
-                $this->classes[] = $class;
-            }
-        }
-    }
-
-    /**
-     * Remove a css class to the table
-     *
-     * @param string $class css class
-     * @return void
-     */
-    public function removeClass(string $class)
-    {
-        if(in_array($class, $this->classes)) {
-            $remove = [$class];
-            $this->classes = array_diff($this->classes, $remove);
-        }
-    }
-
-    /**
-     * Get a string of CSS class names
-     *
-     * @return string
-     */
-    public function getClassesString()
-    {
-        return implode(' ', $this->classes);
-    }
-
-    /**
      * Set a linking pattern
      *
      * @param string $field_name
      * @param string $pattern
      * @return void
      */
-    public function setLinkingPattern(string $field_name, string $pattern = '')
+    public function setLinkingPattern(string $field_name, string $pattern = ''): void
     {
         if($pattern == '') {
             if(isset($this->linking_patterns[$field_name])) {
@@ -232,7 +200,7 @@ class Table{
      * @param array $parameters keys to replace by value
      * @return void
      */
-    public function setLinkingPatternByRoute(string $field_name, string $route_name, array $parameters=[], $query_string=[])
+    public function setLinkingPatternByRoute(string $field_name, string $route_name, array $parameters=[], $query_string=[]): void
     {
         $Route = Route::getRoutes()->getByName($route_name);
         if($Route == null) {
@@ -268,9 +236,9 @@ class Table{
      * Check if the field has a linking pattern
      *
      * @param string $field_name
-     * @return void
+     * @return bool
      */
-    public function hasLinkingPattern(string $field_name)
+    public function hasLinkingPattern(string $field_name): bool
     {
         return isset($this->linking_patterns[$field_name]);
     }
@@ -280,7 +248,7 @@ class Table{
      *
      * @param string $field_name
      * @param mixed $Object
-     * @return void
+     * @return mixed
      */
     public function getLink(string $field_name, &$Object)
     {
@@ -310,28 +278,6 @@ class Table{
         return $link;
     }
 
-
-    /**
-     * Display Fields Accessor
-     *
-     * @return array
-     */
-    public function getDisplayFields()
-    {
-        return $this->display_fields;
-    }
-
-    /**
-     * Set the theme
-     *
-     * @param \Nickwest\EloquentForms\Theme $Theme
-     * @return void
-     */
-    public function setTheme(\Nickwest\EloquentForms\Theme $Theme)
-    {
-        $this->Theme = $Theme;
-    }
-
     /**
      * Add field labels to the existing labels
      *
@@ -339,7 +285,7 @@ class Table{
      * @return void
      * @throws \Exception
      */
-    public function setLabels(array $labels)
+    public function setLabels(array $labels): void
     {
         foreach($labels as $field_name => $label) {
             if(isset($this->display_fields[$field_name])) {
@@ -350,7 +296,13 @@ class Table{
         }
     }
 
-    public function getLabel($field_name)
+    /**
+     * Get a Label for a specific field
+     *
+     * @param string $field_name
+     * @return string
+     */
+    public function getLabel(string $field_name): string
     {
         if(isset($this->labels[$field_name])) {
             return $this->labels[$field_name];
@@ -361,17 +313,6 @@ class Table{
     }
 
     /**
-     * Set the Collection data to the Table Object
-     *
-     * @param Illuminate\Support\Collection $Collection
-     * @return void
-     */
-    public function setData(\Illuminate\Support\Collection $Collection)
-    {
-        $this->Collection = $Collection;
-    }
-
-    /**
      * Make a view and extend $extends in $section, $blade_data is the data array to pass to View::make()
      *
      * @param array $blade_data
@@ -379,7 +320,7 @@ class Table{
      * @param string $section
      * @return View
      */
-    public function makeView(array $blade_data = [], string $extends = '', string $section = '')
+    public function makeView(array $blade_data = [], string $extends = '', string $section = ''): View
     {
         $blade_data['Table'] = $this;
         $blade_data['extends'] = $extends;
@@ -409,7 +350,7 @@ class Table{
      * @param array $config
      * @return void
      */
-    public function exportToExcel(string $title, array $config)
+    public function exportToExcel(string $title, array $config): void
     {
         $this->excel_config = $config;
 
@@ -487,6 +428,12 @@ class Table{
         })->export('xls');
     }
 
+    /**
+     *
+     *
+     * @param string $key
+     * @return mixed
+     */
     protected function config(string $key, $default)
     {
         return (isset($this->excel_config[$key]) ? $this->excel_config[$key] : $default);
