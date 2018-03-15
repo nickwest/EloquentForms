@@ -179,19 +179,12 @@ class Attributes{
     public function getString(){
         $output = [];
 
-        if(count($this->classes) == 0 && isset($this->attributes['class'])) {
-            unset($this->attributes['class']);
-        }elseif(count($this->classes) > 0){
-            $this->attributes['class'] = implode(' ', $this->classes);
-        }
+        $this->prepareClassAttribute();
 
         foreach($this->attributes as $key => $value) {
-
             // Add [] to name attribute if there's a multi_key set or multi_key === true
-            if($key == 'name'){
-                if($this->multi_key !== null && $this->multi_key !== false){
-                    $value .= '['.($this->multi_key !== true ? $this->multi_key : '').']';
-                }
+            if($key == 'name' && $this->multi_key !== null && $this->multi_key !== false){
+                $value .= '['.($this->multi_key !== true ? $this->multi_key : '').']';
             }
 
             if($key == 'id'){
@@ -234,6 +227,20 @@ class Attributes{
             } else {
                 $this->$key = $value;
             }
+        }
+    }
+
+    /**
+     * Prepare the class attribute using $this->classes
+     *
+     * @return void
+     */
+    protected function prepareClassAttribute()
+    {
+        if(count($this->classes) == 0 && isset($this->attributes['class'])) {
+            unset($this->attributes['class']);
+        }elseif(count($this->classes) > 0){
+            $this->attributes['class'] = implode(' ', $this->classes);
         }
     }
 
