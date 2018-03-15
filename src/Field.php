@@ -299,29 +299,33 @@ class Field{
     {
         $array = json_decode($json);
         foreach($array as $key => $value) {
-            if($key == 'attributes') {
-                $this->attributes = new Attributes();
-                $this->attributes->fromJson(json_encode($value));
-
-            } elseif($key == 'Theme' && $value !== null) {
-                $this->Theme = new $value(); // TODO: make a to/from JSON method on this? is it necessary?
-
-            } elseif($key == 'Subform' && $value !== null) {
-                $this->Subform = new Form();
-                $this->Subform->fromJson($value);
-
-            } elseif($key == 'CustomField' || $key == 'validation_rules') {
-                $this->$key = unserialize($value);
-
-            } elseif($key == 'options'){
-                foreach($value as $key => $value){
-                    $this->options[(string)$key] = $value;
-                }
-            } elseif(is_object($value)) {
-                $this->$key = (array)$value;
-
-            } else {
-                $this->$key = $value;
+            switch($key){
+                case 'attributes':
+                    $this->attributes = new Attributes();
+                    $this->attributes->fromJson(json_encode($value));
+                    break;
+                case 'Theme' == $key && $value !== null:
+                    $this->Theme = new $value(); // TODO: make a to/from JSON method on this? is it necessary?
+                    break;
+                case 'Subform' == $key && $value !== null:
+                    $this->Subform = new Form();
+                    $this->Subform->fromJson($value);
+                    break;
+                case 'CustomField':
+                case 'validation_rules':
+                    $this->$key = unserialize($value);
+                    break;
+                case 'options':
+                    foreach($value as $key => $value){
+                        $this->options[(string)$key] = $value;
+                    }
+                    break;
+                case is_object($value):
+                    $this->$key = (array)$value;
+                    break;
+                default:
+                    $this->$key = $value;
+                    break;
             }
         }
     }
