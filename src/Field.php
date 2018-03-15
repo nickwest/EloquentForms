@@ -337,29 +337,22 @@ class Field{
      */
     public function getTemplate(): string
     {
-        $view_name = 'Nickwest\\EloquentForms::fields.'.$this->attributes->type;
+        $namespace = 'Nickwest\\EloquentForm'; // TODO: Define the default name space somewhere?
 
-        // If this is a radio or checkbox switch between multiples or single
-        if($this->attributes->type == 'checkbox' && is_array($this->options)) {
-            if($this->getViewNamespace() != '' && View::exists($this->getViewNamespace().'::fields.checkboxes')) {
-                $view_name = $this->getViewNamespace().'::fields.checkboxes';
-            }
-            $view_name = 'Nickwest\\EloquentForms::fields.checkboxes';
+        // Get the template name
+        $template = 'fields.'.$this->attributes->type;
+        if($this->attributes->type == 'checkbox' && is_array($this->options)){
+            $template = 'fields.checkboxes';
+        }elseif($this->attributes->type == 'radio' && is_array($this->options)){
+            $template = 'fields.radios';
         }
 
-        // If this is a radio or checkbox switch between multiples or single
-        elseif($this->attributes->type == 'radio' && is_array($this->options)) {
-            if($this->getViewNamespace() != '' && View::exists($this->getViewNamespace().'::fields.radios')) {
-                $view_name = $this->getViewNamespace().'::fields.radios';
-            }
-            $view_name = 'Nickwest\\EloquentForms::fields.radios';
+        // Check if the theme has an override for the template, if so use the Theme namespace
+        if($this->getViewNamespace() != '' && $View::exists($this->getViewNamespace().'::'.$template)){
+            $namespace = $this->getViewNamespace();
         }
 
-        elseif($this->getViewNamespace() != '' && View::exists($this->getViewNamespace().'::fields.'.$this->attributes->type)) {
-            $view_name = $this->getViewNamespace().'::fields.'.$this->attributes->type;
-        }
-
-        return $view_name;
+        return $namespace.'::'.$template;
     }
 
     /**
