@@ -23,26 +23,18 @@ class EloquentFormsServiceProvider extends ServiceProvider {
         $this->loadViewsFrom(__DIR__.'/views', 'Nickwest\\EloquentForms');
 
         Blade::directive('eloquentforms_include', function($expression) {
-            $view = \Nickwest\EloquentForms\EloquentFormsServiceProvider::getPartOfExpression($expression, 'view');
-            $template = \Nickwest\EloquentForms\EloquentFormsServiceProvider::getPartOfExpression($expression, 'template');
-            $remainder = \Nickwest\EloquentForms\EloquentFormsServiceProvider::getPartOfExpression($expression, 'remainder');
-
-            return '<?php if(View::exists('.$view.')){
+            return '<?php if(View::exists('.\Nickwest\EloquentForms\EloquentFormsServiceProvider::getPartOfExpression($expression, 'view').')){
                 echo $__env->make('.$expression.', array_except(get_defined_vars(), array(\'__data\', \'__path\')))->render();
             }else{
-                echo $__env->make(\'Nickwest\\EloquentForms::'.$template.$remainder.', array_except(get_defined_vars(), array(\'__data\', \'__path\')))->render();
+                echo $__env->make(\'Nickwest\\EloquentForms::'.\Nickwest\EloquentForms\EloquentFormsServiceProvider::getPartOfExpression($expression, 'template').\Nickwest\EloquentForms\EloquentFormsServiceProvider::getPartOfExpression($expression, 'remainder').', array_except(get_defined_vars(), array(\'__data\', \'__path\')))->render();
             } ?>';
         });
 
         Blade::directive('eloquentforms_component', function($expression) {
-            $view = \Nickwest\EloquentForms\EloquentFormsServiceProvider::getPartOfExpression($expression, 'view');
-            $template = \Nickwest\EloquentForms\EloquentFormsServiceProvider::getPartOfExpression($expression, 'template');
-            $remainder = \Nickwest\EloquentForms\EloquentFormsServiceProvider::getPartOfExpression($expression, 'remainder');
-
-            return '<?php if(View::exists('.$view.')){
-                $__env->startComponent('.$expression.');
+            return '<?php if(View::exists('.\Nickwest\EloquentForms\EloquentFormsServiceProvider::getPartOfExpression($expression, 'view').')){
+                $__env->startCompongitent('.$expression.');
             }else{
-                $__env->startComponent(\'Nickwest\\EloquentForms::'.$template.$remainder.');
+                $__env->startComponent(\'Nickwest\\EloquentForms::'.\Nickwest\EloquentForms\EloquentFormsServiceProvider::getPartOfExpression($expression, 'template').\Nickwest\EloquentForms\EloquentFormsServiceProvider::getPartOfExpression($expression, 'remainder').');
             } ?>';
         });
     }
