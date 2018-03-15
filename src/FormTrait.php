@@ -148,11 +148,7 @@ trait FormTrait{
                 }
 
                 $this->Form()->{$field_name}->attributes->value = $value;
-                if(is_array($value)) {
-                    $this->{$field_name} = implode($this->multi_delimiter, $value);
-                } else {
-                    $this->{$field_name} = $value;
-                }
+                $this->{$field_name} = (is_array($value) ? implode($this->multi_delimiter, $value) : $value);
             }
         }
 
@@ -163,8 +159,8 @@ trait FormTrait{
             }
 
             // If they were omitted set it to null
-            if($this->Form()->{$Field->getOriginalName()} != '') {
-                $this->Form()->{$Field->getOriginalName()} = null;
+            if($this->Form()->{$Field->getOriginalName()}->attributes->value != '') {
+                $this->Form()->{$Field->getOriginalName()}->attributes->value = null;
                 $this->{$Field->getOriginalName()} = null;
             }
         }
