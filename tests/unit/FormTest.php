@@ -655,10 +655,10 @@ class FormTest extends TestCase
         // Verify it starts with the Default theme set
         $this->assertInstanceOf(\Nickwest\EloquentForms\DefaultTheme::class, $this->Form->getTheme());
 
-        $myTheme = new \Nickwest\EloquentForms\bulma\Theme();
+        $myTheme = new \Nickwest\EloquentForms\Themes\bulma\Theme();
         $this->Form->setTheme($myTheme);
 
-        $this->assertInstanceOf(\Nickwest\EloquentForms\bulma\Theme::class, $this->Form->getTheme());
+        $this->assertInstanceOf(\Nickwest\EloquentForms\Themes\bulma\Theme::class, $this->Form->getTheme());
     }
 
     public function test_form_toJson_creates_valid_json()
@@ -701,7 +701,7 @@ class FormTest extends TestCase
 
     public function test_form_can_make_a_view_and_render_without_breaking_bulma_theme()
     {
-        $this->Form->setTheme(new \Nickwest\EloquentForms\bulma\Theme());
+        $this->Form->setTheme(new \Nickwest\EloquentForms\Themes\bulma\Theme());
         $view = $this->Form->MakeView();
         $this->assertInstanceOf(\Illuminate\View\View::class, $view);
 

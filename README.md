@@ -18,7 +18,7 @@ Composer require nickwest/EloquentForms
 EloquentForms supports [Laravel Auto-Discovery](https://medium.com/@taylorotwell/package-auto-discovery-in-laravel-5-5-ea9e3ab20518). It shouldn't be necessary with Laravel 5.5+, but to manually add the package the following providers should be added in your config/app.php:
 ```
 Nickwest\EloquentForms\EloquentFormsServiceProvider::class,
-Nickwest\EloquentForms\bulma\EloquentFormsBulmaThemeServiceProvider::class
+Nickwest\EloquentForms\Themes\bulma\EloquentFormsBulmaThemeServiceProvider::class
 ```
 ## Usage
 
@@ -46,7 +46,7 @@ class Sample extends Model{
         $this->generateFormData();
 
         // Use a custom theme for the generated markup
-        $this->Form()->setTheme(new \Nickwest\EloquentForms\bulma\Theme());
+        $this->Form()->setTheme(new \Nickwest\EloquentForms\Themes\bulma\Theme());
 
         // By Default all fields will be displayed
 

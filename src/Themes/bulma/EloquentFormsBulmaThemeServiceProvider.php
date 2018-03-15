@@ -1,4 +1,4 @@
-<?php namespace Nickwest\EloquentForms\bulma;
+<?php namespace Nickwest\EloquentForms\Themes\bulma;
 
 use Illuminate\Support\ServiceProvider;
 

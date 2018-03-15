@@ -35,7 +35,7 @@ class FieldTest extends TestCase
         $this->assertEquals('Nickwest\\EloquentForms', $this->Field->getViewNamespace());
 
         // When we apply Bulma
-        $this->Field->Theme = new \Nickwest\EloquentForms\bulma\Theme();
+        $this->Field->Theme = new \Nickwest\EloquentForms\Themes\bulma\Theme();
         $this->assertEquals('Nickwest\\EloquentForms\\bulma', $this->Field->getViewNamespace());
     }
 
@@ -53,7 +53,7 @@ class FieldTest extends TestCase
         $this->assertEquals('Nickwest\EloquentForms::fields.select', $this->Field->getTemplate());
 
         // And with a different theme
-        $this->Field->Theme = new \Nickwest\EloquentForms\bulma\Theme();
+        $this->Field->Theme = new \Nickwest\EloquentForms\Themes\bulma\Theme();
         $this->assertEquals('Nickwest\EloquentForms\\bulma::fields.select', $this->Field->getTemplate());
     }
 

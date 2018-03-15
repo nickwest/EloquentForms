@@ -14,7 +14,7 @@ use Sunra\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Form;
 use Nickwest\EloquentForms\Field;
-use Nickwest\EloquentForms\bulma\Theme;
+use Nickwest\EloquentForms\Themes\bulma\Theme;
 
 use Nickwest\EloquentForms\Test\TestCase;
 
