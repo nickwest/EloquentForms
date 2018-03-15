@@ -178,7 +178,7 @@ class FieldTest extends TestCase
 
         $Field->CustomField = new \Nickwest\EloquentForms\CustomFields\daysofweek\CustomField;
 
-        $test_options = [1 => 'one', 2 => 'two', 44 => 'Fourtyfour'];
+        $test_options = ['1' => 'one', '2' => 'two', '44' => 'Fourtyfour'];
         $Field->setOptions($test_options);
 
         $Field->setDisabledOptions([1,44]);

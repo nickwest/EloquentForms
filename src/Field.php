@@ -313,6 +313,10 @@ class Field{
             } elseif($key == 'CustomField' || $key == 'validation_rules') {
                 $this->$key = unserialize($value);
 
+            } elseif($key == 'options'){
+                foreach($value as $key => $value){
+                    $this->options[(string)$key] = $value;
+                }
             } elseif(is_object($value)) {
                 $this->$key = (array)$value;
 
@@ -435,7 +439,7 @@ class Field{
                 throw new OptionValueException('Option values must be strings');
             }
 
-            $this->options[$key] = $value;
+            $this->setOption($key, $value);
         }
     }
 
