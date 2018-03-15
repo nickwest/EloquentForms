@@ -52,13 +52,6 @@ class Form{
     protected $SubmitFields = [];
 
     /**
-     * Theme to use
-     *
-     * @var string
-     */
-    protected $Theme = null;
-
-    /**
      * Constructor
      *
      * @return void
