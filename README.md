@@ -185,7 +185,7 @@ class Sample extends Model{
 
 ### Submit buttons
 
-Submit buttons are required to have unique names when using the default implementation. This is to easily allow for multi-language support in a future version of EloquentForms. By default 1 submit button will be added to the Form. It's name is `submit_button`, with a value of `Submit`. It can be accessed as seen below. Forms added with these methods will be displayed at the end of the form. Button type fields can be added anywhere inside the form as a normal field as well.
+Submit buttons can have duplicate names and the array of submit buttons is keyed by `$name.$value`. By default 1 submit button will be added to the Form. It's name is `submit_button`, with a value of `Submit`. It can be accessed as seen below. Forms added with these methods will be displayed at the end of the form. Button type fields can be added anywhere inside the form as a normal field as well.
 
 ```
     // Remove a submit button
