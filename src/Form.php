@@ -67,7 +67,7 @@ class Form{
         $this->attributes->action = Request::url();
         $this->attributes->method = 'POST';
 
-        $this->addSubmitButton('submit_button', 'Submit');
+        $this->addSubmitButton('submit_button', 'Submit', 'Submit');
     }
 
     /**
@@ -679,16 +679,17 @@ class Form{
      *
      * @param string $name
      * @param string $value
+     * @param string $label
      * @param string $classes
      * @return void
      */
-    public function addSubmitButton(string $name, string $value, string $classes=''): void
+    public function addSubmitButton(string $name, string $value, string $label = null, string $classes=''): void
     {
-        $this->SubmitFields[$name] = new Field($name);
-        $this->SubmitFields[$name]->attributes->value = $value;
-        $this->SubmitFields[$name]->label = $value;
+        $this->SubmitFields[$name.$value] = new Field($name);
+        $this->SubmitFields[$name.$value]->attributes->value = $value;
+        $this->SubmitFields[$name.$value]->label = ($label !== null ? $label : ucfirst(str_replace('_', ' ', $value)));
         if($classes != ''){
-            $this->SubmitFields[$name]->attributes->class = $classes;
+            $this->SubmitFields[$name.$value]->attributes->class = $classes;
         }
     }
 
@@ -696,32 +697,34 @@ class Form{
      * Remove a submit button to the bottom of the form
      *
      * @param string $name
+     * @param string $value
      * @return void
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
-    public function removeSubmitButton(string $name): void
+    public function removeSubmitButton(string $name, string $value): void
     {
-        if(!isset($this->SubmitFields[$name])){
-            throw new InvalidFieldException($name.' is not part of the Form');
+        if(!isset($this->SubmitFields[$name.$value])){
+            throw new InvalidFieldException($name.' '.$value.' is not part of the Form');
         }
 
-        unset($this->SubmitFields[$name]);
+        unset($this->SubmitFields[$name.$value]);
     }
 
     /**
      * Get a submit button from the bottom of the form
      *
      * @param string $name
+     * @param string $value
      * @return Nickwest\EloquentForms\Field
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
-    public function getSubmitButton(string $name): Field
+    public function getSubmitButton(string $name, string $value): Field
     {
-        if(!isset($this->SubmitFields[$name])){
-            throw new InvalidFieldException($name.' is not part of the Form');
+        if(!isset($this->SubmitFields[$name.$value])){
+            throw new InvalidFieldException($name.$value.' is not part of the Form');
         }
 
-        return $this->SubmitFields[$name];
+        return $this->SubmitFields[$name.$value];
     }
 
     /**
@@ -742,23 +745,30 @@ class Form{
      * @param string $new_value
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
-    public function renameSubmitButton(string $name, string $new_name, string $new_value=null): void
+    public function renameSubmitButton(string $name, string $value, string $new_name, string $new_value=null, string $new_label=null): void
     {
-        if(!isset($this->SubmitFields[$name])){
-            throw new InvalidFieldException($name.' is not part of the Form');
+        if(!isset($this->SubmitFields[$name.$value])){
+            throw new InvalidFieldException($name.$value.' is not part of the Form');
         }
 
-        if(isset($this->SubmitFields[$new_name])){
-            throw new InvalidFieldException($new_name.' already exists');
+        if($new_value === null){
+            $new_value = $value;
         }
 
-        $this->SubmitFields[$name]->attributes->name = $new_name;
+        if(isset($this->SubmitFields[$new_name.$new_value])){
+            throw new InvalidFieldException($new_name.' '.$new_value.' already exists');
+        }
+
+        $this->SubmitFields[$name.$value]->attributes->name = $new_name;
         if($new_value !== null){
-            $this->SubmitFields[$name]->attributes->value = $new_value;
+            $this->SubmitFields[$name.$value]->attributes->value = $new_value;
+        }
+        if($new_label !== null){
+            $this->SubmitFields[$name.$value]->label = $new_label;
         }
 
-        $this->SubmitFields[$new_name] = $this->SubmitFields[$name];
-        unset($this->SubmitFields[$name]);
+        $this->SubmitFields[$new_name.$new_value] = $this->SubmitFields[$name.$value];
+        unset($this->SubmitFields[$name.$value]);
     }
 
     /**

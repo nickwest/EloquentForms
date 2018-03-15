@@ -584,8 +584,8 @@ class FormTest extends TestCase
 
     public function test_form_starts_with_a_save_submit_button()
     {
-        $this->assertInstanceOf(\Nickwest\EloquentForms\Field::class, $this->Form->getSubmitButton('submit_button'));
-        $this->assertArrayHasKey('submit_button', $this->Form->getSubmitButtons());
+        $this->assertInstanceOf(\Nickwest\EloquentForms\Field::class, $this->Form->getSubmitButton('submit_button', 'Submit'));
+        $this->assertArrayHasKey('submit_buttonSubmit', $this->Form->getSubmitButtons());
     }
 
 
@@ -593,44 +593,44 @@ class FormTest extends TestCase
     {
         $this->Form->addSubmitButton('resubmit_button', 'Resubmit', 'is-warning');
 
-        $this->assertInstanceOf(\Nickwest\EloquentForms\Field::class, $this->Form->getSubmitButton('resubmit_button'));
-        $this->assertArrayHasKey('resubmit_button', $this->Form->getSubmitButtons());
+        $this->assertInstanceOf(\Nickwest\EloquentForms\Field::class, $this->Form->getSubmitButton('resubmit_button', 'Resubmit'));
+        $this->assertArrayHasKey('resubmit_buttonResubmit', $this->Form->getSubmitButtons());
     }
 
     public function test_form_removeSubmitButton_removes_a_submit_button()
     {
         $this->Form->addSubmitButton('resubmit_button', 'Resubmit', 'is-warning');
-        $this->Form->removeSubmitButton('submit_button');
+        $this->Form->removeSubmitButton('submit_button', 'Submit');
 
         $this->expectException(InvalidFieldException::class);
-        $Field = $this->Form->getSubmitButton('submit_button');
+        $Field = $this->Form->getSubmitButton('submit_button', 'Submit');
     }
 
     public function test_form_removeSubmitButton_throws_an_exception_when_invalid_name_passed()
     {
         $this->expectException(InvalidFieldException::class);
-        $Field = $this->Form->getSubmitButton('not_a_button');
+        $Field = $this->Form->getSubmitButton('not_a_button', 'some_value');
     }
 
     public function test_form_getSubmitButton_gets_a_submit_button()
     {
         // Test against the default submit button
-        $this->assertInstanceOf(\Nickwest\EloquentForms\Field::class, $this->Form->getSubmitButton('submit_button'));
+        $this->assertInstanceOf(\Nickwest\EloquentForms\Field::class, $this->Form->getSubmitButton('submit_button', 'Submit'));
     }
 
     public function test_form_getSubmitButton_throws_exception_when_invalid_field_name()
     {
         $this->expectException(InvalidFieldException::class);
-        $this->Form->getSubmitButton('not_a_field_valid');
+        $this->Form->getSubmitButton('not_a_field_valid', 'some_value');
     }
 
     public function test_form_renameSubmitButton_renames_the_button()
     {
-        $this->Form->renameSubmitButton('submit_button', 'save_button', 'Save');
+        $this->Form->renameSubmitButton('submit_button', 'Submit', 'save_button', 'Save');
 
-        $this->assertArrayHasKey('save_button', $this->Form->getSubmitButtons());
+        $this->assertArrayHasKey('save_buttonSave', $this->Form->getSubmitButtons());
 
-        $button = $this->Form->getSubmitButton('save_button');
+        $button = $this->Form->getSubmitButton('save_button', 'Save');
 
         $this->assertEquals('Save', $button->attributes->value);
         $this->assertEquals('save_button', $button->attributes->name);
@@ -639,7 +639,7 @@ class FormTest extends TestCase
     public function test_form_renameSubmitButton_throws_exception_when_invalid_field_name()
     {
         $this->expectException(InvalidFieldException::class);
-        $this->Form->renameSubmitButton('not_a_field_valid', 'new_field_name');
+        $this->Form->renameSubmitButton('not_a_field_valid', 'Submit', 'new_field_name');
     }
 
     public function test_form_renameSubmitButton_throws_exception_when_new_field_name_already_taken()
@@ -647,7 +647,7 @@ class FormTest extends TestCase
         $this->Form->addSubmitButton('resubmit_button', 'Resubmit', 'is-warning');
 
         $this->expectException(InvalidFieldException::class);
-        $this->Form->renameSubmitButton('submit_button', 'resubmit_button');
+        $this->Form->renameSubmitButton('submit_button', 'Submit', 'resubmit_button', 'Resubmit');
     }
 
     public function test_form_setTheme_sets_the_theme_on_the_form()

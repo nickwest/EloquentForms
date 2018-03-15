@@ -1,4 +1,4 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults;
+<?php namespace Nickwest\EloquentForms\Test\view\bulma;
 
 use Sunra\PhpSimple\HtmlDomParser;
 
