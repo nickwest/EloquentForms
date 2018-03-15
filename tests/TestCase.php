@@ -1,5 +1,8 @@
 <?php namespace Nickwest\EloquentForms\Test;
 
+use Cache;
+use Artisan;
+
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
     /**
@@ -16,7 +19,11 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     }
 
     public function setUp() {
-        return parent::setUp();
+        parent::setUp();
+
+        // Clear any cache
+        Cache::flush();
+        Artisan::run('view:clear');
     }
 
     protected function getPackageProviders($app)
