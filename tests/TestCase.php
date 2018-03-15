@@ -1,7 +1,6 @@
 <?php namespace Nickwest\EloquentForms\Test;
 
 use Cache;
-use Artisan;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
@@ -23,7 +22,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 
         // Clear any cache
         Cache::flush();
-        Artisan::run('view:clear');
     }
 
     protected function getPackageProviders($app)
