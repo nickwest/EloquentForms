@@ -828,27 +828,6 @@ class Form{
         return View::make(DefaultTheme::getDefaultNamespace().'::form', $blade_data);
     }
 
-    protected function setMultipartIfNeeded()
-    {
-        if(isset($this->attributes->enctype)){
-            return;
-        }
-
-        foreach($this->Fields as $Field){
-            if($Field->attributes->type == 'file'){
-                $this->attributes->enctype = 'multipart/form-data';
-                return;
-            }elseif($Field->isSubform()){
-                foreach($Field->Subform->Fields as $SubField){
-                    if($SubField->attributes->type == 'file'){
-                        $this->attributes->enctype = 'multipart/form-data';
-                        return;
-                    }
-                }
-            }
-        }
-    }
-
     /**
      * Make a view, $blade_data is the data array to pass to View::make()
      *
@@ -924,5 +903,30 @@ class Form{
         return $this;
     }
 
+    /**
+     * Set enctype to multipart if there are any File fields in the form
+     *
+     * @return void
+     */
+    protected function setMultipartIfNeeded()
+    {
+        if(isset($this->attributes->enctype)){
+            return;
+        }
+
+        foreach($this->Fields as $Field){
+            if($Field->attributes->type == 'file'){
+                $this->attributes->enctype = 'multipart/form-data';
+                return;
+            }elseif($Field->isSubform()){
+                foreach($Field->Subform->Fields as $SubField){
+                    if($SubField->attributes->type == 'file'){
+                        $this->attributes->enctype = 'multipart/form-data';
+                        return;
+                    }
+                }
+            }
+        }
+    }
 
 }
