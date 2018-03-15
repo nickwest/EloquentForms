@@ -12,6 +12,7 @@ class selectFieldTest extends FieldViewBulmaTestCase
     protected $test_type = 'select';
     protected $test_options = [1 => 'Yes', 2 => 'No'];
     protected $test_tag = 'select';
+    protected $expected_type_class = '';
 
     // Run all basic tests
 

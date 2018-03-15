@@ -8,6 +8,7 @@ class hiddenFieldTest extends FieldViewBulmaTestCase
 {
     protected $test_value = 'my_value';
     protected $test_type = 'hidden';
+    protected $expected_type_class = '';
 
     // Run all basic tests
 

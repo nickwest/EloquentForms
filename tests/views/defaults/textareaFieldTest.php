@@ -12,6 +12,14 @@ class textareaFieldTest extends FieldViewTestCase
 
     // Run all basic tests
 
+    public function test_field_has_correct_type_attribute()
+    {
+        $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
+        $input = current($dom->find($this->test_tag));
+
+        $this->assertFalse($input->type);
+    }
+
     public function test_field_has_correct_value_attribute()
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());

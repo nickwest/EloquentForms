@@ -11,6 +11,7 @@ class radioFieldTest extends FieldViewBulmaTestCase
     protected $test_value = 'no';
     protected $test_type = 'radio';
     protected $test_options = ['yes' => 'Yes', 'no' => 'No'];
+    protected $expected_type_class = '';
 
     // Run all basic tests
 
