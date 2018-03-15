@@ -1,4 +1,4 @@
-[![Latest Stable Version](https://poser.pugx.org/nickwest/eloquent-forms/v/stable)](https://packagist.org/packages/nickwest/eloquent-forms) [![License](https://poser.pugx.org/nickwest/eloquent-forms/license)](https://packagist.org/packages/nickwest/eloquent-forms)
+[![Latest Stable Version](https://poser.pugx.org/nickwest/eloquent-forms/v/stable)](https://packagist.org/packages/nickwest/eloquent-forms) [![Build Status](https://travis-ci.org/nickwest/EloquentForms.svg?branch=5.5.x)](https://travis-ci.org/nickwest/EloquentForms) [![License](https://poser.pugx.org/nickwest/eloquent-forms/license)](https://packagist.org/packages/nickwest/eloquent-forms)
 
 EloquentForms
 =================
