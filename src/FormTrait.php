@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Collection;
 
 use Nickwest\EloquentForms\Form;
+use Illuminate\Foundation\Console\PackageDiscoverCommand;
 
 trait FormTrait{
 
@@ -261,12 +262,11 @@ trait FormTrait{
 
         $rules = [];
         foreach($this->Form()->getFields() as $Field) {
-            $rules[$Field->getOriginalName()] = [];
 
-            if(!is_array($Field->validation_rules)){
-                $rules[$Field->getOriginalName()] = explode('|', $Field->validation_rules);
-            }else{
+            if(is_array($Field->validation_rules)){
                 $rules[$Field->getOriginalName()] = $Field->validation_rules;
+            }else{
+                $rules[$Field->getOriginalName()] = explode('|', $Field->validation_rules);
             }
 
             // We need to do this here because we're not using Form::isValid() we're using the values on the model itself
@@ -277,23 +277,20 @@ trait FormTrait{
 
             // Set max length rule based on column length if available
             if(isset($columns[$Field->getOriginalName()]) && isset($columns[$Field->getOriginalName()]['length']) && $columns[$Field->getOriginalName()]['length'] != '') {
-                $found = false;
-                foreach($rules[$Field->getOriginalName()] as $key => $rule) {
-                    if(strpos($rule, 'max') === 0) {
-                        $found = true;
-                        $max = (int)substr($rule, 4);
-                        if($max > $columns[$Field->getOriginalName()]['length']) {
-                            $rules[$Field->getOriginalName()][$key] = 'max:'.$columns[$Field->getOriginalName()]['length'];
-                        }
-                        break;
+
+                // Find max: rules
+                $max_rules = preg_grep("/^max:/", $rules[$Field->getOriginalName()]);
+
+                foreach($max_rules as $key => $rule){
+                    if((int)substr($rule, 4) > $columns[$Field->getOriginalName()]['length']) {
+                        $rules[$Field->getOriginalName()][$key] = 'max:'.$columns[$Field->getOriginalName()]['length'];
                     }
                 }
 
-                if(!$found) {
+                if(count($max_rules) == 0){
                     $rules[] = 'max:'.$columns[$Field->getOriginalName()]['length'];
                 }
             }
-
         }
 
         // Set up the Validator
@@ -365,7 +362,7 @@ trait FormTrait{
 
             foreach($columns as $column_name){
                 $DoctrineColumn = DB::connection()->getDoctrineColumn($this->getTable(), $column_name);
-                //dump($DoctrineColumn->getColumnDefinition());
+
                 $this->columns[$column_name] = [
                     'name' => $column_name,
                     'type' => $DoctrineColumn->getType()->getName(),
@@ -374,12 +371,8 @@ trait FormTrait{
                     'values' => null,
                 ];
                 $this->valid_columns[$column_name] = $column_name;
-
             }
-
         }
-        //dd($this->columns);
-
 
         return $this->columns;
     }
@@ -393,15 +386,11 @@ trait FormTrait{
     private function getSQLType(string $type): string
     {
         $types = array(
-            'int', 'tinyint', 'smallint', 'mediumint', 'bigint',
-            'decimal', 'float', 'double', 'real',
-            'bit', 'boolean', 'serial',
-            'date', 'datetime', 'timestamp', 'time', 'year',
-            'char', 'varchar',
-            'tinytext', 'text', 'mediumtext', 'longtext',
-            'binary', 'varbinary',
-            'tinyblob', 'mediumblob', 'blob', 'longblob',
-            'enum', 'set',
+            'int', 'tinyint', 'smallint', 'mediumint', 'bigint', 'decimal',
+            'float', 'double', 'real', 'bit', 'boolean', 'serial', 'date',
+            'datetime', 'timestamp', 'time', 'year', 'char', 'varchar',
+            'tinytext', 'text', 'mediumtext', 'longtext', 'binary', 'varbinary',
+            'tinyblob', 'mediumblob', 'blob', 'longblob', 'enum', 'set',
         );
 
         foreach($types as $key) {
@@ -410,13 +399,6 @@ trait FormTrait{
             }
         }
     }
-
-    // private function getDoctrineType($type)
-    // {
-    //     $types = array(
-
-    //     )
-    // }
 
     /**
      * Isolate and return the column length
