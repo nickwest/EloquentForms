@@ -5,53 +5,28 @@ use Nickwest\EloquentForms\Table;
 
 class Theme extends \Nickwest\EloquentForms\Theme
 {
-    public function getViewNamespace() : string
+    /**
+     * Get the View namespace for this Theme
+     *
+     * @return string
+     */
+    public function getViewNamespace(): string
     {
         return 'Nickwest\\EloquentForms\\bulma';
     }
 
-    public function prepareFieldView(Field &$Field)
+    /**
+     * Modify the field view
+     *
+     * @param Nickwest\EloquentForms\Field
+     * @return void
+     */
+    public function prepareFieldView(Field &$Field): void
     {
         $Field->label_class = 'label';
-        switch($Field->attributes->type) {
-            case 'text':
-            case 'email':
-            case 'tel':
-            case 'url':
-            case 'password':
-                $Field->attributes->addClass('input');
-            break;
-            case 'file':
-                $Field->attributes->addClass('file-input');
-            break;
-            case 'select':
-                $Field->input_wrapper_class = 'select';
-            break;
-            case 'textarea':
-                $Field->attributes->addClass('textarea');
-            break;
 
-            // These are less than perfect, but Bulma doesn't have unique style for them yet.
-            case 'number':
-            case 'date':
-            case 'datetime-local':
-            case 'month':
-            case 'time':
-            case 'week':
-            case 'color':
-                $Field->attributes->addClass('input');
-            break;
-        }
-
-        // Add danger style to fields with errors
-        if($Field->error_message) {
-            $Field->attributes->addClass('is-danger');
-            $Field->input_wrapper_class .= ' is-danger';
-        }
-
-        // If there's only one submit button add a is-success class to it
-
-        return;
+        $this->setTypeClasses();
+        $this->setErrorClasses();
     }
 
     /**
@@ -59,7 +34,7 @@ class Theme extends \Nickwest\EloquentForms\Theme
      *
      * @return void
      */
-    public function prepareFormView(\Nickwest\EloquentForms\Form &$Form)
+    public function prepareFormView(\Nickwest\EloquentForms\Form &$Form): void
     {
         if(count($Form->getSubmitButtons()) == 1){
             foreach($Form->getSubmitButtons() as $Button){
@@ -69,11 +44,55 @@ class Theme extends \Nickwest\EloquentForms\Theme
 
     }
 
-    public function prepareTableView(Table &$Table)
+    /**
+     * Modify the table view as necessary
+     *
+     * @param Nickwest\EloquentForms\Table
+     * @return void
+     */
+    public function prepareTableView(Table &$Table): void
     {
         $Table->attributes->addClass('table');
 
         return;
+    }
+
+    /**
+     * Add is-danger class to fields with errors
+     *
+     * @param Nickwest\EloquentForms\Field $Field
+     * @return void
+     */
+    protected function setErrorClasses(Field &$Field): void
+    {
+        if($Field->error_message) {
+            $Field->attributes->addClass('is-danger');
+            $Field->input_wrapper_class .= ' is-danger';
+        }
+    }
+
+    /**
+     * Set type based classes to Field
+     *
+     * @param Nickwest\EloquentForms\Field $Field
+     * @return void
+     */
+    public function setTypeClasses(Field &$Field): void
+    {
+        switch($Field->attributes->type) {
+            case 'file':
+                $Field->attributes->addClass('file-input');
+                break;
+            case 'select':
+                $Field->input_wrapper_class = 'select';
+                break;
+            case 'textarea':
+                $Field->attributes->addClass('textarea');
+                break;
+            default:
+                $Field->attributes->addClass('input');
+                break;
+        }
     }
 
 }
