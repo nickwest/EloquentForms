@@ -67,7 +67,7 @@ class Form{
         $this->attributes->action = Request::url();
         $this->attributes->method = 'POST';
 
-        $this->addSubmitButton('submit', 'Save');
+        $this->addSubmitButton('submit_button', 'Submit');
     }
 
     /**
@@ -686,6 +686,7 @@ class Form{
     {
         $this->SubmitFields[$name] = new Field($name);
         $this->SubmitFields[$name]->attributes->value = $value;
+        $this->SubmitFields[$name]->label = $value;
         if($classes != ''){
             $this->SubmitFields[$name]->attributes->class = $classes;
         }
@@ -731,6 +732,33 @@ class Form{
     public function getSubmitButtons(): array
     {
         return $this->SubmitFields;
+    }
+
+     /**
+     * Rename a submit button, and optionally also update its value
+     *
+     * @param string $name
+     * @param string $new_name
+     * @param string $new_value
+     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
+     */
+    public function renameSubmitButton(string $name, string $new_name, string $new_value=null): void
+    {
+        if(!isset($this->SubmitFields[$name])){
+            throw new InvalidFieldException($name.' is not part of the Form');
+        }
+
+        if(isset($this->SubmitFields[$new_name])){
+            throw new InvalidFieldException($new_name.' already exists');
+        }
+
+        $this->SubmitFields[$name]->attributes->name = $new_name;
+        if($new_value !== null){
+            $this->SubmitFields[$name]->attributes->value = $new_value;
+        }
+
+        $this->SubmitFields[$new_name] = $this->SubmitFields[$name];
+        unset($this->SubmitFields[$name]);
     }
 
     /**
@@ -790,6 +818,8 @@ class Form{
                 }
             }
         }
+
+        $this->Theme->prepareFormView($this);
 
         if($extends != '') {
             // If the custom Theme doesn't have an override use the default instead.

@@ -51,8 +51,6 @@ class Theme extends \Nickwest\EloquentForms\Theme
 
         // If there's only one submit button add a is-success class to it
 
-
-
         return;
     }
 
@@ -63,7 +61,11 @@ class Theme extends \Nickwest\EloquentForms\Theme
      */
     public function prepareFormView(\Nickwest\EloquentForms\Form &$Form)
     {
-
+        if(count($Form->getSubmitButtons()) == 1){
+            foreach($Form->getSubmitButtons() as $Button){
+                $Button->attributes->addClass('is-success');
+            }
+        }
 
     }
 

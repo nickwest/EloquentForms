@@ -183,6 +183,25 @@ class Sample extends Model{
     }
 ```
 
+### Submit buttons
+
+Submit buttons are required to have unique names when using the default implementation. This is to easily allow for multi-language support in a future version of EloquentForms. By default 1 submit button will be added to the Form. It's name is `submit_button`, with a value of `Submit`. It can be accessed as seen below. Forms added with these methods will be displayed at the end of the form. Button type fields can be added anywhere inside the form as a normal field as well.
+
+```
+    // Remove a submit button
+    $Form->removeSubmitButton('submit_button');
+
+    // Add a submit button
+    $Form->addSubmitButton('submit_button', 'Submit');
+
+    // Get a submit button
+    $Form->getSubmitButton('submit_button');
+
+    // Edit a submit button
+    $Form->getSubmitButton('submit_button')->attributes->value = 'Save';
+
+```
+
 ## Misc
 
 EloquentForms doesn't need to be used by the trait. The Form and Field classes can be used standalone as well. Instead of automatically generating form fields, they will need to be manually declared.
