@@ -37,7 +37,7 @@
         "laravel": {
             "providers": [
                 "Nickwest\\EloquentForms\\EloquentFormsServiceProvider",
-                "Nickwest\\EloquentForms\\bulma\\EloquentFormsBulmaThemeServiceProvider"
+                "Nickwest\\EloquentForms\\Themes\\bulma\\EloquentFormsBulmaThemeServiceProvider"
             ]
         }
     }
