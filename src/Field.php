@@ -337,7 +337,7 @@ class Field{
      */
     public function getTemplate(): string
     {
-        $namespace = 'Nickwest\\EloquentForm'; // TODO: Define the default name space somewhere?
+        $namespace = 'Nickwest\\EloquentForms'; // TODO: Define the default name space somewhere?
 
         // Get the template name
         $template = 'fields.'.$this->attributes->type;
@@ -348,7 +348,7 @@ class Field{
         }
 
         // Check if the theme has an override for the template, if so use the Theme namespace
-        if($this->getViewNamespace() != '' && $View::exists($this->getViewNamespace().'::'.$template)){
+        if(View::exists($this->getViewNamespace().'::'.$template)){
             $namespace = $this->getViewNamespace();
         }
 

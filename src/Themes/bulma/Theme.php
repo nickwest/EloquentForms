@@ -25,8 +25,8 @@ class Theme extends \Nickwest\EloquentForms\Theme
     {
         $Field->label_class = 'label';
 
-        $this->setTypeClasses();
-        $this->setErrorClasses();
+        $this->setTypeClasses($Field);
+        $this->setErrorClasses($Field);
     }
 
     /**
@@ -80,6 +80,13 @@ class Theme extends \Nickwest\EloquentForms\Theme
     public function setTypeClasses(Field &$Field): void
     {
         switch($Field->attributes->type) {
+            case 'text':
+            case 'email':
+            case 'tel':
+            case 'url':
+            case 'password':
+                $Field->attributes->addClass('input');
+                break;
             case 'file':
                 $Field->attributes->addClass('file-input');
                 break;
@@ -89,7 +96,13 @@ class Theme extends \Nickwest\EloquentForms\Theme
             case 'textarea':
                 $Field->attributes->addClass('textarea');
                 break;
-            default:
+            case 'number':
+            case 'date':
+            case 'datetime-local':
+            case 'month':
+            case 'time':
+            case 'week':
+            case 'color':
                 $Field->attributes->addClass('input');
                 break;
         }
