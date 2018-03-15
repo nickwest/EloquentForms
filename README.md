@@ -189,16 +189,19 @@ Submit buttons are required to have unique names when using the default implemen
 
 ```
     // Remove a submit button
-    $Form->removeSubmitButton('submit_button');
+    $Form->removeSubmitButton('submit_button', 'Submit);
 
     // Add a submit button
     $Form->addSubmitButton('submit_button', 'Submit');
 
     // Get a submit button
-    $Form->getSubmitButton('submit_button');
+    $Form->getSubmitButton('submit_button', 'Submit);
 
     // Edit a submit button
-    $Form->getSubmitButton('submit_button')->attributes->value = 'Save';
+    $Form->getSubmitButton('submit_button', 'Submit')->attributes->addClass = 'is-success';
+
+    // Rename a submit button (you can do this through attributes, but this will re-key it in the Form and let you access it with the new name)
+    $Form->renameSubmitButton('submit_button', 'Submit', 'save_button', 'Save');
 
 ```
 
