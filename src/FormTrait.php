@@ -271,21 +271,8 @@ trait FormTrait{
                 $rules[$Field->getOriginalName()][] = 'required';
             }
 
-            // Set max length rule based on column length if available
-            if(isset($columns[$Field->getOriginalName()]) && isset($columns[$Field->getOriginalName()]['length']) && $columns[$Field->getOriginalName()]['length'] != '') {
-
-                // Find max: rules
-                $max_rules = preg_grep("/^max:/", $rules[$Field->getOriginalName()]);
-
-                foreach($max_rules as $key => $rule){
-                    if((int)substr($rule, 4) > $columns[$Field->getOriginalName()]['length']) {
-                        $rules[$Field->getOriginalName()][$key] = 'max:'.$columns[$Field->getOriginalName()]['length'];
-                    }
-                }
-
-                if(count($max_rules) == 0){
-                    $rules[] = 'max:'.$columns[$Field->getOriginalName()]['length'];
-                }
+            if(isset($columns[$Field->getOriginalName()])){
+                $this->addMaxRule($columns[$Field->getOriginalName()], $rules[$Field->getOriginalName()], $Field);
             }
         }
 
@@ -303,6 +290,28 @@ trait FormTrait{
         }
 
         return $success;
+    }
+
+    /**
+     * Add or adjust max length rule if column exists and has a max length
+     */
+    protected function addMaxRule($column, array &$rules)
+    {
+        // Set max length rule based on column length if available
+        if(isset($column['length']) && $column['length'] != '') {
+            // Find existing max: rules
+            $max_rules = preg_grep("/^max:/", $rules);
+
+            foreach($max_rules as $key => $rule){
+                if((int)substr($rule, 4) > $column['length']) {
+                    $rules[$key] = 'max:'.$column['length'];
+                }
+            }
+
+            if(count($max_rules) == 0){
+                $rules[] = 'max:'.$column['length'];
+            }
+        }
     }
 
     /**
