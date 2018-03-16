@@ -1,4 +1,4 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults\fields;
+<?php namespace Nickwest\EloquentForms\Test\views\defaults\fields;
 
 use Sunra\PhpSimple\HtmlDomParser;
 
