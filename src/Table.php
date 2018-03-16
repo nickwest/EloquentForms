@@ -5,12 +5,12 @@ use Route;
 
 use Illuminate\Support\Collection;
 
+use Maatwebsite\Excel\Facades\Excel;
+
 use Nickwest\EloquentForms\Theme;
 use Nickwest\EloquentForms\Traits\Themeable;
 use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
 use Nickwest\EloquentForms\Exceptions\InvalidRouteException;
-
-use Maatwebsite\Excel\Facades\Excel;
 
 class Table{
 
@@ -212,6 +212,18 @@ class Table{
     }
 
     /**
+     *  Convenience method for setting a linking pattern on a field
+     *
+     * @param string $field_name
+     * @param string $href
+     */
+    public function setLinkingPattern(string $field_name, string $href): void
+    {
+        // Make and set the linking pattern
+        $this->field_replacements[$field_name] = '<a href="'.$href.'">{'.$field_name.'}</a>';
+    }
+
+    /**
      * Convenience method for creating a link replacement pattern by route name
      *
      * @param string $field_name
@@ -262,9 +274,9 @@ class Table{
      *
      * @param string $title
      * @param array $config
-     * @return void
+     * @return mixed
      */
-    public function exportToExcel(string $title, array $config): void
+    public function exportToExcel(string $title, array $config, $return_object = false)
     {
         $this->excel_config = $config;
 
@@ -277,33 +289,58 @@ class Table{
             return $collection->only($this->display_fields)->all();
         })->toArray());
 
-        Excel::create($title, function($Excel) use ($title, $config, $export) {
+
+        $sheet_settings = [
+            // Font settings
+            'setFontFamily' => $this->config('FontFamily', 'Calibri'),
+            'setFontSize' => $this->config('FontSize', 16),
+            'setFontBold' => $this->config('FontBold', false),
+
+            // Page settings
+            'sethorizontalCentered' => $this->config('horizontalCentered', false),
+            'setfitToPage' => $this->config('fitToPage', false),
+            'setfitToHeight' => $this->config('fitToHeight', false),
+            'setfitToWidth' => $this->config('fitToWidth', true),
+            'setpaperSize' => $this->config('paperSize', 1),
+
+            // Set margins
+            'setPageMargin' => $this->config('PageMargin', array(0.7, 0.25, 0.25, 0.25)),
+        ];
+
+        if($return_object){
+            return $this->createExcelObject($title, $export, $sheet_settings);
+        }
+
+        // Send the export headers and stop processing afterward
+        $this->createExcelObject($title, $export, $sheet_settings)->export('xls');
+    }
+
+    /**
+     *  Create the Excel Object
+     *
+     * @param string $title
+     * @param array $export
+     * @param array $sheet_settings
+     * @return Maatwebsite\Excel\Writers\LaravelExcelWriter
+     */
+    protected function createExcelObject(string $title, array $export, array $sheet_settings): \Maatwebsite\Excel\Writers\LaravelExcelWriter
+    {
+        return Excel::create($title, function($Excel) use ($title, $export, $sheet_settings) {
             $Excel->setTitle($title)
                     ->setCreator($this->config('Creator', ''))
                     ->setCompany($this->config('Company', ''))
                     ->setDescription($this->config('Description', ''));
 
-            $Excel->sheet($title, function($Sheet) use ($config, $export){
-                // Set font
-                $Sheet->setFontFamily($this->config('FontFamily', 'Calibri'));
-                $Sheet->setFontSize($this->config('FontSize', 16));
-                $Sheet->setFontBold($this->config('FontBold', false));
+            $Excel->sheet($title, function($Sheet) use ($export, $sheet_settings){
 
-                // Set up the page
-                $Sheet->sethorizontalCentered($this->config('horizontalCentered', false));
-                $Sheet->setfitToPage($this->config('fitToPage', false));
-                $Sheet->setfitToHeight($this->config('fitToHeight', false));
-                $Sheet->setfitToWidth($this->config('fitToWidth', true));
-                $Sheet->setpaperSize($this->config('paperSize', 1));
-
-                // Set margins
-                $Sheet->setPageMargin($this->config('PageMargin', array(0.7, 0.25, 0.25, 0.25)));
+                foreach($sheet_settings as $method => $param){
+                    $Sheet->{$method}($param);
+                }
 
                 // Populate data
                 $Sheet->fromArray($export, null, 'A1', false, false);
 
                 $highest_col = $Sheet->getHighestColumn();
-
                 $total_rows = count($export);
 
                 // Format all rows as text
@@ -336,10 +373,8 @@ class Table{
                 $Sheet->cell('A1:'.$highest_col.$total_rows, function($cells){
                     $cells->setValignment('top');
                 });
-
             });
-
-        })->export('xls');
+        });
     }
 
     /**

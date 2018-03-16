@@ -161,14 +161,27 @@ class TableTest extends TestCase
         $this->assertEquals('<strong>'.$item['email'].' '.$item['birthday'].'</strong>', $this->Table->getFieldReplacement('birthday', $item));
     }
 
-    public function test_table_setLinkingPattern_sets_a_linking_pattern_for_a_field()
+    public function test_table_setLinkingPattern_sets_a_linking_patter_form_a_field()
+    {
+        $this->Table->setLinkingPattern('email', 'mailto:{email}');
+        $this->Table->setLinkingPattern('name', 'https://google.com');
+
+        $expected = [
+            'email' => '<a href="mailto:{email}">{email}</a>',
+            'name' => '<a href="https://google.com">{name}</a>'
+        ];
+
+        $this->assertAttributeEquals($expected, 'field_replacements', $this->Table);
+    }
+
+    public function test_table_setLinkingPatternByRoute_sets_a_linking_pattern_for_a_field()
     {
         $this->Table->setLinkingPatternByRoute('name', 'sample');
 
         $this->assertAttributeEquals(['name' => '<a href="/sample/data">{name}</a>'], 'field_replacements', $this->Table);
     }
 
-    public function test_table_setLinkingPattern_throws_exception_on_invalid_route()
+    public function test_table_setLinkingPatternByRoute_throws_exception_on_invalid_route()
     {
         $this->expectException(InvalidRouteException::class);
         $this->Table->setLinkingPatternByRoute('name', 'no.route');
@@ -190,11 +203,23 @@ class TableTest extends TestCase
         $this->assertInstanceOf(\Illuminate\View\View::class, $View);
     }
 
+
+    // the best I can figure for this right now is making sure it doesn't error.
+    // in a better case we'd actually test the created excel file
     public function test_table_exportToExcel_created_an_excel_file()
     {
+        $this->Table->setDisplayFields($this->display_fields);
+        $labels = [
+            'name' => 'Name',
+            'email' => 'E-mail',
+            'birthday' => 'Birthday',
+        ];
 
+        $this->Table->setLabels($labels);
+
+        $Excel = $this->Table->exportToExcel('My Export', [], true);
+        $this->assertinstanceOf(\Maatwebsite\Excel\Writers\LaravelExcelWriter::class, $Excel);
     }
-
 
 
 
