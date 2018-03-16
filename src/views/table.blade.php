@@ -1,18 +1,19 @@
+{{-- The funny tabbing in this file makes for clean HTML output --}}
 <table {!! $Table->attributes !!}>
     <thead>
         <tr>
-        @foreach($Table->display_fields as $field_name)
+@foreach($Table->getDisplayFields() as $field_name)
             <th>{{ $Table->getLabel($field_name) }}</th>
-        @endforeach
+@endforeach
         </tr>
     </thead>
-    <tobdy>
-        @foreach($Table->Collection as $row)
-        <tr>
-            @foreach($Table->display_fields as $field_name)
-                @eloquentforms_include($Table->getViewNamespace().'::pieces.table-cell', ['row' => $row, 'field_name' => $field_name, 'Table' => $Table])
-            @endforeach
-        </tr>
-        @endforeach
-    </tbody>
+    <tbody>
+    @foreach($Table->Collection as $row)
+    <tr>
+    @foreach($Table->getDisplayFields() as $field_name)
+        @eloquentforms_include($Table->getTheme()->getViewNamespace().'::pieces.table-cell', ['row' => $row, 'field_name' => $field_name, 'Table' => $Table])
+    @endforeach
+    </tr>
+    @endforeach
+</tbody>
 </table>

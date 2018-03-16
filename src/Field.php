@@ -190,6 +190,7 @@ class Field{
     public function __construct(string $field_name, string $type = null)
     {
         $this->attributes = new Attributes();
+        $this->attributes->id_prefix = 'input-';
 
         // Set some base attributes for the field
         $this->attributes->name = $field_name;

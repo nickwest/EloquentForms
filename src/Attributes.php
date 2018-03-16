@@ -14,7 +14,7 @@ class Attributes{
      *
      * @var string
      */
-    public $id_prefix = 'input-';
+    public $id_prefix = '';
 
     /**
      * prefix for IDs when writing HTML (used when multi_key is set)
@@ -222,6 +222,8 @@ class Attributes{
             'classes' => $this->classes,
             'attributes' => $this->attributes,
             'multi_key' => $this->multi_key,
+            'id_prefix' => $this->id_prefix,
+            'id_suffix' => $this->id_suffix,
         ]);
     }
 

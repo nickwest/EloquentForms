@@ -81,7 +81,7 @@ class AttributesTest extends TestCase
         $Attributes->method = 'POST';
         $Attributes->{'v-for'} = 'something for JS stuff';
 
-        $this->assertEquals('disabled id="input-my-id" method="POST" v-for="something for JS stuff"', (string)$Attributes);
+        $this->assertEquals('disabled id="my-id" method="POST" v-for="something for JS stuff"', (string)$Attributes);
     }
 
     public function test_attributes_getRawID_returns_unmodified_id()
@@ -117,7 +117,7 @@ class AttributesTest extends TestCase
         $Attributes->id = 'my_id';
         $Attributes->id_suffix = '-42';
 
-        $this->assertEquals('id="input-my_id-42"', (string)$Attributes);
+        $this->assertEquals('id="my_id-42"', (string)$Attributes);
     }
 
     public function test_attributes_get_method_for_id_obeys_prefix_and_suffix()

@@ -22,6 +22,13 @@ class Table{
     public $attributes = null;
 
     /**
+     * Collection that the table will display
+     *
+     * @var Illuminate\Support\Collection
+     */
+    public $Collection = [];
+
+    /**
      * Array of field names
      *
      * @var array
@@ -62,13 +69,6 @@ class Table{
      * @var array
      */
     protected $linking_patterns = [];
-
-    /**
-     * Collection that the table will display
-     *
-     * @var Illuminate\Support\Collection
-     */
-    protected $Collection = [];
 
     /**
      * Constructor
