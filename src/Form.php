@@ -804,17 +804,13 @@ class Form{
         $this->setMultipartIfNeeded();
         $this->Theme->prepareFormView($this);
 
-        if($extends != '') {
-            // If the custom Theme doesn't have an override use the default instead.
-            if($this->Theme->getViewNamespace() != '' && View::exists($this->Theme->getViewNamespace().'::form-extend')) {
-                return View::make($this->Theme->getViewNamespace().'::form-extend', $blade_data);
-            }
-            return View::make(DefaultTheme::getDefaultNamespace().'::form-extend', $blade_data);
+        $template = ($extends != '' ? 'form-extends' : 'form');
+
+        if(View::exists($this->Theme->getViewNamespace().'::'.$template)) {
+            return View::make($this->Theme->getViewNamespace().'::'.$template, $blade_data);
+        }else{
+            return View::make(DefaultTheme::getDefaultNamespace().'::'.$template, $blade_data);
         }
-        if($this->Theme->getViewNamespace() != '' && View::exists($this->Theme->getViewNamespace().'::form')) {
-            return View::make($this->Theme->getViewNamespace().'::form', $blade_data);
-        }
-        return View::make(DefaultTheme::getDefaultNamespace().'::form', $blade_data);
     }
 
     /**

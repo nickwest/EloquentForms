@@ -516,11 +516,11 @@ class Field{
     {
         $this->Theme->prepareFieldView($this);
 
-        if($this->getViewNamespace() != '' && View::exists($this->getViewNamespace().'::fields.display')) {
+        if(View::exists($this->getViewNamespace().'::fields.display')) {
             return View::make($this->getViewNamespace().'::fields.display', ['Field' => $this, 'prev_inline' => $prev_inline]);
         }
 
-        return View::make('Nickwest\\EloquentForms::fields.display', ['Field' => $this, 'prev_inline' => $prev_inline]);
+        return View::make(DefaultTheme::getDefaultNamespace().'::fields.display', ['Field' => $this, 'prev_inline' => $prev_inline]);
     }
 
     /**

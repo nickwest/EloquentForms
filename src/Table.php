@@ -1,11 +1,14 @@
 <?php namespace Nickwest\EloquentForms;
 
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Route;
+use View;
+use Route;
+
 use Illuminate\Support\Collection;
 
 use Nickwest\EloquentForms\Theme;
 use Nickwest\EloquentForms\Traits\Themeable;
+use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
+use Nickwest\EloquentForms\Exceptions\InvalidRouteException;
 
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -123,7 +126,42 @@ class Table{
     }
 
     /**
-     * Add a html replacement string for a field
+     * Add field labels to the existing labels
+     *
+     * @param array $labels
+     * @return void
+     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
+     */
+    public function setLabels(array $labels): void
+    {
+        foreach($labels as $field_name => $label) {
+            if(isset($this->display_fields[$field_name])) {
+                $this->labels[$field_name] = $label;
+            } else {
+                throw new InvalidFieldException('"'.$field_name.'" not set as a display field');
+            }
+        }
+    }
+
+    /**
+     * Get a Label for a specific field
+     *
+     * @param string $field_name
+     * @return string
+     */
+    public function getLabel(string $field_name): string
+    {
+        if(isset($this->labels[$field_name])) {
+            return $this->labels[$field_name];
+        }
+
+        // This should always be done the same was as Field::makeLabel()
+        return ucfirst(str_replace('_', ' ', $field_name));
+    }
+
+    /**
+     * Set a replacement string for a given field's output. Use {field_name} to inject values
+     * field_name supports any field set in the given object/array that exists within the Collection
      *
      * @param string $field field name
      * @param string $html non-escaped text to replace field value in output
@@ -149,6 +187,7 @@ class Table{
      * Get a field's replacement value
      *
      * @param string $field field name
+     * @param string $Object Object or array
      * @return string
      */
     public function getFieldReplacement(string $field, &$Object): string
@@ -162,9 +201,9 @@ class Table{
         if(is_array($results[0]) && is_array($results[1])) {
             foreach($results[0] as $key => $match) {
                 if(is_object($Object) && isset($Object->{$results[1][$key]})) {
-                    $replaced = str_replace($results[0][$key], (string)$Object->{$results[1][$key]}, $this->field_replacements[$field]);
+                    $replaced = str_replace($results[0][$key], (string)$Object->{$results[1][$key]}, $replaced);
                 } elseif(is_array($Object) && isset($Object[$results[1][$key]])) {
-                    $replaced = str_replace($results[0][$key], $Object[$results[1][$key]], $this->field_replacements[$field]);
+                    $replaced = str_replace($results[0][$key], $Object[$results[1][$key]], $replaced);
                 }
             }
         }
@@ -173,144 +212,25 @@ class Table{
     }
 
     /**
-     * Set a linking pattern
-     *
-     * @param string $field_name
-     * @param string $pattern
-     * @return void
-     */
-    public function setLinkingPattern(string $field_name, string $pattern = ''): void
-    {
-        if($pattern == '') {
-            if(isset($this->linking_patterns[$field_name])) {
-                unset($this->linking_patterns[$field_name]);
-            }
-            return;
-        }
-
-        $this->linking_patterns[$field_name] = $pattern;
-    }
-
-
-    /**
-     * Set a linking pattern by route name
+     * Convenience method for creating a link replacement pattern by route name
      *
      * @param string $field_name
      * @param string $route_name
-     * @param array $parameters keys to replace by value
+     * @param mixed $query_string
      * @return void
+     * @throws Nickwest\EloquentForms\InvalidRouteException
      */
-    public function setLinkingPatternByRoute(string $field_name, string $route_name, array $parameters=[], $query_string=[]): void
+    public function setLinkingPatternByRoute(string $field_name, string $route_name, $query_string=[]): void
     {
         $Route = Route::getRoutes()->getByName($route_name);
         if($Route == null) {
-            throw new \Exception('Invalid route name '.$route_name);
+            throw new InvalidRouteException('Invalid route name '.$route_name);
         }
 
-        $replaced = '/'.$Route->uri;
-
-        $pattern = '/\{(.*?)\??\}/';
-        $results = [];
-        preg_match_all($pattern, $replaced, $results, PREG_PATTERN_ORDER);
-
-        if(is_array($results[0]) && is_array($results[1])) {
-            foreach($results[0] as $key => $match) {
-                if(isset($parameters[$results[1][$key]])) {
-                    $replaced = str_replace($results[0][$key], $parameters[$results[1][$key]], $replaced);
-                }
-            }
-        }
-
-        if(count($query_string) > 0){
-            $pieces = [];
-            foreach($query_string as $key => $value){
-                $pieces[] = $key.'='.$value;
-            }
-            $replaced = $replaced.'?'.implode('&', $pieces);
-        }
-
-        $this->linking_patterns[$field_name] = $replaced;
+        // Make and set the linking pattern
+        $this->field_replacements[$field_name] = '<a href="/'.$Route->uri.'">{'.$field_name.'}</a>';
     }
 
-    /**
-     * Check if the field has a linking pattern
-     *
-     * @param string $field_name
-     * @return bool
-     */
-    public function hasLinkingPattern(string $field_name): bool
-    {
-        return isset($this->linking_patterns[$field_name]);
-    }
-
-    /**
-     * Get a link from a linking pattern
-     *
-     * @param string $field_name
-     * @param mixed $Object
-     * @return mixed
-     */
-    public function getLink(string $field_name, &$Object)
-    {
-        $link = false;
-
-        if(isset($this->linking_patterns[$field_name])) {
-            $link = $this->linking_patterns[$field_name];
-            $replacement = [];
-
-            $pattern = '/\{([a-zA-Z0-9_]+)\}/';
-            $results = [];
-            preg_match_all($pattern, $this->linking_patterns[$field_name], $results, PREG_PATTERN_ORDER);
-
-            if(is_array($results[0]) && is_array($results[1])) {
-                foreach($results[0] as $key => $match) {
-                    if(is_object($Object) && isset($Object->{$results[1][$key]})) {
-                        $link = str_replace($results[0][$key], (string)$Object->{$results[1][$key]}, $link);
-                    } elseif(is_array($Object) && isset($Object[$results[1][$key]])) {
-                        $link = str_replace($results[0][$key], $Object[$results[1][$key]], $link);
-                    } else {
-                        return false;
-                    }
-                }
-            }
-        }
-
-        return $link;
-    }
-
-    /**
-     * Add field labels to the existing labels
-     *
-     * @param array $labels
-     * @return void
-     * @throws \Exception
-     */
-    public function setLabels(array $labels): void
-    {
-        foreach($labels as $field_name => $label) {
-            if(isset($this->display_fields[$field_name])) {
-                $this->labels[$field_name] = $label;
-            } else {
-                throw new \Exception('"'.$field_name.'" not set as a display field');
-            }
-        }
-    }
-
-    /**
-     * Get a Label for a specific field
-     *
-     * @param string $field_name
-     * @return string
-     */
-    public function getLabel(string $field_name): string
-    {
-        if(isset($this->labels[$field_name])) {
-            return $this->labels[$field_name];
-        }
-
-        // This should always be done the same was as Field::makeLabel()
-        return ucfirst(str_replace('_', ' ', $field_name));
-    }
 
     /**
      * Make a view and extend $extends in $section, $blade_data is the data array to pass to View::make()
@@ -318,9 +238,9 @@ class Table{
      * @param array $blade_data
      * @param string $extends
      * @param string $section
-     * @return View
+     * @return Illuminate\View\View
      */
-    public function makeView(array $blade_data = [], string $extends = '', string $section = ''): View
+    public function makeView(array $blade_data = [], string $extends = '', string $section = ''): \Illuminate\View\View
     {
         $blade_data['Table'] = $this;
         $blade_data['extends'] = $extends;
@@ -328,19 +248,13 @@ class Table{
 
         $this->Theme->prepareTableView($this);
 
-        if($extends != '') {
+        $template = ($extends != '' ? 'table-extends' : 'table');
 
-            if($this->Theme->view_namespace != '' && View::exists($this->Theme->view_namespace.'::table-extend')) {
-                return View::make($this->Theme->view_namespace.'::table-extend', $blade_data);
-            }
-
-            return View::make('Nickwest\\EloquentForms::table-extend', $blade_data);
+        if(View::exists($this->Theme->getViewNamespace().'::'.$template)) {
+            return View::make($this->Theme->getViewNamespace().'::'.$template, $blade_data);
+        }else{
+            return View::make(DefaultTheme::getDefaultNamespace().'::'.$template, $blade_data);
         }
-
-        if($this->Theme->view_namespace != '' && View::exists($this->Theme->view_namespace.'::table')) {
-            return View::make($this->Theme->view_namespace.'::table', $blade_data);
-        }
-        return View::make('Nickwest\\EloquentForms::table', $blade_data);
     }
 
     /**
