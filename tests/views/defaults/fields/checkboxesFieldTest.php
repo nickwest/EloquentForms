@@ -131,5 +131,23 @@ class checkboxesFieldTest extends FieldViewTestCase
         $this->assertSame(false, $no_input->checked);
     }
 
+    public function test_field_can_have_multiple_values()
+    {
+        $this->Field->attributes->value = [1, 2];
+
+        $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
+        $inputs = $dom->find($this->test_tag);
+        $yes_input = array_shift($inputs);
+        $no_input = array_shift($inputs);
+
+        // Checkbox has a value even when not selected
+        $this->assertSame('1', $yes_input->value);
+        $this->assertSame('2', $no_input->value);
+
+        // Both are checked
+        $this->assertSame(true, $yes_input->checked);
+        $this->assertSame(true, $no_input->checked);
+    }
+
 
 }

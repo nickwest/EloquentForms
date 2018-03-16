@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Collection;
 
 use Nickwest\EloquentForms\Form;
-use Illuminate\Foundation\Console\PackageDiscoverCommand;
+use Nickwest\EloquentForms\Exceptions\NotImplementedException;
 
 trait FormTrait{
 
@@ -174,42 +174,59 @@ trait FormTrait{
     public function setAllFormValues(): void
     {
         foreach($this->Form()->getFields() as $Field) {
+            // Use the Model Field's value if it has the field
+            if(isset($this->{$Field->getOriginalName()})){
+                $value = $this->{$Field->getOriginalName()};
+            }
+            // Use the Field's Default value if it has one
+            elseif($this->Form()->{$Field->getOriginalName()}->default_value != null){
+                $value = $this->Form()->{$Field->getOriginalName()}->default_value;
+            }
+            // Just use null
+            else{
+                $value = null;
+            }
+
+            // If the field has a CustomField object, then try to use it's hook for setting them value.
             if(is_object($Field->CustomField)) {
                 try {
-                    // If the model doesn't have this field, then use default or empty string as the starting value
-                    if(isset($this->{$Field->getOriginalName()})){
-                        $this->Form()->{$Field->getOriginalName()}->value = $this->{$Field->getOriginalName()};
-                    }else{
-                        $this->Form()->{$Field->getOriginalName()}->value = $this->Form()->{$Field->getOriginalName()}->default_value != '' ? $this->Form()->{$Field->getOriginalName()}->default_value : '';
-                    }
-                    continue; // Next field
+                    $this->Form()->{$Field->getOriginalName()}->attributes->value = $Field->CustomField->hook_setAllFormValues($Field, $value);
+                    continue;
                 }
-                catch(NotImplementedException $e){}
+                catch(NotImplementedException $e){dump('caught');}
             }
 
-            if($Field->attributes->type == 'checkbox' || $Field->attributes->multi_key) {
-                if((!isset($this->{$Field->getOriginalName()}) || ($this->{$Field->getOriginalName()} == '' && $this->{$Field->getOriginalName()} !== 0)) && $this->Form()->{$Field->getOriginalName()}->default_value != '') {
-                    $this->Form()->{$Field->getOriginalName()}->attributes->value = $this->Form()->{$Field->getOriginalName()}->default_value;
-                } else {
-                    if(!is_array($this->{$Field->getOriginalName()})){
-                        $values = array();
-                        foreach(explode($this->multi_delimiter, $this->{$Field->getOriginalName()}) as $value) {
-                            $values[$value] = $value;
-                        }
-                    }else{
-                        $values = $this->{$Field->getOriginalName()}->attributes->value;
-                    }
-
-                    $this->Form()->{$Field->getOriginalName()}->attributes->value = $values;
-                }
-            } else {
-                // If the model doesn't have this field, then use default or empty string as the starting value
-                if(isset($this->{$Field->getOriginalName()})){
-                    $this->Form()->{$Field->getOriginalName()}->attributes->value = $this->{$Field->getOriginalName()};
-                } else {
-                    $this->Form()->{$Field->getOriginalName()}->attributes->value = $this->Form()->{$Field->getOriginalName()}->default_value != null ? $this->Form()->{$Field->getOriginalName()}->default_value : '';
-                }
+            // If it's a checkbox or otherwise has multi_key set, assume we have a divided string that needs to be made into an array.
+            if($value !== null && !is_array($value) && ($Field->attributes->type == 'checkbox' || $Field->attributes->multi_key)){
+                $value = explode($this->multi_delimiter, $value);
             }
+
+            $this->Form()->{$Field->getOriginalName()}->attributes->value = $value;
+
+
+            // if($Field->attributes->type == 'checkbox' || $Field->attributes->multi_key) {
+            //     if((!isset($this->{$Field->getOriginalName()}) || ($this->{$Field->getOriginalName()} == '' && $this->{$Field->getOriginalName()} !== 0)) && $this->Form()->{$Field->getOriginalName()}->default_value != '') {
+            //         $this->Form()->{$Field->getOriginalName()}->attributes->value = $this->Form()->{$Field->getOriginalName()}->default_value;
+            //     } else {
+            //         if(!is_array($this->{$Field->getOriginalName()})){
+            //             $values = array();
+            //             foreach(explode($this->multi_delimiter, $this->{$Field->getOriginalName()}) as $value) {
+            //                 $values[$value] = $value;
+            //             }
+            //         }else{
+            //             $values = $this->{$Field->getOriginalName()}->value; // The model
+            //         }
+
+            //         $this->Form()->{$Field->getOriginalName()}->attributes->value = $values;
+            //     }
+            // } else {
+            //     // If the model doesn't have this field, then use default or empty string as the starting value
+            //     if(isset($this->{$Field->getOriginalName()})){
+            //         $this->Form()->{$Field->getOriginalName()}->attributes->value = $this->{$Field->getOriginalName()};
+            //     } else {
+            //         $this->Form()->{$Field->getOriginalName()}->attributes->value = $this->Form()->{$Field->getOriginalName()}->default_value != null ? $this->Form()->{$Field->getOriginalName()}->default_value : '';
+            //     }
+            // }
         }
     }
 
@@ -262,7 +279,7 @@ trait FormTrait{
             if(is_array($Field->validation_rules)){
                 $rules[$Field->getOriginalName()] = $Field->validation_rules;
             }else{
-                $rules[$Field->getOriginalName()] = explode('|', $Field->validation_rules);
+                $rules[$Field->getOriginalName()] = explode($this->multi_delimiter, $Field->validation_rules);
             }
 
             // We need to do this here because we're not using Form::isValid() we're using the values on the model itself

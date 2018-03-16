@@ -187,15 +187,24 @@ class Attributes{
     /**
      * Output all attributes as a string
      *
+     * @param array $skip Skip attributes listed here
      * @return string
      */
-    public function getString(): string
+    public function getString(array $skip=[]): string
     {
         $output = [];
 
         $this->prepareClassAttribute();
 
+        if(isset($this->attributes['type']) && $this->attributes['type'] == 'select' && $this->multi_key !== null){
+            $this->attributes['multiple'] = null;
+        }
+
         foreach($this->attributes as $key => $value) {
+            if(in_array($key, $skip)){
+                continue;
+            }
+
             // Add [] to name attribute if there's a multi_key set or multi_key === true
             if($key == 'name' && $this->multi_key !== null && $this->multi_key !== false){
                 $value .= '['.($this->multi_key !== true ? $this->multi_key : '').']';

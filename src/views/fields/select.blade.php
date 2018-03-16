@@ -12,7 +12,7 @@
                 @endforeach
             </div>
         @else
-            <select {!! $Field->attributes !!}>
+            <select {!! $Field->attributes->getString(['value']) !!}>
                 @foreach($Field->getOptions() as $key => $value)
                     @eloquentforms_include($Field->getViewNamespace().'::fields.select_option')
                 @endforeach

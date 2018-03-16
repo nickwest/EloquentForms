@@ -1,7 +1,1 @@
-<option
-	value="{{ $key }}"
-	{{ ($Field->attributes->value == $key ? ' selected' : '') }}
-	{{ ($Field->attributes->multi_key != '' && $key == $Field->attributes->multi_key ? ' selected' : '') }}
->
-	{{ $value }}
-</option>
+<option	value="{{ $key }}"{{ ($Field->attributes->value == $key ? ' selected' : '') }}{{ (is_array($Field->attributes->value) && in_array($key, $Field->attributes->value) ? ' selected' : '') }}>{{ $value }}</option>

@@ -22,23 +22,26 @@ class CustomField extends BaseCustomField
         return View::make(DefaultTheme::getDefaultNamespace().'::customfields.daysofweek', ['Field' => $Field, 'daysofweek' => $this->daysofweek, 'view_only' => $view_only]);
     }
 
+
     public function hook_setAllFormValues(Field $Field, $value)
     {
-        $data = explode('|', $value);
-        foreach($this->daysofweek as $key => $day) {
-            if(in_array($key, $data)) {
-                $return[$key] = 1;
-            } else {
-                $return[$key] = 0;
-            }
+        if(!is_string($value)){
+            throw new \Exception('$value needs to be a string');
         }
-        return $return;
+
+        $value = explode('|', $value);
+
+        return $value;
     }
 
-    public function hook_setPostValues($value)
-    {
-        return implode('|',$value);
-    }
+    // public function hook_setPostValues($value)
+    // {
+    //     if(is_array($value)){
+    //         return implode('|',$value);
+    //     }else{
+    //         return $value;
+    //     }
+    // }
 
 
 }

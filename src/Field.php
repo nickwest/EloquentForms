@@ -262,7 +262,7 @@ class Field{
             'attributes' => json_decode($this->attributes->toJson()),
             'Theme' => (is_object($this->Theme) ? '\\'.get_class($this->Theme) : null),
             'Subform' => is_object($this->Subform) ? $this->Subform->toJson() : $this->Subform,
-            'CustomField' => (is_object($this->CustomField) ? serialize($this->CustomField) : $this->CustomField),
+            'CustomField' => serialize($this->CustomField),
             'label' => $this->label,
             'label_suffix' => $this->label_suffix,
             'example' => $this->example,
@@ -541,7 +541,9 @@ class Field{
         $Field->attributes->id_suffix = '-'.$key;
         $Field->attributes->value = $key;
 
-        if($key == $value){
+        if(is_array($value) && in_array($key, $value)){
+            $Field->attributes->checked = null;
+        }elseif(!is_array($value) && $key == $value){
             $Field->attributes->checked = null;
         }
 

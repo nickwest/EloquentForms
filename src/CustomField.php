@@ -1,8 +1,7 @@
 <?php namespace Nickwest\EloquentForms;
+// TODO: Change this over to use Laravel's Event system
 
-/*
-    Could change this over to use Laravel's Event system, but that would introduce more dependencies
-*/
+use Nickwest\EloquentForms\Exceptions\NotImplementedException;
 
 abstract class CustomField
 {

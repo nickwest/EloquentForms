@@ -92,6 +92,9 @@ class FormTraitTest extends TestCase
     {
         $post_data = $this->getSimulatedPostValues();
         foreach($post_data as $field => $value){
+            if(is_array($value)){
+                $value = implode('|', $value);
+            }
             $this->Model->{$field} = $value;
         }
 
@@ -101,10 +104,12 @@ class FormTraitTest extends TestCase
         // getFieldValues is tested in FormTests
         $values = $this->Model->Form()->getFieldValues();
 
+
         // Unset ID and timestamps since they're not in the post data used to generate the model
         unset($values['id']);
         unset($values['created_at']);
         unset($values['updated_at']);
+        unset($values['volumes']); // Datalists arenn't real fields either
 
         // The form should now have equal values to what's in post_data,
         $this->assertEquals($post_data, $values);
@@ -135,8 +140,26 @@ class FormTraitTest extends TestCase
 
         foreach($post_data as $field => $value) {
             $this->assertEquals($value, $this->Model->Form()->{$field}->attributes->value);
+            // on the model arrays are flattened
+            if(is_array($value)){
+                $value = implode('|', $value);
+            }
             $this->assertEquals($value, $this->Model->{$field});
         }
+    }
+
+    public function test_fortrait_setPostValues_can_handle_multi_key_fields()
+    {
+        $post_data = $this->getSimulatedPostValues();
+        $post_data['fruits_liked'] = ['Banana', 'Apple', 'Peach'];
+
+        $this->Model->setPostValues($post_data);
+
+        // The model should have flattened values
+        $expected = 'Banana|Apple|Peach';
+
+        $this->assertEquals($post_data['fruits_liked'], $this->Model->Form()->fruits_liked->attributes->value);
+        $this->assertEquals($expected, $this->Model->fruits_liked);
     }
 
     public function test_formtrait_models_force_validation_on_save_by_default()
@@ -149,6 +172,12 @@ class FormTraitTest extends TestCase
         $post_data = $this->getSimulatedPostValues();
 
         $this->Model->setPostValues($this->getSimulatedPostValues());
+
+        // foreach($this->Model->Form()->getFields() as $Field){
+        //     if($Field->error_message != ''){
+        //         dd($Field->attributes->name.' '.$Field->error_message);
+        //     }
+        // }
 
         // Simple case, completely valid
         $this->assertTrue($this->Model->isFormValid());
@@ -235,15 +264,15 @@ class FormTraitTest extends TestCase
             'password' => $this->Faker->sha1,
             'file_name' => '/'.$this->Faker->word.'/'.$this->Faker->word.'/'.$this->Faker->word.'.'.$this->Faker->fileExtension,
             'favorite_number' => $this->Faker->numberBetween(10, 5000),
-            'is_hidden' => $this->Faker->numberBetween(0,1),
+            'is_hidden' => [$this->Faker->numberBetween(0,1)],
             'favorite_season' => $this->Faker->randomElement(['', 'Winter', 'Spring', 'Summer', 'Autumn']),
             'beverage' => '',
-            'fruits_liked' => $this->Faker->word,
+            'fruits_liked' => ['Banana', 'Peach'],
             'actors_liked' => $this->Faker->name,
             'favorite_color' => $this->Faker->hexcolor,
             'good_day' => $this->Faker->randomElement(['', 'Yes', 'No']),
             'favorite_date' => $this->Faker->date,
-            'favorite_days' => $this->Faker->dayOfWeek,
+            'favorite_days' => ['T'],
             'birthday' => $this->Faker->date,
             'volume' => $this->Faker->numberBetween(1, 10),
             'favorite_month' => $this->Faker->month,
@@ -348,29 +377,140 @@ class Sample extends Model
 
     public function prepareForm()
     {
-        // This is magical and comes from the FormTrait. It generates form field data by looking at the model's table columns
-        $this->generateFormData();
-
         // Default Form Field label postfix
         $this->setLabelSuffix(':');
 
-        $this->Form()->good_day->setOptions(['Yes' => 'Yes', 'No' => 'No']);
-        $this->Form()->beverage->setOptions(['Beer' => 'Beer', 'Wine' => 'Wine', 'Water' => 'Water']);
+        // This is magical and comes from the FormTrait. It generates form field data by looking at the model's table columns
+        $this->generateFormData();
 
-        // Set some validation rules
-        $this->Form->setValidationRules([
-            'first_name' => 'required',
-            'last_name' => 'required',
+        $this->Form()->getSubmitButton('submit_button', 'Submit')->attributes->value = 'Save';
+        $this->Form()->getSubmitButton('submit_button', 'Submit')->label = 'Save';
+
+        $this->Form()->setTheme(new \Nickwest\EloquentForms\Themes\bulma\Theme());
+
+        // Set field types for fields that aren't just default types
+        $this->Form()->setTypes([
+            'beverage' => 'radio',
+            'birthday' => 'datetime-local',
+            'fruits_liked' => 'checkbox',
             'email' => 'email',
-            'good_day' => [
-                Rule::in($this->Form()->good_day->getOptions()),
-            ],
-            'beverage' => [
-                Rule::in($this->Form()->beverage->getOptions()),
-            ],
-            'volume' => 'numeric',
+            'favorite_date' => 'date',
+            'favorite_days' => new \Nickwest\EloquentForms\CustomFields\daysofweek\CustomField(),
+            'favorite_color' => 'color',
+            'file_name' => 'file',
+            'favorite_month' => 'month',
+            'favorite_number' => 'number',
+            'password' => 'password',
+            'phone_number' => 'tel',
+            'time' => 'time',
+            'week_year' => 'week',
+            'website_url' => 'url',
+            'volume' => 'range',
+            'actors_liked' => 'select',
+            'is_hidden' => 'checkbox'
         ]);
 
+        // By Default all fields will be displayed
+
+        // We can set specific fields to be displayed by the form
+        // $this->Form()->setDisplayFields( array(
+        //     'first_name', 'last_name',
+        //     'email', 'password',
+        //     'phone_number',
+        //     'time',
+        //     'website_url',
+        //     'week_year',
+        //     'beverage',
+        // ));
+
+        // Or we can remove only selected display fields.
+        $this->Form()->removeDisplayFields([
+            'id',
+            'created_at',
+            'updated_at',
+        ]);
+
+        // Override delete button value
+        $this->Form()->file_name->delete_button_value = 'Remove';
+
+        // Set custom labels for some of our fields
+        $this->Form()->setLabels([
+            'fruits_liked' => 'Which fruits do you like?',
+            'good_day' => 'Are you having a good day?',
+            'time' => 'Current time',
+            'website_url' => 'Link to your website',
+            'actors_liked' => 'Which of these actors do you like?'
+        ]);
+
+        // Set which fields are required (label view purposes only right now)
+        $this->Form()->setRequiredFields([
+            'first_name', 'last_name'
+        ]);
+
+        // Setting inline fields
+        // When a field is inline then it will be on the same line as the next field
+        // If you have 3 inline fields in a row, all 4 fields will be on the same line
+        $this->Form()->setInline(['first_name']);
+
+        $this->Form()->is_hidden->setOptions([
+            1 => 'Yes',
+        ]);
+
+        $this->Form()->fruits_liked->setOptions([
+            'banana' => 'Banana',
+            'strawberry' => 'Strawberry',
+            'apple' => 'Apple',
+            'mango' => 'Mango',
+            'passion Fruit' => 'Passion Fruit',
+            'orange' => 'Orange',
+            'kiwi' => 'Kiwi',
+            'pear' => 'Pear',
+            'pineapple' => 'Pineapple'
+        ]);
+
+        $this->Form()->actors_liked->setOptions([
+            'RDN' => 'Robert De Niro',
+            'MF' => 'Morgran Freeman',
+            'CE' => 'Clint Eastwood',
+            'AP' => 'Al Pacino',
+            'TH' => 'Tom Hanks',
+            'MD' => 'Matt Damon',
+        ]);
+        $this->Form()->actors_liked->multiple = true;
+
+        // Turn off the auto injection of CSRF Token Field
+        //$this->Form()->laravel_csrf = false;
+
+        $this->Form()->setExamples([
+            'phone_number' => 'ex: 206-685-9937',
+        ]);
+
+        $this->Form()->volume->attributes->min = 5;
+        $this->Form()->volume->attributes->max = 40;
+        $this->Form()->volume->attributes->step = 5;
+        $this->Form()->volume->attributes->list = 'volumes';
+
+        $this->Form()->addDatalist('volumes', [ 5 => '5', 10 => '', 15 => '', 20 => '20', 25 => '', 30 => '', 35 => '', 40 => '40']);
+
+        $this->Form()->phone_number->attributes->pattern = '\\d{3}[\\-]\\d{3}[\\-]\\d{4}';
+        $this->Form()->phone_number->attributes->placeholder = '123-456-7890';
+
+        // $this->Form()->allow_delete = true;
+
+        // Set a custom field ID
+        //$this->Form()->phone->id = 'override-id';
+
+        $this->Form()->setValidationRules([
+            'first_name' => 'max:64',
+            'last_name' => 'max:64',
+            //'phone_number' => 'phone:US,CA',
+
+            // Having these validators means users can't inject random options outside of our options array
+            // 'actors_liked' => 'in:'.implode(',', array_merge([''], array_keys($this->Form()->actors_liked->options))),
+            // 'fruits_liked' => 'in:'.implode(',', array_merge([''], array_keys($this->Form()->fruits_liked->options))),
+            'good_day' => 'in:'.implode(',', array_merge([''], array_keys($this->Form()->good_day->getOptions()))),
+            // 'favorite_days' => 'in:'.implode(',', array_merge([''], array_keys($this->Form()->favorite_days->options))),
+        ]);
     }
 
 
