@@ -268,7 +268,7 @@ class FormTraitTest extends TestCase
             'favorite_season' => $this->Faker->randomElement(['', 'Winter', 'Spring', 'Summer', 'Autumn']),
             'beverage' => '',
             'fruits_liked' => ['Banana', 'Peach'],
-            'actors_liked' => $this->Faker->name,
+            'actors_liked' => ['RDN', 'MF'],
             'favorite_color' => $this->Faker->hexcolor,
             'good_day' => $this->Faker->randomElement(['', 'Yes', 'No']),
             'favorite_date' => $this->Faker->date,
@@ -431,7 +431,7 @@ class Sample extends Model
         ]);
 
         // Override delete button value
-        $this->Form()->file_name->delete_button_value = 'Remove';
+        $this->Form()->file_name->file_delete_button_value = 'Remove';
 
         // Set custom labels for some of our fields
         $this->Form()->setLabels([
@@ -476,10 +476,12 @@ class Sample extends Model
             'TH' => 'Tom Hanks',
             'MD' => 'Matt Damon',
         ]);
-        $this->Form()->actors_liked->multiple = true;
+        $this->Form()->actors_liked->attributes->multi_key = true;
 
         // Turn off the auto injection of CSRF Token Field
         //$this->Form()->laravel_csrf = false;
+
+        $this->Form()->good_day->setOptions(['Yes' => 'Yes', 'No' => 'No']);
 
         $this->Form()->setExamples([
             'phone_number' => 'ex: 206-685-9937',
@@ -501,15 +503,16 @@ class Sample extends Model
         //$this->Form()->phone->id = 'override-id';
 
         $this->Form()->setValidationRules([
-            'first_name' => 'max:64',
-            'last_name' => 'max:64',
-            //'phone_number' => 'phone:US,CA',
-
-            // Having these validators means users can't inject random options outside of our options array
-            // 'actors_liked' => 'in:'.implode(',', array_merge([''], array_keys($this->Form()->actors_liked->options))),
-            // 'fruits_liked' => 'in:'.implode(',', array_merge([''], array_keys($this->Form()->fruits_liked->options))),
-            'good_day' => 'in:'.implode(',', array_merge([''], array_keys($this->Form()->good_day->getOptions()))),
-            // 'favorite_days' => 'in:'.implode(',', array_merge([''], array_keys($this->Form()->favorite_days->options))),
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'email',
+            'good_day' => [
+                Rule::in($this->Form()->good_day->getOptions()),
+            ],
+            'beverage' => [
+                Rule::in($this->Form()->beverage->getOptions()),
+            ],
+            'volume' => 'numeric',
         ]);
     }
 

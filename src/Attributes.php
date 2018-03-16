@@ -196,7 +196,7 @@ class Attributes{
 
         $this->prepareClassAttribute();
 
-        if(isset($this->attributes['type']) && $this->attributes['type'] == 'select' && $this->multi_key !== null){
+        if($this->multi_key !== null){
             $this->attributes['multiple'] = null;
         }
 

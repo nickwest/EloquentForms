@@ -25,8 +25,8 @@ class CustomField extends BaseCustomField
 
     public function hook_setAllFormValues(Field $Field, $value)
     {
-        if(!is_string($value)){
-            throw new \Exception('$value needs to be a string');
+        if(is_object($value) || is_array($value)){
+            throw new \Exception('$value cannot be an array or Object');
         }
 
         $value = explode('|', $value);

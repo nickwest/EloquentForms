@@ -250,7 +250,6 @@ class Field{
         return $this->attributes->getRawID();
     }
 
-
     /**
      * Convert this object to a simple JSON representation
      *
@@ -260,7 +259,6 @@ class Field{
     {
         $array = [
             'attributes' => json_decode($this->attributes->toJson()),
-            'Theme' => (is_object($this->Theme) ? '\\'.get_class($this->Theme) : null),
             'Subform' => is_object($this->Subform) ? $this->Subform->toJson() : $this->Subform,
             'CustomField' => serialize($this->CustomField),
             'label' => $this->label,
@@ -278,9 +276,12 @@ class Field{
             'options_container_class' => $this->options_container_class,
             'option_wrapper_class' => $this->option_wrapper_class,
             'option_label_class' => $this->option_label_class,
+            'subform_data' => $this->subform_data,
+            'extra_blade_data' => $this->extra_blade_data,
             'original_name' => $this->original_name,
             'options' => $this->options,
             'disabled_options' => $this->disabled_options,
+            'Theme' => (is_object($this->Theme) ? '\\'.get_class($this->Theme) : null),
         ];
 
         return json_encode($array);

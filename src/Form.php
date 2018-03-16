@@ -842,6 +842,7 @@ class Form{
             'laravel_csrf' => $this->laravel_csrf,
             'attributes' => json_decode($this->attributes->toJson()),
             'Fields' => [],
+            'SubmitFields' => [],
             'display_fields' => $this->display_fields,
             'Theme' => (is_object($this->Theme) ? '\\'.get_class($this->Theme) : null),
         ];
@@ -849,6 +850,11 @@ class Form{
         foreach($this->Fields as $key => $Field) {
             $array['Fields'][$key] = json_decode($Field->toJson());
         }
+
+        foreach($this->SubmitFields as $key => $Field) {
+            $array['SubmitFields'][$key] = json_decode($Field->toJson());
+        }
+
 
         return json_encode($array);
     }
@@ -864,7 +870,7 @@ class Form{
         $array = json_decode($json);
 
         foreach($array as $key => $value) {
-            if($key == 'Fields') {
+            if($key == 'Fields' || $key == 'SubmitFields') {
                 foreach($value as $key2 => $array) {
                     $this->$key[$key2] = new Field($key2);
                     $this->$key[$key2]->fromJson(json_encode($array));
