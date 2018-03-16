@@ -3,11 +3,11 @@
 use Sunra\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Field;
-
 use Nickwest\EloquentForms\Test\TestCase;
+use Nickwest\EloquentForms\Test\ThemeTestInterfaces\datalistFieldTestInterface;
 
 // Extend TestCase since Contentblock isn't a real field
-class datalistFieldTest extends TestCase
+class datalistFieldTest extends TestCase implements datalistFieldTestInterface
 {
     protected $options = [
         1 => 'First',

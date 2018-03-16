@@ -3,8 +3,9 @@
 use Sunra\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Test\FieldViewBulmaTestCase;
+use Nickwest\EloquentForms\Test\ThemeTestInterfaces\passwordFieldTestInterface;
 
-class passwordFieldTest extends FieldViewBulmaTestCase
+class passwordFieldTest extends FieldViewBulmaTestCase implements passwordFieldTestInterface
 {
     protected $test_value = 'this_is_a_bad_password_probably';
     protected $test_type = 'password';

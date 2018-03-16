@@ -3,10 +3,10 @@
 use Sunra\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Field;
-
 use Nickwest\EloquentForms\Test\FieldViewBulmaTestCase;
+use Nickwest\EloquentForms\Test\ThemeTestInterfaces\selectFieldTestInterface;
 
-class selectFieldTest extends FieldViewBulmaTestCase
+class selectFieldTest extends FieldViewBulmaTestCase implements selectFieldTestInterface
 {
     protected $test_value = '2';
     protected $test_type = 'select';

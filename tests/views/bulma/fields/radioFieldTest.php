@@ -3,10 +3,10 @@
 use Sunra\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Field;
-
 use Nickwest\EloquentForms\Test\FieldViewBulmaTestCase;
+use Nickwest\EloquentForms\Test\ThemeTestInterfaces\radioFieldTestInterface;
 
-class radioFieldTest extends FieldViewBulmaTestCase
+class radioFieldTest extends FieldViewBulmaTestCase implements radioFieldTestInterface
 {
     protected $test_value = 'no';
     protected $test_type = 'radio';

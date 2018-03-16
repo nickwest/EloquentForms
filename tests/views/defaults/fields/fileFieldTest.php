@@ -3,10 +3,10 @@
 use Sunra\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Field;
-
 use Nickwest\EloquentForms\Test\FieldViewTestCase;
+use Nickwest\EloquentForms\Test\ThemeTestInterfaces\fileFieldTestInterface;
 
-class fileFieldTest extends FieldViewTestCase
+class fileFieldTest extends FieldViewTestCase implements fileFieldTestInterface
 {
     protected $test_value = 'yoda.pdf';
     protected $test_type = 'file';

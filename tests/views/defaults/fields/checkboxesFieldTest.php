@@ -3,10 +3,10 @@
 use Sunra\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Field;
-
 use Nickwest\EloquentForms\Test\FieldViewTestCase;
+use Nickwest\EloquentForms\Test\ThemeTestInterfaces\checkboxesFieldTestInterface;
 
-class checkboxesFieldTest extends FieldViewTestCase
+class checkboxesFieldTest extends FieldViewTestCase implements checkboxesFieldTestInterface
 {
     protected $test_value = '2';
     protected $test_type = 'checkbox';

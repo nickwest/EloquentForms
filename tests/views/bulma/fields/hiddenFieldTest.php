@@ -3,8 +3,9 @@
 use Sunra\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Test\FieldViewBulmaTestCase;
+use Nickwest\EloquentForms\Test\ThemeTestInterfaces\hiddenFieldTestInterface;
 
-class hiddenFieldTest extends FieldViewBulmaTestCase
+class hiddenFieldTest extends FieldViewBulmaTestCase implements hiddenFieldTestInterface
 {
     protected $test_value = 'my_value';
     protected $test_type = 'hidden';
