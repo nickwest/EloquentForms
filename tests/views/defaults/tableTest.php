@@ -100,13 +100,55 @@ class tableButtonsTest extends TestCase
         foreach($trs as $tr){
             $data = $this->Collection->shift();
             foreach($tr->find('td') as $td){
-                $this->assertEquals(e($data[$td->{'data-field'}]), $td->plaintext);
+                $this->assertEquals(e($data[$td->{'data-field'}]), trim($td->innertext));
             }
         }
     }
 
+    public function test_table_can_have_custom_headings()
+    {
+        $labels = ['name' => 'Full name', 'email' => 'E-mail'];
+        $this->Table->setLabels($labels);
 
+        $dom = HtmlDomParser::str_get_html($this->Table->makeView()->render());
+        $ths = $dom->find('thead tr th');
 
+        foreach($ths as $th){
+            if(isset($labels[$th->{'data-field'}])){
+                $this->assertEquals(e($labels[$th->{'data-field'}]), trim($th->innertext));
+            }
+        }
+    }
+
+    public function test_table_can_have_replacement_pattern()
+    {
+        // Inject something nasty
+        $Collection = new Collection();
+        $item = $this->Collection->pop();
+        $item['name'] = '<script>alert("test")</script>';
+        $item['birthday'] = '<script>alert("Happy Birthday!")</script>';
+        $Collection->push($item);
+
+        // Put the modified Collection on the Table
+        $this->Table->setData($Collection);
+
+        $this->Table->addFieldReplacement('birthday', '<strong>{birthday}</strong>');
+        $this->Table->addLinkingPattern('name', '/my/url');
+
+        $dom = HtmlDomParser::str_get_html($this->Table->makeView()->render());
+        $tds = $dom->find('td');
+
+        $data = $Collection->shift();
+        foreach($tds as $td){
+            if($td->{'data-field'} == 'birthday'){
+                // Value cleaned with e()
+                $this->assertEquals('<strong>'.e($data[$td->{'data-field'}]).'</strong>', trim($td->innertext));
+            }elseif($td->{'data-field'} == 'nname'){
+                // Value cleaned with e()
+                $this->assertEquals('<a href="/my/url">'.e($data[$td->{'data-field'}]).'</a>', trim($td->innertext));
+            }
+        }
+    }
 
 
     /**

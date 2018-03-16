@@ -191,9 +191,9 @@ class Table{
         if(is_array($results[0]) && is_array($results[1])) {
             foreach($results[0] as $key => $match) {
                 if(is_object($Object) && isset($Object->{$results[1][$key]})) {
-                    $replaced = str_replace($results[0][$key], (string)$Object->{$results[1][$key]}, $replaced);
+                    $replaced = str_replace($results[0][$key], e($Object->{$results[1][$key]}), $replaced);
                 } elseif(is_array($Object) && isset($Object[$results[1][$key]])) {
-                    $replaced = str_replace($results[0][$key], $Object[$results[1][$key]], $replaced);
+                    $replaced = str_replace($results[0][$key], e($Object[$results[1][$key]]), $replaced);
                 }
             }
         }
@@ -207,7 +207,7 @@ class Table{
      * @param string $field_name
      * @param string $href
      */
-    public function setLinkingPattern(string $field_name, string $href): void
+    public function addLinkingPattern(string $field_name, string $href): void
     {
         // Make and set the linking pattern
         $this->field_replacements[$field_name] = '<a href="'.$href.'">{'.$field_name.'}</a>';
@@ -222,7 +222,7 @@ class Table{
      * @return void
      * @throws Nickwest\EloquentForms\InvalidRouteException
      */
-    public function setLinkingPatternByRoute(string $field_name, string $route_name, $query_string=[]): void
+    public function addLinkingPatternByRoute(string $field_name, string $route_name, $query_string=[]): void
     {
         $Route = Route::getRoutes()->getByName($route_name);
         if($Route == null) {

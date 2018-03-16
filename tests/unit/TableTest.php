@@ -161,10 +161,10 @@ class TableTest extends TestCase
         $this->assertEquals('<strong>'.$item['email'].' '.$item['birthday'].'</strong>', $this->Table->getFieldReplacement('birthday', $item));
     }
 
-    public function test_table_setLinkingPattern_sets_a_linking_patter_form_a_field()
+    public function test_table_addLinkingPattern_adds_a_linking_patter_form_a_field()
     {
-        $this->Table->setLinkingPattern('email', 'mailto:{email}');
-        $this->Table->setLinkingPattern('name', 'https://google.com');
+        $this->Table->addLinkingPattern('email', 'mailto:{email}');
+        $this->Table->addLinkingPattern('name', 'https://google.com');
 
         $expected = [
             'email' => '<a href="mailto:{email}">{email}</a>',
@@ -174,17 +174,17 @@ class TableTest extends TestCase
         $this->assertAttributeEquals($expected, 'field_replacements', $this->Table);
     }
 
-    public function test_table_setLinkingPatternByRoute_sets_a_linking_pattern_for_a_field()
+    public function test_table_addLinkingPatternByRoute_adds_a_linking_pattern_for_a_field()
     {
-        $this->Table->setLinkingPatternByRoute('name', 'sample');
+        $this->Table->addLinkingPatternByRoute('name', 'sample');
 
         $this->assertAttributeEquals(['name' => '<a href="/sample/data">{name}</a>'], 'field_replacements', $this->Table);
     }
 
-    public function test_table_setLinkingPatternByRoute_throws_exception_on_invalid_route()
+    public function test_table_addLinkingPatternByRoute_throws_exception_on_invalid_route()
     {
         $this->expectException(InvalidRouteException::class);
-        $this->Table->setLinkingPatternByRoute('name', 'no.route');
+        $this->Table->addLinkingPatternByRoute('name', 'no.route');
     }
 
     public function test_table_makeView_returns_a_view()
