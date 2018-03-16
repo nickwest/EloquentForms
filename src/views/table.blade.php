@@ -3,7 +3,7 @@
     <thead>
         <tr>
 @foreach($Table->getDisplayFields() as $field_name)
-            <th>{{ $Table->getLabel($field_name) }}</th>
+            <th data-field="{{ $field_name }}">{{ $Table->getLabel($field_name) }}</th>
 @endforeach
         </tr>
     </thead>
