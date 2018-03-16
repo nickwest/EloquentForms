@@ -250,7 +250,7 @@ class Table{
 
         $this->Theme->prepareTableView($this);
 
-        $template = ($extends != '' ? 'table-extends' : 'table');
+        $template = ($extends != '' ? 'table-extend' : 'table');
 
         if(View::exists($this->Theme->getViewNamespace().'::'.$template)) {
             return View::make($this->Theme->getViewNamespace().'::'.$template, $blade_data);
