@@ -199,10 +199,10 @@ class AttributesTest extends TestCase
         $Attributes->name = 'people';
         $Attributes->multi_key = true;
 
-        $this->assertEquals('name="people[]"', (string)$Attributes);
+        $this->assertEquals('name="people[]" multiple', (string)$Attributes);
 
         $Attributes->multi_key = 1;
-        $this->assertEquals('name="people[1]"', (string)$Attributes);
+        $this->assertEquals('name="people[1]" multiple', (string)$Attributes);
     }
 
     public function test_attributes_toJson_produces_a_json_string()

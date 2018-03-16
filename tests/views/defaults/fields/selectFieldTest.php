@@ -30,9 +30,12 @@ class selectFieldTest extends FieldViewTestCase
 
     public function test_field_can_have_multiple_attribute_set()
     {
-        $this->Field->attributes->multiple = null;
+        $this->Field->attributes->multi_key = true;
 
+        $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
+        $select = current($dom->find('select'));
 
+        $this->assertSame(true, $select->multiple);
     }
 
     public function test_field_has_proper_option_selected_when_value_is_set()
