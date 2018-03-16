@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\View;
 
 use Nickwest\EloquentForms\CustomField as BaseCustomField;
 use Nickwest\EloquentForms\Field;
+use Nickwest\EloquentForms\DefaultTheme;
 
 class CustomField extends BaseCustomField
 {
@@ -17,7 +18,8 @@ class CustomField extends BaseCustomField
 
     public function makeView(Field $Field, bool $prev_inline = false, bool $view_only = false)
     {
-        return View::make('Nickwest\\EloquentForms::customfields.daysofweek', ['Field' => $Field, 'daysofweek' => $this->daysofweek, 'view_only' => $view_only]);
+        // TODO: make is so themes can override custom fields too.
+        return View::make(DefaultTheme::getDefaultNamespace().'::customfields.daysofweek', ['Field' => $Field, 'daysofweek' => $this->daysofweek, 'view_only' => $view_only]);
     }
 
     public function hook_setAllFormValues(Field $Field, $value)

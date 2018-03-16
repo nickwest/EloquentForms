@@ -334,7 +334,7 @@ class Field{
      */
     public function getTemplate(): string
     {
-        $namespace = 'Nickwest\\EloquentForms'; // TODO: Define the default name space somewhere?
+        $namespace = DefaultTheme::getDefaultNamespace();
 
         // Get the template name
         $template = 'fields.'.$this->attributes->type;
@@ -547,10 +547,10 @@ class Field{
 
         $Field->Theme->prepareFieldView($Field);
 
-        if($Field->getViewNamespace() != '' && View::exists($Field->getViewNamespace().'::fields.'.$Field->attributes->type.'_option')) {
+        if(View::exists($Field->getViewNamespace().'::fields.'.$Field->attributes->type.'_option')) {
             return View::make($Field->getViewNamespace().'::fields.'.$Field->attributes->type.'_option', array('Field' => $Field, 'key' => $key, 'view_only' => $view_only));
         }
-        return View::make('Nickwest\\EloquentForms::fields.'.$Field->attributes->type.'_option', array('Field' => $Field, 'key' => $key, 'view_only' => $view_only));
+        return View::make(DefaultTheme::getDefaultNamespace().'::fields.'.$Field->attributes->type.'_option', array('Field' => $Field, 'key' => $key, 'view_only' => $view_only));
     }
 
 
