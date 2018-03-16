@@ -141,6 +141,20 @@ class AttributesTest extends TestCase
         $this->assertEquals('class="red"', (string)$Attributes);
     }
 
+    public function test_attributes_addClasses_adds_multiple_classes_to_the_class_attribute()
+    {
+        $Attributes = new Attributes();
+
+        $Attributes->addClasses(['red', 'bold', 'big']);
+
+        $expected = ['red' => 'red', 'bold' => 'bold', 'big' => 'big'];
+
+        $this->assertAttributeEquals($expected, 'classes', $Attributes);
+        $this->assertEquals('red bold big', $Attributes->class);
+        $this->assertEquals('class="red bold big"', (string)$Attributes);
+
+    }
+
     public function test_attributes_adding_multiple_classes_produces_a_valid_class_string()
     {
         $Attributes = new Attributes();

@@ -65,7 +65,7 @@ class Attributes{
      * @param mixed $value
      * @return void
      */
-    public function __set(string $attribute, $value)
+    public function __set(string $attribute, $value): void
     {
         // If it's a class, save it as an array so we can manipulate single classes
         if($attribute == 'class') {
@@ -89,9 +89,9 @@ class Attributes{
      * Field property mutator
      *
      * @param string $attribute
-     * @return boolean
+     * @return bool
      */
-    public function __isset(string $attribute)
+    public function __isset(string $attribute): bool
     {
         if($attribute == 'class'){
             return count($this->classes) > 0;
@@ -106,7 +106,7 @@ class Attributes{
      * @param string $attribute
      * @return void
      */
-    public function __unset(string $attribute)
+    public function __unset(string $attribute): void
     {
         if($attribute == 'class'){
             $this->classes = [];
@@ -121,7 +121,7 @@ class Attributes{
      *
      * @return string
      */
-    public function __tostring()
+    public function __tostring(): string
     {
         return $this->getString();
     }
@@ -142,10 +142,23 @@ class Attributes{
      * @param string $class_name
      * @return void
      */
-    public function addClass(string $class_name)
+    public function addClass(string $class_name): void
     {
         if(trim($class_name) != '') {
             $this->classes[$class_name] = $class_name;
+        }
+    }
+
+    /**
+     * Add multiple css classes
+     *
+     * @param array $class_names
+     * @return void
+     */
+    public function addClasses(array $class_names): void
+    {
+        foreach($class_names as $class_name){
+            $this->addClass($class_name);
         }
     }
 
@@ -155,7 +168,7 @@ class Attributes{
      * @param string $class_name
      * @return void
      */
-    public function removeClass(string $class_name)
+    public function removeClass(string $class_name): void
     {
         unset($this->classes[$class_name]);
     }
@@ -164,9 +177,9 @@ class Attributes{
      * Check if classes has a specific class
      *
      * @param string $class_name
-     * @return boolean
+     * @return bool
      */
-    public function hasClass(string $class_name)
+    public function hasClass(string $class_name): bool
     {
         return isset($this->classes[$class_name]);
     }
@@ -176,7 +189,8 @@ class Attributes{
      *
      * @return string
      */
-    public function getString(){
+    public function getString(): string
+    {
         $output = [];
 
         $this->prepareClassAttribute();
@@ -202,7 +216,7 @@ class Attributes{
      *
      * @return string JSON
      */
-    public function toJson()
+    public function toJson(): string
     {
         return json_encode([
             'classes' => $this->classes,
@@ -217,7 +231,7 @@ class Attributes{
      * @param string JSON
      * @return void
      */
-    public function fromJson($json)
+    public function fromJson($json): void
     {
         $array = json_decode($json);
 
@@ -235,7 +249,7 @@ class Attributes{
      *
      * @return void
      */
-    protected function prepareClassAttribute()
+    protected function prepareClassAttribute(): void
     {
         if(count($this->classes) == 0 && isset($this->attributes['class'])) {
             unset($this->attributes['class']);
