@@ -8,10 +8,10 @@
 
 @yield('above_table')
 
-<table class="{{ $Table->getClassesString() }}">
+<table {!! $Table->attributes !!}>
     <thead>
         <tr>
-        @foreach($Table->display_fields as $field_name)
+        @foreach($Table->getDisplayFields() as $field_name)
             <th>{{ $Table->getLabel($field_name) }}</th>
         @endforeach
         </tr>
@@ -19,8 +19,8 @@
     <tobdy>
         @foreach($Table->Collection as $row)
         <tr>
-            @foreach($Table->display_fields as $field_name)
-                @eloquentforms_include($Table->getViewNamespace().'::pieces.table-cell', ['row' => $row, 'field_name' => $field_name, 'Table' => $Table])
+            @foreach($Table->getDisplayFields() as $field_name)
+                @eloquentforms_include($Table->getTheme()->getViewNamespace().'::pieces.table-cell', ['row' => $row, 'field_name' => $field_name, 'Table' => $Table])
             @endforeach
         </tr>
         @endforeach

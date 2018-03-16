@@ -21,5 +21,5 @@
 
 {{--  Use default input template for non-view only --}}
 @else
-    @include("Nickwest\EloquentForms::pieces.default-input")
+    @eloquentforms_include($Field->getViewNamespace().'::pieces.default-input')
 @endif

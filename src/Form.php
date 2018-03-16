@@ -340,7 +340,7 @@ class Form{
         foreach($types as $field_name => $type) {
             if(isset($this->Fields[$field_name])) {
                 // If it's a custom type, it'll be an object
-                if(is_object($type) && is_a($type, 'Nickwest\EloquentForms\CustomField')) {
+                if(is_object($type) && is_a($type, CustomField::class)) {
                     $this->Fields[$field_name]->CustomField = $type;
                 }
                 // If it's some other object, it's not a valid type
@@ -804,7 +804,7 @@ class Form{
         $this->setMultipartIfNeeded();
         $this->Theme->prepareFormView($this);
 
-        $template = ($extends != '' ? 'form-extends' : 'form');
+        $template = ($extends != '' ? 'form-extend' : 'form');
 
         if(View::exists($this->Theme->getViewNamespace().'::'.$template)) {
             return View::make($this->Theme->getViewNamespace().'::'.$template, $blade_data);
