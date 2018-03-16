@@ -203,27 +203,6 @@ class TableTest extends TestCase
         $this->assertInstanceOf(\Illuminate\View\View::class, $View);
     }
 
-
-    // the best I can figure for this right now is making sure it doesn't error.
-    // in a better case we'd actually test the created excel file
-    public function test_table_exportToExcel_created_an_excel_file()
-    {
-        $this->Table->setDisplayFields($this->display_fields);
-        $labels = [
-            'name' => 'Name',
-            'email' => 'E-mail',
-            'birthday' => 'Birthday',
-        ];
-
-        $this->Table->setLabels($labels);
-
-        $Excel = $this->Table->exportToExcel('My Export', [], true);
-        $this->assertinstanceOf(\Maatwebsite\Excel\Writers\LaravelExcelWriter::class, $Excel);
-    }
-
-
-
-
     /**
      *  Make a test collection full of data
      *

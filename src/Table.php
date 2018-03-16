@@ -5,8 +5,6 @@ use Route;
 
 use Illuminate\Support\Collection;
 
-use Maatwebsite\Excel\Facades\Excel;
-
 use Nickwest\EloquentForms\Theme;
 use Nickwest\EloquentForms\Traits\Themeable;
 use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
@@ -71,14 +69,6 @@ class Table{
      * @var Illuminate\Support\Collection
      */
     protected $Collection = [];
-
-    /**
-     * Excel Config values from client
-     *
-     * @var array
-     */
-    protected $excel_config = [];
-
 
     /**
      * Constructor
@@ -267,124 +257,5 @@ class Table{
         }else{
             return View::make(DefaultTheme::getDefaultNamespace().'::'.$template, $blade_data);
         }
-    }
-
-    /**
-     * Export this to excel
-     *
-     * @param string $title
-     * @param array $config
-     * @return mixed
-     */
-    public function exportToExcel(string $title, array $config, $return_object = false)
-    {
-        $this->excel_config = $config;
-
-        foreach($this->display_fields as $field){
-            $headings[] = $this->getLabel($field);
-        }
-
-        $export = array_merge([$headings], $this->Collection->map(function($item){
-            $collection = new Collection($item);
-            return $collection->only($this->display_fields)->all();
-        })->toArray());
-
-
-        $sheet_settings = [
-            // Font settings
-            'setFontFamily' => $this->config('FontFamily', 'Calibri'),
-            'setFontSize' => $this->config('FontSize', 16),
-            'setFontBold' => $this->config('FontBold', false),
-
-            // Page settings
-            'sethorizontalCentered' => $this->config('horizontalCentered', false),
-            'setfitToPage' => $this->config('fitToPage', false),
-            'setfitToHeight' => $this->config('fitToHeight', false),
-            'setfitToWidth' => $this->config('fitToWidth', true),
-            'setpaperSize' => $this->config('paperSize', 1),
-
-            // Set margins
-            'setPageMargin' => $this->config('PageMargin', array(0.7, 0.25, 0.25, 0.25)),
-        ];
-
-        if($return_object){
-            return $this->createExcelObject($title, $export, $sheet_settings);
-        }
-
-        // Send the export headers and stop processing afterward
-        $this->createExcelObject($title, $export, $sheet_settings)->export('xls');
-    }
-
-    /**
-     *  Create the Excel Object
-     *
-     * @param string $title
-     * @param array $export
-     * @param array $sheet_settings
-     * @return Maatwebsite\Excel\Writers\LaravelExcelWriter
-     */
-    protected function createExcelObject(string $title, array $export, array $sheet_settings): \Maatwebsite\Excel\Writers\LaravelExcelWriter
-    {
-        return Excel::create($title, function($Excel) use ($title, $export, $sheet_settings) {
-            $Excel->setTitle($title)
-                    ->setCreator($this->config('Creator', ''))
-                    ->setCompany($this->config('Company', ''))
-                    ->setDescription($this->config('Description', ''));
-
-            $Excel->sheet($title, function($Sheet) use ($export, $sheet_settings){
-
-                foreach($sheet_settings as $method => $param){
-                    $Sheet->{$method}($param);
-                }
-
-                // Populate data
-                $Sheet->fromArray($export, null, 'A1', false, false);
-
-                $highest_col = $Sheet->getHighestColumn();
-                $total_rows = count($export);
-
-                // Format all rows as text
-                $Sheet->setColumnFormat(array(
-                    'A1:'.$highest_col.$total_rows => '@',
-                ));
-
-                // Add borders
-                if($this->config('borders', false)){
-                    $Sheet->setBorder('A1:'.$highest_col.$total_rows, 'thin');
-                }
-
-                // Make the first row bold
-                $Sheet->cell('A1:'.$highest_col.'1', function($cells){
-                    $cells->setFontWeight('bold');
-                });
-
-                // Zebra rows
-                if($this->config('zebraRows', true)) {
-                    for($i = 2; $i <= $total_rows; $i++){
-                        if($i % 2 == 0){
-                            $Sheet->cell('A'.$i.':'.$highest_col.$i, function($cells){
-                                $cells->setBackground('#EEEEEE');
-                            });
-                        }
-                    }
-                }
-
-                // Verticle align
-                $Sheet->cell('A1:'.$highest_col.$total_rows, function($cells){
-                    $cells->setValignment('top');
-                });
-            });
-        });
-    }
-
-    /**
-     *
-     *
-     * @param string $key
-     * @return mixed
-     */
-    protected function config(string $key, $default)
-    {
-        return (isset($this->excel_config[$key]) ? $this->excel_config[$key] : $default);
     }
 }

@@ -28,7 +28,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     {
         return [
             \Orchestra\Database\ConsoleServiceProvider::class,
-            \Maatwebsite\Excel\ExcelServiceProvider::class,
             \Nickwest\EloquentForms\EloquentFormsServiceProvider::class,
             \Nickwest\EloquentForms\Themes\bulma\EloquentFormsBulmaThemeServiceProvider::class,
         ];
