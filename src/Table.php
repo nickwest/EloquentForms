@@ -252,10 +252,6 @@ class Table{
 
         $template = ($extends != '' ? 'table-extend' : 'table');
 
-        if(View::exists($this->Theme->getViewNamespace().'::'.$template)) {
-            return View::make($this->Theme->getViewNamespace().'::'.$template, $blade_data);
-        }else{
-            return View::make(DefaultTheme::getDefaultNamespace().'::'.$template, $blade_data);
-        }
+        return $this->getThemeView($template, $blade_data);
     }
 }
