@@ -446,7 +446,7 @@ class Form{
 
         $this->{$name}->attributes->type = 'datalist';
         $this->{$name}->attributes->id = $name;
-        $this->{$name}->setOptions($options);
+        $this->{$name}->options->setOptions($options);
 
         $this->addDisplayFields([$name]);
     }

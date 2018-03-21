@@ -7,15 +7,15 @@
         <div class="value">
             @if(is_array($Field->attributes->value))
                 @foreach($Field->attributes->value as $value)
-                    @if(count($Field->getOptions()) > 0 && $Field->hasOption($value))
-                        {{ $Field->getOption($value) . ($loop->last ? '' : ', ') }}
+                    @if($Field->options->hasOption($value))
+                        {{ $Field->options->getOption($value) . ($loop->last ? '' : ', ') }}
                     @else
                         {{ $value . ($loop->last ? '' : ', ') }}
                     @endif
                 @endforeach
             @else
-                @if(count($Field->getOptions()) > 0 && isset($Field->hasOption($Field->attributes->value))
-                    {{ $Field->getOption($Field->attributes->value) }}
+                @if($Field->options->hasOptions() && $Field->options->hasOption($Field->attributes->value)
+                    {{ $Field->options->getOption($Field->attributes->value) }}
                 @else
                     @if($Field->attributes->type == 'textarea')
                         {!! nl2br(htmlspecialchars($Field->attributes->value)) !!}

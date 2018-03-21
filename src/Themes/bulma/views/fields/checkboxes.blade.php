@@ -1,12 +1,12 @@
 @eloquentforms_component($Field->getViewNamespace().'::components.field', ['Field' => $Field, 'prev_inline' => $prev_inline])
 
     @slot('field_markup')
-        <div class="{{ $Field->options_container_class }}">
+        <div class="{{ $Field->options->container_class }}">
             @if($Field->label != '')
                 <label class="{{ $Field->label_class }}">{!! $Field->label.($Field->label_suffix != '' ? $Field->label_suffix : '').(isset($Field->attributes->required) ? ' <em>*</em>' : '') !!}</label>
             @endif
 
-            @foreach($Field->getOptions() as $key => $option)
+            @foreach($Field->options->getOptions() as $key => $option)
                 {!! $Field->makeOptionView($key, $Field->attributes->value, $view_only) !!}
             @endforeach
         </div>

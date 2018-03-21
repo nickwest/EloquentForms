@@ -579,7 +579,7 @@ class FormTest extends TestCase
         $this->assertAttributeContains('my_data', 'display_fields', $this->Form);
 
         // Make sure they got set accurately too
-        $this->assertEquals($data, $this->Form->my_data->getOptions());
+        $this->assertEquals($data, $this->Form->my_data->options->getOptions());
     }
 
     public function test_form_starts_with_a_save_submit_button()
@@ -720,7 +720,7 @@ class FormTest extends TestCase
         $Form = new Form();
         $Form->addFields(array_column($this->fields, 'name'));
 
-        $Form->{$this->fields[3]['name']}->setOptions(['Yes', 'No']);
+        $Form->{$this->fields[3]['name']}->options->setOptions(['Yes', 'No']);
 
         // Set some validation rules
         $this->validation_rules = [
@@ -729,7 +729,7 @@ class FormTest extends TestCase
             $this->fields[2]['name'] => 'required|email',
             $this->fields[3]['name'] => [
                 'required',
-                Rule::in($Form->{$this->fields[3]['name']}->getOptions()),
+                Rule::in($Form->{$this->fields[3]['name']}->options->getOptions()),
             ],
         ];
         $Form->setValidationRules($this->validation_rules);

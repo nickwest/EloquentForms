@@ -38,7 +38,7 @@ abstract class FieldViewBulmaTestCase extends TestCase
         $this->Field->attributes->type = $this->test_type;
 
         if(is_array($this->test_options)){
-            $this->Field->setOptions($this->test_options);
+            $this->Field->options->setOptions($this->test_options);
         }
     }
 

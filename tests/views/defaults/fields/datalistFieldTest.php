@@ -22,12 +22,12 @@ class datalistFieldTest extends TestCase implements datalistFieldTestInterface
         $this->Field = new Field('my_test_field');
 
         $this->Field->attributes->type = 'datalist';
-        $this->Field->setOptions($this->options);
+        $this->Field->options->setOptions($this->options);
     }
 
     public function test_field_not_there_if_no_options_set()
     {
-        $this->Field->setOptions([]);
+        $this->Field->options->setOptions([]);
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
 
         // Without a options this generates no output at all

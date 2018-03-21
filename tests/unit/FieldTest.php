@@ -57,82 +57,7 @@ class FieldTest extends TestCase
         $this->assertEquals('Nickwest\EloquentForms\\bulma::fields.select', $this->Field->getTemplate());
     }
 
-    public function test_field_setOption_will_set_a_sign_option_to_the_field()
-    {
-        $test_options = $this->Field->getOptions();
 
-        $test_options[56] = 'Fifty Six';
-        $this->Field->setOption(56, 'Fifty Six');
-
-        $this->assertEquals($test_options, $this->Field->getOptions());
-    }
-
-    public function test_field_setOptions_will_set_options_to_a_field()
-    {
-        $test_options = [1 => 'different', 2 => 'two', 44 => 'Fourtyfour'];
-        $this->Field->setOptions($test_options);
-
-        $options = $this->Field->getOptions();
-
-        $this->assertEquals($test_options, $options);
-    }
-
-    public function test_field_getOption_will_return_the_correct_single_option()
-    {
-        $test_options = [1 => 'different', 2 => 'two', 44 => 'Fourtyfour'];
-        $this->Field->setOptions($test_options);
-
-        foreach($test_options as $key => $value){
-            $this->assertEquals($value, $this->Field->getOption($key));
-        }
-    }
-
-    public function test_field_setOptions_overwrites_previous_set_values()
-    {
-        $this->Field->setOption(1, 'Wrong');
-        $this->Field->setOption(2, 'Option');
-
-        $test_options = [1 => 'one', 2 => 'two', 44 => 'Fourtyfour'];
-        $this->Field->setOptions($test_options);
-
-        $this->assertEquals($test_options, $this->Field->getOptions());
-    }
-
-    public function test_field_setOptions_throws_an_exception_when_option_values_are_not_strings()
-    {
-        $test_options = [1 => 'different', 2 => 'two', 44 => ['Fourtyfour']];
-
-        $this->expectException(OptionValueException::class);
-        $this->Field->setOptions($test_options);
-    }
-
-    public function test_field_removeOption_will_remove_an_option()
-    {
-        $test_options = [1 => 'different', 2 => 'two', 44 => 'Fourtyfour'];
-        $this->Field->setOptions($test_options);
-
-        $this->Field->removeOption(2);
-
-        unset($test_options[2]);
-        $this->assertEquals($test_options, $this->Field->getOptions());
-    }
-
-    public function test_field_setDisabledOptions_sets_options_to_be_disabled()
-    {
-        // This should overwrite the previously set values
-        $this->Field->setDisabledOptions([2]);
-
-        $this->assertAttributeEquals([2], 'disabled_options', $this->Field);
-    }
-
-    public function test_field_setDisalbedOptions_throws_an_exception_if_invalid_options_are_passed()
-    {
-        $test_options = [1 => 'one', 2 => 'two', 44 => 'Fourtyfour'];
-        $this->Field->setOptions($test_options);
-
-        $this->expectException(OptionValueException::class);
-        $this->Field->setDisabledOptions([1,44,4]);
-    }
 
     public function test_field_toJson_returns_a_valid_json_string()
     {
@@ -179,9 +104,9 @@ class FieldTest extends TestCase
         $Field->CustomField = new \Nickwest\EloquentForms\CustomFields\daysofweek\CustomField;
 
         $test_options = ['1' => 'one', '2' => 'two', '44' => 'Fourtyfour'];
-        $Field->setOptions($test_options);
+        $Field->options->setOptions($test_options);
 
-        $Field->setDisabledOptions([1,44]);
+        $Field->options->setDisabledOptions(['1','44']);
 
         $Field->label_suffix = ':';
         $Field->example = 'This is an example';
@@ -194,10 +119,10 @@ class FieldTest extends TestCase
         $Field->validation_rules = 'required|integer';
         $Field->label_class = 'label_class_goes_here';
         $Field->container_class = 'yay';
-        $Field->options_container_class = 'options';
+        $Field->options->container_class = 'options';
         $Field->input_wrapper_class = 'Snoop-Dogg';
-        $Field->option_wrapper_class = 'Macklemore';
-        $Field->option_label_class = 'so_many_classes';
+        $Field->options->wrapper_class = 'Macklemore';
+        $Field->options->label_class = 'so_many_classes';
 
         return $Field;
     }

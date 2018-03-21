@@ -3,15 +3,15 @@
     @slot('field_markup')
 
         @if($view_only)
-            <div class="{{ $Field->option_wrapper_class }}">
-                <label class="{{ $Field->option_label_class }}" for={{ $Field->attributes->id }}>
+            <div class="{{ $Field->options->wrapper_class }}">
+                <label class="{{ $Field->options->label_class }}" for={{ $Field->attributes->id }}>
                     {{ $Field->label }}
                 </label>
                 <div class="value">{{ $Field->attributes->value }}</div>
             </div>
         @else
-            <div class="{{ $Field->option_wrapper_class }}">
-                <label class="{{ $Field->option_label_class }}" for={{ $Field->attributes->id }}>
+            <div class="{{ $Field->options->wrapper_class }}">
+                <label class="{{ $Field->options->label_class }}" for={{ $Field->attributes->id }}>
                     <input {!! $Field->attributes !!}>
                     {{ $Field->label }}
                 </label>

@@ -346,7 +346,7 @@ trait FormTrait{
             $this->Form()->{$column['name']}->default_value = $column['default'];
             $this->Form()->{$column['name']}->attributes->type = $this->getFormTypeFromColumnType($column['type']);
             if(is_array($column['values'])){
-                $this->Form()->{$column['name']}->setOptions($column['values']);
+                $this->Form()->{$column['name']}->options->setOptions($column['values']);
             }
             $this->Form()->addDisplayFields([$column['name']]);
         }

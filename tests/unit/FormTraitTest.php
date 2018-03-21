@@ -452,11 +452,11 @@ class Sample extends Model
         // If you have 3 inline fields in a row, all 4 fields will be on the same line
         $this->Form()->setInline(['first_name']);
 
-        $this->Form()->is_hidden->setOptions([
+        $this->Form()->is_hidden->options->setOptions([
             1 => 'Yes',
         ]);
 
-        $this->Form()->fruits_liked->setOptions([
+        $this->Form()->fruits_liked->options->setOptions([
             'banana' => 'Banana',
             'strawberry' => 'Strawberry',
             'apple' => 'Apple',
@@ -468,7 +468,7 @@ class Sample extends Model
             'pineapple' => 'Pineapple'
         ]);
 
-        $this->Form()->actors_liked->setOptions([
+        $this->Form()->actors_liked->options->setOptions([
             'RDN' => 'Robert De Niro',
             'MF' => 'Morgran Freeman',
             'CE' => 'Clint Eastwood',
@@ -481,7 +481,7 @@ class Sample extends Model
         // Turn off the auto injection of CSRF Token Field
         //$this->Form()->laravel_csrf = false;
 
-        $this->Form()->good_day->setOptions(['Yes' => 'Yes', 'No' => 'No']);
+        $this->Form()->good_day->options->setOptions(['Yes' => 'Yes', 'No' => 'No']);
 
         $this->Form()->setExamples([
             'phone_number' => 'ex: 206-685-9937',
@@ -507,10 +507,10 @@ class Sample extends Model
             'last_name' => 'required',
             'email' => 'email',
             'good_day' => [
-                Rule::in($this->Form()->good_day->getOptions()),
+                Rule::in($this->Form()->good_day->options->getOptions()),
             ],
             'beverage' => [
-                Rule::in($this->Form()->beverage->getOptions()),
+                Rule::in($this->Form()->beverage->options->getOptions()),
             ],
             'volume' => 'numeric',
         ]);

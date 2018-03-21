@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Validator;
 
 use Nickwest\EloquentForms\Attributes;
+use Nickwest\EloquentForms\Options;
 use Nickwest\EloquentForms\Traits\Themeable;
 use Nickwest\EloquentForms\Exceptions\OptionValueException;
 
@@ -17,6 +18,14 @@ class Field{
      * @var Nickwest\EloquentForms\Attributes
      */
     public $attributes = null;
+
+    /**
+     * Field Options (defaults are set in constructor)
+     *
+     * @var Nickwest\EloquentForms\Options
+     */
+    public $options = null;
+
 
     /**
      * Blade data to pass through to the subform
@@ -117,27 +126,6 @@ class Field{
     public $input_wrapper_class = '';
 
     /**
-     * Class(es) for the field's containing div
-     *
-     * @var string
-     */
-    public $options_container_class = ''; // was 'checkbox'
-
-    /**
-     * Class(es) for the field's containing div
-     *
-     * @var string
-     */
-    public $option_wrapper_class = 'option';
-
-    /**
-     * Class(es) for the field's containing div
-     *
-     * @var string
-     */
-    public $option_label_class = '';
-
-    /**
      * Blade data to be passed to subForm
      *
      * @var string
@@ -165,20 +153,6 @@ class Field{
      */
     protected $original_name = '';
 
-    /**
-     * Options to populate select, radio, checkbox, and other multi-option fields
-     *
-     * @var array
-     */
-    protected $options = [];
-
-    /**
-     * Options to that are disabled inside of a radio, checkbox or other multi-option field
-     *
-     * @var array
-     */
-    protected $disabled_options = [];
-
 
     /**
      * Constructor
@@ -198,6 +172,9 @@ class Field{
         $this->attributes->id = $field_name;
         $this->attributes->class = '';
         $this->attributes->value = null;
+
+        // Create Options object
+        $this->options = new Options();
 
         // Set some basic properties
         $this->original_name = $this->attributes->name;
@@ -259,6 +236,7 @@ class Field{
     {
         $array = [
             'attributes' => json_decode($this->attributes->toJson()),
+            'options' => json_decode($this->options->toJson()),
             'Subform' => is_object($this->Subform) ? $this->Subform->toJson() : $this->Subform,
             'CustomField' => serialize($this->CustomField),
             'label' => $this->label,
@@ -273,14 +251,9 @@ class Field{
             'label_class' => $this->label_class,
             'container_class' => $this->container_class,
             'input_wrapper_class' => $this->input_wrapper_class,
-            'options_container_class' => $this->options_container_class,
-            'option_wrapper_class' => $this->option_wrapper_class,
-            'option_label_class' => $this->option_label_class,
             'subform_data' => $this->subform_data,
             'extra_blade_data' => $this->extra_blade_data,
             'original_name' => $this->original_name,
-            'options' => $this->options,
-            'disabled_options' => $this->disabled_options,
             'Theme' => (is_object($this->Theme) ? '\\'.get_class($this->Theme) : null),
         ];
 
@@ -302,6 +275,9 @@ class Field{
                     $this->attributes = new Attributes();
                     $this->attributes->fromJson(json_encode($value));
                     break;
+                case 'options':
+                    $this->options = new Options();
+                    $this->options->fromJson(json_encode($value));
                 case 'Theme' == $key && $value !== null:
                     $this->Theme = new $value(); // TODO: make a to/from JSON method on this? is it necessary?
                     break;
@@ -312,11 +288,6 @@ class Field{
                 case 'CustomField':
                 case 'validation_rules':
                     $this->$key = unserialize($value);
-                    break;
-                case 'options':
-                    foreach($value as $key => $value){
-                        $this->options[(string)$key] = $value;
-                    }
                     break;
                 case is_object($value):
                     $this->$key = (array)$value;
@@ -339,9 +310,9 @@ class Field{
 
         // Get the template name
         $template = 'fields.'.$this->attributes->type;
-        if($this->attributes->type == 'checkbox' && is_array($this->options)){
+        if($this->attributes->type == 'checkbox' && $this->options->hasOptions()){
             $template = 'fields.checkboxes';
-        }elseif($this->attributes->type == 'radio' && is_array($this->options)){
+        }elseif($this->attributes->type == 'radio' && $this->options->hasOptions()){
             $template = 'fields.radios';
         }
 
@@ -351,118 +322,6 @@ class Field{
         }
 
         return $namespace.'::'.$template;
-    }
-
-    /**
-     * Add or change an option
-     *
-     * @param string $key
-     * @param string $value
-     * @return void
-     */
-    public function setOption(string $key, string $value): void
-    {
-        if($value == null) {
-            unset($this->options[$key]);
-            return;
-        }
-
-        $this->options[$key] = $value;
-    }
-
-    /**
-     * Returns options set to this field
-     *
-     * @param string $key
-     * @return mixed
-     */
-    public function getOption(string $key)
-    {
-        return $this->options[$key];
-    }
-
-    /**
-     * Checks if an option key is set
-     *
-     * @param string $key
-     * @return bool
-     */
-    public function hasOption($key): bool
-    {
-        return isset($this->options[$key]);
-    }
-
-    /**
-     * Remove an option
-     *
-     * @param string $key
-     * @return void
-     * @throws Nickwest\EloquentForms\Exceptions\OptionValueException
-     */
-    public function removeOption(string $key): void
-    {
-        if(!isset($this->options[$key])){
-            throw new OptionValueException('Cannot disable '.$key.'. It\'s not currently in the options array');
-        }
-
-        unset($this->options[$key]);
-    }
-
-    /**
-     * Returns options set to this field
-     *
-     * @return array
-     */
-    public function getOptions(): array
-    {
-        return $this->options;
-    }
-
-    /**
-     * Set options replacing all current options with those in the given array
-     *
-     * @param array $options
-     * @return void
-     * @throws Nickwest\EloquentForms\Exceptions\OptionValueException
-     */
-    public function setOptions(array $options): void
-    {
-        if($options == null) {
-            $this->options = [];
-            return;
-        }
-
-        foreach($options as $key => $value) {
-            if(is_array($value) || is_object($value) || is_resource($value)) {
-                throw new OptionValueException('Option values must be strings');
-            }
-
-            $this->setOption($key, $value);
-        }
-    }
-
-    /**
-     * Set options that should be disabled on the input field
-     *
-     * @param array $options
-     * @return void
-     * @throws Nickwest\EloquentForms\Exceptions\OptionValueException
-     */
-    public function setDisabledOptions(array $options): void
-    {
-        $this->disabled_options = [];
-
-        if($options == null) {
-            return;
-        }
-
-        foreach($options as $key) {
-            if(!isset($this->options[$key])){
-                throw new OptionValueException('Cannot disable '.$key.'. It\'s not currently in the options array');
-            }
-
-            $this->disabled_options[] = $key;
-        }
     }
 
     /**
@@ -585,8 +444,8 @@ class Field{
      */
     protected function formatValue(string $value): string
     {
-        if(is_array($this->options) && isset($this->options[$value])) {
-            return $this->options[$value];
+        if(isset($this->options->$value)) {
+            return $this->options->$value;
         }
 
         // TODO: Add other formatting options here, specifically for dates

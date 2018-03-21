@@ -1,6 +1,6 @@
-@if(count($Field->getOptions()) > 0)
+@if($Field->options->hasOptions())
 <datalist id="{{ $Field->attributes->id }}">
-    @foreach($Field->getOptions() as $key => $value)
+    @foreach($Field->options->getOptions() as $key => $value)
         <option value="{{ $key }}"{!! $value != '' ? ' label="'.$value.'"' : '' !!}">
     @endforeach
 </datalist>
