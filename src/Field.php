@@ -15,14 +15,14 @@ class Field{
     /**
      * Field Attributes (defaults are set in constructor)
      *
-     * @var Nickwest\EloquentForms\Attributes
+     * @var \Nickwest\EloquentForms\Attributes
      */
     public $attributes = null;
 
     /**
      * Field Options (defaults are set in constructor)
      *
-     * @var Nickwest\EloquentForms\Options
+     * @var \Nickwest\EloquentForms\Options
      */
     public $options = null;
 
@@ -30,14 +30,14 @@ class Field{
     /**
      * Blade data to pass through to the subform
      *
-     * @var Nickwest\EloquentForms\Form
+     * @var \Nickwest\EloquentForms\Form
      */
     public $Subform = null;
 
     /**
      * Name of the custom field (if this is one)
      *
-     * @var Nickwest\EloquentForms\CustomField
+     * @var \Nickwest\EloquentForms\CustomField
      */
     public $CustomField = null;
 
@@ -343,7 +343,7 @@ class Field{
      *
      * @var bool $prev_inline Was the previous field inline?
      * @var bool $view_only
-     * @return Illuminate\View\View
+     * @return \Illuminate\View\View
      */
     public function makeView(bool $prev_inline = false, bool $view_only = false): \Illuminate\View\View
     {
@@ -390,7 +390,7 @@ class Field{
      * @param string $key
      * @param mixed $value
      * @param bool $view_only
-     * @return Illuminate\View\View
+     * @return \Illuminate\View\View
      */
     public function makeOptionView(string $key, $value, bool $view_only = false): \Illuminate\View\View
     {
