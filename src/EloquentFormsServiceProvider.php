@@ -25,9 +25,7 @@ class EloquentFormsServiceProvider extends ServiceProvider {
         $this->loadViewsFrom(__DIR__.'/views', DefaultTheme::getDefaultNamespace());
 
         Blade::directive('eloquentforms_include', function($expression) {
-            $view = (strpos($expression, ',') !== false ? substr($expression, 0, strpos($expression, ',')) : $expression);
-
-            return '<?php if(View::exists('.$view.')){
+            return '<?php if(View::exists('.EloquentFormsServiceProvider::getViewFromExpression($expression).')){
                 echo $__env->make('.$expression.', array_except(get_defined_vars(), array(\'__data\', \'__path\')))->render();
             }else{
                 echo $__env->make(\''.DefaultTheme::getDefaultNamespace().'::'.substr($expression, strpos($expression, '::')+2).', array_except(get_defined_vars(), array(\'__data\', \'__path\')))->render();
@@ -35,9 +33,7 @@ class EloquentFormsServiceProvider extends ServiceProvider {
         });
 
         Blade::directive('eloquentforms_component', function($expression) {
-            $view = (strpos($expression, ',') !== false ? substr($expression, 0, strpos($expression, ',')) : $expression);
-
-            return '<?php if(View::exists('.$view.')){
+            return '<?php if(View::exists('.EloquentFormsServiceProvider::getViewFromExpression($expression).')){
                 $__env->startComponent('.$expression.');
             }else{
                 $__env->startComponent(\''.DefaultTheme::getDefaultNamespace().'::'.substr($expression, strpos($expression, '::')+2).');
@@ -63,6 +59,17 @@ class EloquentFormsServiceProvider extends ServiceProvider {
     public function provides()
     {
         return [];
+    }
+
+    /**
+     * Extract the view from a template string
+     *
+     * @param string $expression
+     * @return string
+     */
+    static public function getViewFromExpression(string $expression): string
+    {
+        return (strpos($expression, ',') !== false ? substr($expression, 0, strpos($expression, ',')) : $expression);;
     }
 
 }
