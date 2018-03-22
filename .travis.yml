@@ -27,4 +27,13 @@ install:
   - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-suggest; fi
   - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-suggest; fi
 
-script: vendor/bin/phpunit
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+
+script:
+  - vendor/bin/phpunit --coverage-clover '/tmp/clover.xml'
+
+after_script:
+  - ./cc-test-reporter format-coverage /tmp/clover.xml --input-type clover --output /tmp/clover.json
+  - ./cc-test-reporter upload-coverage -i /tmp/clover.json

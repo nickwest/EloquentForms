@@ -22,4 +22,9 @@
         <env name="DB_USERNAME" value="EloquentFormsTester"/>
         <env name="DB_PASSWORD" value="EFTes%ter5642"/>
     </php>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./src/</directory>
+        </whitelist>
+    </filter>
 </phpunit>
