@@ -1,4 +1,7 @@
-<?php namespace Nickwest\EloquentForms\Exceptions;
+<?php
+
+namespace Nickwest\EloquentForms\Exceptions;
 
 class InvalidFieldException extends \Exception
-{}
+{
+}

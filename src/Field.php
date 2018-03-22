@@ -1,90 +1,87 @@
-<?php namespace Nickwest\EloquentForms;
+<?php
+
+namespace Nickwest\EloquentForms;
 
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Validator;
-
-use Nickwest\EloquentForms\Attributes;
-use Nickwest\EloquentForms\Options;
 use Nickwest\EloquentForms\Traits\Themeable;
-use Nickwest\EloquentForms\Exceptions\OptionValueException;
 
-class Field{
-
+class Field
+{
     use Themeable;
 
     /**
-     * Field Attributes (defaults are set in constructor)
+     * Field Attributes (defaults are set in constructor).
      *
      * @var \Nickwest\EloquentForms\Attributes
      */
     public $attributes = null;
 
     /**
-     * Field Options (defaults are set in constructor)
+     * Field Options (defaults are set in constructor).
      *
      * @var \Nickwest\EloquentForms\Options
      */
     public $options = null;
 
-
     /**
-     * Blade data to pass through to the subform
+     * Blade data to pass through to the subform.
      *
      * @var \Nickwest\EloquentForms\Form
      */
     public $Subform = null;
 
     /**
-     * Name of the custom field (if this is one)
+     * Name of the custom field (if this is one).
      *
      * @var \Nickwest\EloquentForms\CustomField
      */
     public $CustomField = null;
 
     /**
-     * Human readable formatted name
+     * Human readable formatted name.
      *
      * @var string
      */
     public $label = '';
 
     /**
-     * Suffix for every label (typically ":")
+     * Suffix for every label (typically ":").
      *
      * @var string
      */
     public $label_suffix = '';
 
     /**
-     * An example to show by the field
+     * An example to show by the field.
      *
      * @var string
      */
     public $example = '';
 
     /**
-     * A note to display below the field (Accepts HTML markup)
+     * A note to display below the field (Accepts HTML markup).
      *
      * @var string
      */
     public $note;
 
     /**
-     * Add a link below the field. Link's name will be equal to field's value
+     * Add a link below the field. Link's name will be equal to field's value.
      *
      * @var string
      */
     public $link = '';
 
     /**
-     * Error message to show on the field
+     * Error message to show on the field.
      *
      * @var string
      */
     public $error_message = '';
 
     /**
-     * A default value (prepopulated if field is blank)
+     * A default value (prepopulated if field is blank).
      *
      * @var string
      */
@@ -105,60 +102,60 @@ class Field{
     public $validation_rules = '';
 
     /**
-     * Class(es) for the field's label
+     * Class(es) for the field's label.
      *
      * @var string
      */
     public $label_class = '';
 
     /**
-     * Class(es) for the field's containing div
+     * Class(es) for the field's containing div.
      *
      * @var string
      */
     public $container_class = '';
 
     /**
-     * Class(es) for the input wrapper
+     * Class(es) for the input wrapper.
      *
      * @var string
      */
     public $input_wrapper_class = '';
 
     /**
-     * Blade data to be passed to subForm
+     * Blade data to be passed to subForm.
      *
      * @var string
      */
     public $subform_data = [];
 
     /**
-     * The name of the delete button on a file field when there is a file
+     * The name of the delete button on a file field when there is a file.
      *
      * @var string
      */
     public $file_delete_button_value = 'Remove';
 
     /**
-     * Extra stuff accessible in blade templates, used by certain field types
+     * Extra stuff accessible in blade templates, used by certain field types.
      *
      * @var array
      */
     public $extra_blade_data = [];
 
     /**
-     * Original name when field created
+     * Original name when field created.
      *
      * @var string
      */
     protected $original_name = '';
 
-
     /**
-     * Constructor
+     * Constructor.
      *
      * @param string $field_name
      * @param string $type
+     *
      * @return void
      */
     public function __construct(string $field_name, string $type = null)
@@ -168,7 +165,7 @@ class Field{
 
         // Set some base attributes for the field
         $this->attributes->name = $field_name;
-        $this->attributes->type = $type != null ? $type : 'text';
+        $this->attributes->type = $type !== null ? $type : 'text';
         $this->attributes->id = $field_name;
         $this->attributes->class = '';
         $this->attributes->value = null;
@@ -184,11 +181,10 @@ class Field{
         $this->Theme = new DefaultTheme();
     }
 
-
-//// ACCESSORS AND MUTATORS
+    //// ACCESSORS AND MUTATORS
 
     /**
-     * Get the View Namespace
+     * Get the View Namespace.
      *
      * @return string
      */
@@ -208,7 +204,7 @@ class Field{
     }
 
     /**
-     * Get the original name of this field
+     * Get the original name of this field.
      *
      * @return string
      */
@@ -218,7 +214,7 @@ class Field{
     }
 
     /**
-     * Get the original name of this field
+     * Get the original name of this field.
      *
      * @return string
      */
@@ -228,7 +224,7 @@ class Field{
     }
 
     /**
-     * Convert this object to a simple JSON representation
+     * Convert this object to a simple JSON representation.
      *
      * @return string Json
      */
@@ -261,16 +257,17 @@ class Field{
     }
 
     /**
-     * Populate Field from Json representation
+     * Populate Field from Json representation.
      *
      * @param string $json
+     *
      * @return void
      */
     public function fromJson($json): void
     {
         $array = json_decode($json);
-        foreach($array as $key => $value) {
-            switch($key){
+        foreach ($array as $key => $value) {
+            switch ($key) {
                 case 'attributes':
                     $this->attributes = new Attributes();
                     $this->attributes->fromJson(json_encode($value));
@@ -278,10 +275,10 @@ class Field{
                 case 'options':
                     $this->options = new Options();
                     $this->options->fromJson(json_encode($value));
-                case 'Theme' == $key && $value !== null:
+                case 'Theme' === $key && $value !== null:
                     $this->Theme = new $value(); // TODO: make a to/from JSON method on this? is it necessary?
                     break;
-                case 'Subform' == $key && $value !== null:
+                case 'Subform' === $key && $value !== null:
                     $this->Subform = new Form();
                     $this->Subform->fromJson($value);
                     break;
@@ -290,7 +287,7 @@ class Field{
                     $this->$key = unserialize($value);
                     break;
                 case is_object($value):
-                    $this->$key = (array)$value;
+                    $this->$key = (array) $value;
                     break;
                 default:
                     $this->$key = $value;
@@ -300,7 +297,7 @@ class Field{
     }
 
     /**
-     * Get the template that this field should use
+     * Get the template that this field should use.
      *
      * @return string
      */
@@ -310,14 +307,14 @@ class Field{
 
         // Get the template name
         $template = 'fields.'.$this->attributes->type;
-        if($this->attributes->type == 'checkbox' && $this->options->hasOptions()){
+        if ($this->attributes->type === 'checkbox' && $this->options->hasOptions()) {
             $template = 'fields.checkboxes';
-        }elseif($this->attributes->type == 'radio' && $this->options->hasOptions()){
+        } elseif ($this->attributes->type === 'radio' && $this->options->hasOptions()) {
             $template = 'fields.radios';
         }
 
         // Check if the theme has an override for the template, if so use the Theme namespace
-        if(View::exists($this->getViewNamespace().'::'.$template)){
+        if (View::exists($this->getViewNamespace().'::'.$template)) {
             $namespace = $this->getViewNamespace();
         }
 
@@ -325,7 +322,7 @@ class Field{
     }
 
     /**
-     * Return the formatted value of the Field's value
+     * Return the formatted value of the Field's value.
      *
      * @return string
      */
@@ -334,36 +331,35 @@ class Field{
         return $this->formatValue($this->value);
     }
 
-
-//// View Methods
-
+    //// View Methods
 
     /**
-     * Make a form view for this field
+     * Make a form view for this field.
      *
-     * @var bool $prev_inline Was the previous field inline?
+     * @var bool Was the previous field inline?
      * @var bool $view_only
+     *
      * @return \Illuminate\View\View
      */
     public function makeView(bool $prev_inline = false, bool $view_only = false): \Illuminate\View\View
     {
-        if($this->error_message) {
+        if ($this->error_message) {
             $this->attributes->addClass('error');
         }
 
         $this->Theme->prepareFieldView($this);
 
-        if(is_object($this->CustomField)) {
+        if (is_object($this->CustomField)) {
             return $this->CustomField->makeView($this, $prev_inline, $view_only);
         }
 
         // Never output the password value, ever.
-        if($this->attributes->type == 'password'){
+        if ($this->attributes->type === 'password') {
             $this->attributes->value = null;
-        }elseif($this->attributes->type == 'textarea'){
+        } elseif ($this->attributes->type === 'textarea') {
             $this->extra_blade_data['value'] = $this->attributes->value;
             unset($this->attributes->value);
-        }elseif($this->attributes->type == 'checkbox' && count($this->options->getOptions()) > 1 && $this->attributes->multi_key == null){
+        } elseif ($this->attributes->type === 'checkbox' && count($this->options->getOptions()) > 1 && $this->attributes->multi_key === null) {
             $this->attributes->multi_key = true;
         }
 
@@ -371,7 +367,7 @@ class Field{
     }
 
     /**
-     * Make a display only view for this field
+     * Make a display only view for this field.
      *
      * @return Illuminate\View\View
      */
@@ -379,7 +375,7 @@ class Field{
     {
         $this->Theme->prepareFieldView($this);
 
-        if(View::exists($this->getViewNamespace().'::fields.display')) {
+        if (View::exists($this->getViewNamespace().'::fields.display')) {
             return View::make($this->getViewNamespace().'::fields.display', ['Field' => $this, 'prev_inline' => $prev_inline]);
         }
 
@@ -387,11 +383,12 @@ class Field{
     }
 
     /**
-     * Make an option view for this field
+     * Make an option view for this field.
      *
      * @param string $key
      * @param mixed $value
      * @param bool $view_only
+     *
      * @return \Illuminate\View\View
      */
     public function makeOptionView(string $key, $value, bool $view_only = false): \Illuminate\View\View
@@ -403,34 +400,34 @@ class Field{
         $Field->attributes->id_suffix = '-'.$key;
         $Field->attributes->value = $key;
 
-        if(is_array($value) && in_array($key, $value)){
+        if (is_array($value) && in_array($key, $value)) {
             $Field->attributes->checked = null;
-        }elseif(!is_array($value) && $key == $value){
+        } elseif (! is_array($value) && $key === $value) {
             $Field->attributes->checked = null;
         }
 
         $Field->Theme->prepareFieldView($Field);
 
-        if(View::exists($Field->getViewNamespace().'::fields.'.$Field->attributes->type.'_option')) {
+        if (View::exists($Field->getViewNamespace().'::fields.'.$Field->attributes->type.'_option')) {
             return View::make($Field->getViewNamespace().'::fields.'.$Field->attributes->type.'_option', array('Field' => $Field, 'key' => $key, 'view_only' => $view_only));
         }
+
         return View::make(DefaultTheme::getDefaultNamespace().'::fields.'.$Field->attributes->type.'_option', array('Field' => $Field, 'key' => $key, 'view_only' => $view_only));
     }
 
-
-//// HELPERS
+    //// HELPERS
 
     // TODO: Add isValid() method that uses validation_rules and Validator
 
     /**
-     * Make a label for the given field, uses $this->label if available, otherwises generates based on field name
+     * Make a label for the given field, uses $this->label if available, otherwises generates based on field name.
      *
      * @return string
      */
     protected function makeLabel(): string
     {
         // If no label use the field's name, but replace _ with spaces
-        if (trim($this->label) == '') {
+        if (trim($this->label) === '') {
             // If this is changed Table::getLabel() should be updated to match
             $this->label = ucfirst(str_replace('_', ' ', $this->attributes->name));
         }
@@ -439,14 +436,15 @@ class Field{
     }
 
     /**
-     * Return the formatted value of the $value
+     * Return the formatted value of the $value.
      *
      * @param string $value
+     *
      * @return string
      */
     protected function formatValue(string $value): string
     {
-        if(isset($this->options->$value)) {
+        if (isset($this->options->$value)) {
             return $this->options->$value;
         }
 
@@ -454,5 +452,4 @@ class Field{
 
         return $value;
     }
-
 }

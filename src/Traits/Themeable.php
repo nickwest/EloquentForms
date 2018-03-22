@@ -1,20 +1,23 @@
-<?php namespace Nickwest\EloquentForms\Traits;
+<?php
+
+namespace Nickwest\EloquentForms\Traits;
 
 use View;
-
 use Nickwest\EloquentForms\Theme;
 use Nickwest\EloquentForms\DefaultTheme;
 
-trait Themeable{
+trait Themeable
+{
     /**
      * @var Nickwest\EloquentForms\Theme
      */
     protected $Theme = null;
 
     /**
-     * Set the theme
+     * Set the theme.
      *
      * @param Nickwest\EloquentForms\Theme $Theme
+     *
      * @return void
      */
     public function setTheme(Theme $Theme): void
@@ -23,7 +26,7 @@ trait Themeable{
     }
 
     /**
-     * Get the theme
+     * Get the theme.
      *
      * @return Nickwest\EloquentForms\Theme $Theme
      */
@@ -33,19 +36,19 @@ trait Themeable{
     }
 
     /**
-     * Get the View for the given theme, or return the default
+     * Get the View for the given theme, or return the default.
      *
      * @param string $template
      * @param array $blade_data
+     *
      * @return Illuminate\View\View
      */
-    public function getThemeView(string $template, array $blade_data=[]): \Illuminate\View\View
+    public function getThemeView(string $template, array $blade_data = []): \Illuminate\View\View
     {
-        if(View::exists($this->Theme->getViewNamespace().'::'.$template)) {
+        if (View::exists($this->Theme->getViewNamespace().'::'.$template)) {
             return View::make($this->Theme->getViewNamespace().'::'.$template, $blade_data);
-        }else{
+        } else {
             return View::make(DefaultTheme::getDefaultNamespace().'::'.$template, $blade_data);
         }
     }
-
 }
