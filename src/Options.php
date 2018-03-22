@@ -1,52 +1,55 @@
-<?php namespace Nickwest\EloquentForms;
+<?php
 
-use Nickwest\EloquentForms\Exceptions\InvalidOptionException;
+namespace Nickwest\EloquentForms;
+
 use Nickwest\EloquentForms\Exceptions\OptionValueException;
+use Nickwest\EloquentForms\Exceptions\InvalidOptionException;
 
-class Options{
-
+class Options
+{
     /**
-     * Class(es) for the field's containing div
+     * Class(es) for the field's containing div.
      *
      * @var string
      */
     public $container_class = ''; // was 'checkbox'
 
     /**
-     * Class(es) for the field's containing div
+     * Class(es) for the field's containing div.
      *
      * @var string
      */
     public $wrapper_class = 'option';
 
     /**
-     * Class(es) for the field's containing div
+     * Class(es) for the field's containing div.
      *
      * @var string
      */
     public $label_class = '';
 
     /**
-     * Array of options
+     * Array of options.
      *
      * @var array
      */
     protected $options = [];
 
     /**
-     * Options to that are disabled inside of a radio, checkbox or other multi-option field
+     * Options to that are disabled inside of a radio, checkbox or other multi-option field.
      *
      * @var array
      */
     protected $disabled_options = [];
 
-
     /**
-     * Get an option by key
+     * Get an option by key.
      *
      * @param string $key
-     * @return mixed
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidOptionException
+     *
+     * @return mixed
      */
     public function __get(string $key)
     {
@@ -54,10 +57,11 @@ class Options{
     }
 
     /**
-     * Set an option by key
+     * Set an option by key.
      *
      * @param string $key
      * @param mixed $value
+     *
      * @return void
      */
     public function __set(string $key, $value): void
@@ -66,9 +70,10 @@ class Options{
     }
 
     /**
-     * Check if an option is set by key
+     * Check if an option is set by key.
      *
      * @param $key
+     *
      * @return bool
      */
     public function __isset(string $key): bool
@@ -77,11 +82,13 @@ class Options{
     }
 
     /**
-     *  Unset an option by key
+     *  Unset an option by key.
      *
      * @param $key
-     * @return void
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidOptionException
+     *
+     * @return void
      */
     public function __unset(string $key): void
     {
@@ -89,15 +96,17 @@ class Options{
     }
 
     /**
-     * Get an option's value
+     * Get an option's value.
      *
      * @param string $key
-     * @return mixed
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidOptionException
+     *
+     * @return mixed
      */
     public function getOption(string $key)
     {
-        if(!isset($this->options[$key])){
+        if (! isset($this->options[$key])) {
             throw new InvalidOptionException;
         }
 
@@ -105,10 +114,11 @@ class Options{
     }
 
     /**
-     * Set an option by key
+     * Set an option by key.
      *
      * @param string $key
      * @param mixed $value
+     *
      * @return void
      */
     public function setOption(string $key, $value): void
@@ -117,9 +127,10 @@ class Options{
     }
 
     /**
-     * Check if an option is set by key
+     * Check if an option is set by key.
      *
      * @param $key
+     *
      * @return bool
      */
     public function hasOption(string $key): bool
@@ -128,15 +139,17 @@ class Options{
     }
 
     /**
-     *  Unset an option by key
+     *  Unset an option by key.
      *
      * @param $key
-     * @return void
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidOptionException
+     *
+     * @return void
      */
     public function removeOption($key): void
     {
-        if(!isset($this->options[$key])){
+        if (! isset($this->options[$key])) {
             throw new InvalidOptionException;
         }
 
@@ -144,7 +157,7 @@ class Options{
     }
 
     /**
-     * Determine if there are options set
+     * Determine if there are options set.
      *
      * @return bool
      */
@@ -154,7 +167,7 @@ class Options{
     }
 
     /**
-     * Get all options
+     * Get all options.
      *
      * @return array
      */
@@ -164,22 +177,24 @@ class Options{
     }
 
     /**
-     * Set options replacing all current options with those in the given array
+     * Set options replacing all current options with those in the given array.
      *
      * @param array $options
-     * @return void
+     *
      * @throws Nickwest\EloquentForms\Exceptions\OptionValueException
+     *
+     * @return void
      */
     public function setOptions(array $options): void
     {
         $this->options = [];
 
-        if($options == null) {
+        if ($options === null) {
             return;
         }
 
-        foreach($options as $key => $value) {
-            if(is_array($value) || is_object($value) || is_resource($value)) {
+        foreach ($options as $key => $value) {
+            if (is_array($value) || is_object($value) || is_resource($value)) {
                 throw new OptionValueException('Option values must be strings');
             }
 
@@ -188,22 +203,24 @@ class Options{
     }
 
     /**
-     * Set options that should be disabled
+     * Set options that should be disabled.
      *
      * @param array $keys
-     * @return void
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidOptionException
+     *
+     * @return void
      */
     public function setDisabledOptions(array $keys): void
     {
         $this->disabled_options = [];
 
-        if($keys == null) {
+        if ($keys === null) {
             return;
         }
 
-        foreach($keys as $key) {
-            if(!isset($this->options[$key])){
+        foreach ($keys as $key) {
+            if (! isset($this->options[$key])) {
                 throw new InvalidOptionException;
             }
 
@@ -211,9 +228,8 @@ class Options{
         }
     }
 
-
     /**
-     * Create a json representation of options
+     * Create a json representation of options.
      *
      * @return string JSON
      */
@@ -229,21 +245,18 @@ class Options{
     }
 
     /**
-     * Populate object from JSON representation
+     * Populate object from JSON representation.
      */
     public function fromJson(string $json): void
     {
         $array = json_decode($json);
 
-        foreach($array as $key => $value) {
-            if(is_object($value)) {
-                $this->$key = (array)$value;
+        foreach ($array as $key => $value) {
+            if (is_object($value)) {
+                $this->$key = (array) $value;
             } else {
                 $this->$key = $value;
             }
         }
     }
-
-
-
 }
