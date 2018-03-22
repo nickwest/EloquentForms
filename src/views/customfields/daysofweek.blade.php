@@ -1,5 +1,5 @@
 <div id="field-{{ $Field->attributes->id }}" class="field">
-    <div class="daysofweek {{ $Field->options_container_class }}">
+    <div class="daysofweek {{ $Field->options->container_class }}">
         <label class="{{ $Field->label_class }}">{!! $Field->label.($Field->label_suffix != '' ? $Field->label_suffix : '').(isset($Field->attributes->required) ? ' <em>*</em>' : '') !!}</label>
 
         @foreach($daysofweek as $key => $value)
@@ -8,8 +8,8 @@
                     <div>{{ $value }}</div>
                 @endif
             @else
-                <span class="{{ $Field->option_wrapper_class }}">
-                    <label class="{{ $Field->option_label_class }}" for="{{ $Field->attributes->id }}_{{ $loop->index }}">
+                <span class="{{ $Field->options->wrapper_class }}">
+                    <label class="{{ $Field->options->label_class }}" for="{{ $Field->attributes->id }}_{{ $loop->index }}">
                         <input type="checkbox" name="{{ $Field->attributes->name }}[]" value="{{ $key }}" id="{{ $Field->attributes->id }}_{{ $loop->index }}" {{ ($Field->attributes->multi_value != '' && $Field->attributes->multi_value == $key ? 'checked ' : '' )}}/>
                         {{ $value }}
                     </label>
