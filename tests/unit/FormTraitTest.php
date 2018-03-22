@@ -1,6 +1,7 @@
 <?php namespace Nickwest\EloquentForms\Test\unit;
 
 use Faker;
+use Config;
 
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Artisan;
@@ -48,7 +49,7 @@ class FormTraitTest extends TestCase
         // If MySQL connection fails, then skip this test
         try{
             // Switch to MySQL
-            \Config::set('database.default', 'mysql');
+            Config::set('database.default', 'mysql');
 
             // Rerun setup
             $this->setUp();
