@@ -363,6 +363,8 @@ class Field{
         }elseif($this->attributes->type == 'textarea'){
             $this->extra_blade_data['value'] = $this->attributes->value;
             unset($this->attributes->value);
+        }elseif($this->attributes->type == 'checkbox' && count($this->options->getOptions()) > 1 && $this->attributes->multi_key == null){
+            $this->attributes->multi_key = true;
         }
 
         return View::make($this->getTemplate(), ['Field' => $this, 'prev_inline' => $prev_inline, 'view_only' => $view_only]);

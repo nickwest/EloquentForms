@@ -149,5 +149,17 @@ class checkboxesFieldTest extends FieldViewTestCase implements checkboxesFieldTe
         $this->assertSame(true, $no_input->checked);
     }
 
+    public function test_fields_have_brackets_in_name_when_multiple_options_are_set()
+    {
+        $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
+        $inputs = $dom->find($this->test_tag);
+        $yes_input = array_shift($inputs);
+        $no_input = array_shift($inputs);
+
+        $this->assertStringEndsWith('[]', $yes_input->name);
+        $this->assertStringEndsWith('[]', $no_input->name);
+    }
+
+
 
 }

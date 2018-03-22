@@ -57,7 +57,12 @@ abstract class FieldViewBulmaTestCase extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
 
-        $this->assertEquals('my_test_field', $input->name);
+        $expected = 'my_test_field';
+        if($this->Field->attributes->type == 'checkbox' && count($this->Field->options->getOptions()) > 1){
+            $expected .= '[]';
+        }
+
+        $this->assertEquals($expected, $input->name);
     }
 
     public function test_field_has_correct_name_attribute_when_changed()
@@ -66,7 +71,12 @@ abstract class FieldViewBulmaTestCase extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
 
-        $this->assertEquals('new_name', $input->name);
+        $expected = 'new_name';
+        if($this->Field->attributes->type == 'checkbox' && count($this->Field->options->getOptions()) > 1){
+            $expected .= '[]';
+        }
+
+        $this->assertEquals($expected, $input->name);
     }
 
     public function test_field_has_correct_id_attribute()
@@ -330,7 +340,12 @@ abstract class FieldViewBulmaTestCase extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $div = current($dom->find('div'));
 
-        $this->assertEquals('field-my_test_field', $div->id);
+        $expected = 'field-my_test_field';
+        if($this->Field->attributes->type == 'checkbox' && count($this->Field->options->getOptions()) > 1){
+            $expected .= '_1';
+        }
+
+        $this->assertEquals($expected, $div->id);
         // Order is arbitrary, so sort to make sure they're equal even if not ordered the same way
         $expected = ['type-'.$this->test_type, 'field', $this->test_type];
         $actual = explode(' ', $div->class);
