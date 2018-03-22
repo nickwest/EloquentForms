@@ -2,6 +2,7 @@
 
 namespace Nickwest\EloquentForms;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Validator;
 use Nickwest\EloquentForms\Traits\Themeable;
@@ -358,6 +359,8 @@ class Field
             unset($this->attributes->value);
         } elseif ($this->attributes->type == 'checkbox' && count($this->options->getOptions()) > 1 && $this->attributes->multi_key == null) {
             $this->attributes->multi_key = true;
+        } elseif ($this->attributes->type == 'datetime-local' && $this->attributes->value != null) {
+            $this->attributes->value = Carbon::parse($this->attributes->value)->format('Y-m-d\TH:i');
         }
 
         return View::make($this->getTemplate(), ['Field' => $this, 'prev_inline' => $prev_inline, 'view_only' => $view_only]);
