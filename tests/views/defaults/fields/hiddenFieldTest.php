@@ -1,7 +1,10 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults\fields;
+<?php
+
+declare(strict_types=1);
+
+namespace Nickwest\EloquentForms\Test\view\defaults\fields;
 
 use Sunra\PhpSimple\HtmlDomParser;
-
 use Nickwest\EloquentForms\Test\FieldViewTestCase;
 use Nickwest\EloquentForms\Test\ThemeTestInterfaces\hiddenFieldTestInterface;
 
@@ -14,7 +17,7 @@ class hiddenFieldTest extends FieldViewTestCase implements hiddenFieldTestInterf
 
     // Override some basic tests because Hidden is different
 
-    public function test_field_has_proper_label()
+    public function test_field_has_proper_label(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $label = current($dom->find('label'));
@@ -23,7 +26,7 @@ class hiddenFieldTest extends FieldViewTestCase implements hiddenFieldTestInterf
         $this->assertSame(false, $label);
     }
 
-    public function test_field_has_proper_label_when_attributes_changed()
+    public function test_field_has_proper_label_when_attributes_changed(): void
     {
         $this->Field->attributes->id = 'new_id';
         $this->Field->attributes->name = 'new_name';
@@ -34,7 +37,7 @@ class hiddenFieldTest extends FieldViewTestCase implements hiddenFieldTestInterf
         $this->assertSame(false, $label);
     }
 
-    public function test_field_has_proper_label_when_label_changed()
+    public function test_field_has_proper_label_when_label_changed(): void
     {
         $this->Field->label = 'Awesome new Label';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -44,7 +47,7 @@ class hiddenFieldTest extends FieldViewTestCase implements hiddenFieldTestInterf
         $this->assertSame(false, $label);
     }
 
-    public function test_field_has_proper_label_suffix_when_set()
+    public function test_field_has_proper_label_suffix_when_set(): void
     {
         $this->Field->label_suffix = ':';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -54,7 +57,7 @@ class hiddenFieldTest extends FieldViewTestCase implements hiddenFieldTestInterf
         $this->assertSame(false, $label);
     }
 
-    public function test_field_has_example_when_set()
+    public function test_field_has_example_when_set(): void
     {
         $this->Field->example = 'This is an <strong>awesome</strong> example';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -64,7 +67,7 @@ class hiddenFieldTest extends FieldViewTestCase implements hiddenFieldTestInterf
         $this->assertSame(false, $example);
     }
 
-    public function test_field_has_note_when_set()
+    public function test_field_has_note_when_set(): void
     {
         $this->Field->note = 'Something <a href="https://google.com">to give</a> more info';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -74,7 +77,7 @@ class hiddenFieldTest extends FieldViewTestCase implements hiddenFieldTestInterf
         $this->assertSame(false, $note);
     }
 
-    public function test_field_has_a_container_div()
+    public function test_field_has_a_container_div(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $div = current($dom->find('div'));
@@ -83,7 +86,7 @@ class hiddenFieldTest extends FieldViewTestCase implements hiddenFieldTestInterf
         $this->assertSame(false, $div);
     }
 
-    public function test_field_container_div_has_valid_attributes()
+    public function test_field_container_div_has_valid_attributes(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $div = current($dom->find('div'));
@@ -91,5 +94,4 @@ class hiddenFieldTest extends FieldViewTestCase implements hiddenFieldTestInterf
         // Hidden fields don't have a container, so we don't care about its attributes, just pass
         $this->assertSame(false, $div);
     }
-
 }

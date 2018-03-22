@@ -1,4 +1,8 @@
-<?php namespace Nickwest\EloquentForms\Test;
+<?php
+
+declare(strict_types=1);
+
+namespace Nickwest\EloquentForms\Test;
 
 use Cache;
 
@@ -11,13 +15,14 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
      *
      * @return void
      */
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app): void
     {
         // SQLite
         $app['config']->set('database.default', env('DB_CONNECTION'));
     }
 
-    public function setUp() {
+    public function setUp(): void
+    {
         parent::setUp();
 
         // Clear any cache

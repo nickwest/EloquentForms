@@ -1,17 +1,20 @@
-<?php namespace Nickwest\EloquentForms\Test\unit;
+<?php
 
-use Faker;
+declare(strict_types=1);
+
+namespace Nickwest\EloquentForms\Test\unit;
 
 use Nickwest\EloquentForms\Attributes;
 use Nickwest\EloquentForms\Test\TestCase;
 
 class AttributesTest extends TestCase
 {
-    public function setUp(){
+    public function setUp(): void
+    {
         parent::setUp();
     }
 
-    public function test_attributes_set_magic_method_sets_an_attribute()
+    public function test_attributes_set_magic_method_sets_an_attribute(): void
     {
         $Attributes = new Attributes();
 
@@ -25,7 +28,7 @@ class AttributesTest extends TestCase
         $this->assertEquals('something for JS stuff', $Attributes->{'v-for'});
     }
 
-    public function test_attributes_get_magic_method_gets_an_attribute()
+    public function test_attributes_get_magic_method_gets_an_attribute(): void
     {
         $Attributes = new Attributes();
         $Attributes->method = 'POST';
@@ -33,7 +36,7 @@ class AttributesTest extends TestCase
         $this->assertEquals('POST', $Attributes->method);
     }
 
-    public function test_attributes_isset_magic_method_checks_if_an_attribute_is_set()
+    public function test_attributes_isset_magic_method_checks_if_an_attribute_is_set(): void
     {
         $Attributes = new Attributes();
 
@@ -45,7 +48,7 @@ class AttributesTest extends TestCase
         $this->assertTrue(isset($Attributes->id));
     }
 
-    public function test_attributes_unset_magic_method_unsets_an_attribute()
+    public function test_attributes_unset_magic_method_unsets_an_attribute(): void
     {
         $Attributes = new Attributes();
 
@@ -60,7 +63,7 @@ class AttributesTest extends TestCase
         $this->assertFalse(isset($Attributes->id));
     }
 
-    public function test_attributes_getting_an_invalid_attribute_returns_null()
+    public function test_attributes_getting_an_invalid_attribute_returns_null(): void
     {
         $Attributes = new Attributes();
 
@@ -71,7 +74,7 @@ class AttributesTest extends TestCase
         $this->assertNull($Attributes->blahblah);
     }
 
-    public function test_attributes_toString_magic_method_creates_attribute_string()
+    public function test_attributes_toString_magic_method_creates_attribute_string(): void
     {
         $Attributes = new Attributes();
 
@@ -81,10 +84,10 @@ class AttributesTest extends TestCase
         $Attributes->method = 'POST';
         $Attributes->{'v-for'} = 'something for JS stuff';
 
-        $this->assertEquals('disabled id="my-id" method="POST" v-for="something for JS stuff"', (string)$Attributes);
+        $this->assertEquals('disabled id="my-id" method="POST" v-for="something for JS stuff"', (string) $Attributes);
     }
 
-    public function test_attributes_getRawID_returns_unmodified_id()
+    public function test_attributes_getRawID_returns_unmodified_id(): void
     {
         $Attributes = new Attributes();
 
@@ -96,7 +99,7 @@ class AttributesTest extends TestCase
         $this->assertEquals('secret-my_id', $Attributes->id);
     }
 
-    public function test_attributes_id_prefix_can_be_changed()
+    public function test_attributes_id_prefix_can_be_changed(): void
     {
         $Attributes = new Attributes();
 
@@ -107,20 +110,20 @@ class AttributesTest extends TestCase
         $Attributes->method = 'POST';
         $Attributes->{'v-for'} = 'something for JS stuff';
 
-        $this->assertEquals('disabled id="secret-my-id" method="POST" v-for="something for JS stuff"', (string)$Attributes);
+        $this->assertEquals('disabled id="secret-my-id" method="POST" v-for="something for JS stuff"', (string) $Attributes);
     }
 
-    public function test_attributes_id_suffix_can_be_set_and_shows_up()
+    public function test_attributes_id_suffix_can_be_set_and_shows_up(): void
     {
         $Attributes = new Attributes();
 
         $Attributes->id = 'my_id';
         $Attributes->id_suffix = '-42';
 
-        $this->assertEquals('id="my_id-42"', (string)$Attributes);
+        $this->assertEquals('id="my_id-42"', (string) $Attributes);
     }
 
-    public function test_attributes_get_method_for_id_obeys_prefix_and_suffix()
+    public function test_attributes_get_method_for_id_obeys_prefix_and_suffix(): void
     {
         $Attributes = new Attributes();
 
@@ -131,17 +134,17 @@ class AttributesTest extends TestCase
         $this->assertEquals('secret-my_id-42', $Attributes->id);
     }
 
-    public function test_attributes_addClass_adds_a_class_to_the_class_attribute()
+    public function test_attributes_addClass_adds_a_class_to_the_class_attribute(): void
     {
         $Attributes = new Attributes();
 
         $Attributes->addClass('red');
 
         $this->assertEquals('red', $Attributes->class);
-        $this->assertEquals('class="red"', (string)$Attributes);
+        $this->assertEquals('class="red"', (string) $Attributes);
     }
 
-    public function test_attributes_addClasses_adds_multiple_classes_to_the_class_attribute()
+    public function test_attributes_addClasses_adds_multiple_classes_to_the_class_attribute(): void
     {
         $Attributes = new Attributes();
 
@@ -151,11 +154,10 @@ class AttributesTest extends TestCase
 
         $this->assertAttributeEquals($expected, 'classes', $Attributes);
         $this->assertEquals('red bold big', $Attributes->class);
-        $this->assertEquals('class="red bold big"', (string)$Attributes);
-
+        $this->assertEquals('class="red bold big"', (string) $Attributes);
     }
 
-    public function test_attributes_adding_multiple_classes_produces_a_valid_class_string()
+    public function test_attributes_adding_multiple_classes_produces_a_valid_class_string(): void
     {
         $Attributes = new Attributes();
 
@@ -164,10 +166,10 @@ class AttributesTest extends TestCase
         $Attributes->addClass('bold');
 
         $this->assertEquals('red big bold', $Attributes->class);
-        $this->assertEquals('class="red big bold"', (string)$Attributes);
+        $this->assertEquals('class="red big bold"', (string) $Attributes);
     }
 
-    public function test_attributes_removeClass_removes_a_class_from_the_class_attribute()
+    public function test_attributes_removeClass_removes_a_class_from_the_class_attribute(): void
     {
         $Attributes = new Attributes();
 
@@ -179,7 +181,7 @@ class AttributesTest extends TestCase
         $this->assertEquals('red bold', $Attributes->class);
     }
 
-    public function test_attributes_hasClass_returns_if_a_class_name_exists()
+    public function test_attributes_hasClass_returns_if_a_class_name_exists(): void
     {
         $Attributes = new Attributes();
 
@@ -192,20 +194,20 @@ class AttributesTest extends TestCase
         $this->assertFalse($Attributes->hasClass('green'));
     }
 
-    public function test_attributes_multi_key_sets_name_attribute_accordingly()
+    public function test_attributes_multi_key_sets_name_attribute_accordingly(): void
     {
         $Attributes = new Attributes();
 
         $Attributes->name = 'people';
         $Attributes->multi_key = true;
 
-        $this->assertEquals('name="people[]" multiple', (string)$Attributes);
+        $this->assertEquals('name="people[]" multiple', (string) $Attributes);
 
         $Attributes->multi_key = 1;
-        $this->assertEquals('name="people[1]" multiple', (string)$Attributes);
+        $this->assertEquals('name="people[1]" multiple', (string) $Attributes);
     }
 
-    public function test_attributes_toJson_produces_a_json_string()
+    public function test_attributes_toJson_produces_a_json_string(): void
     {
         $Attributes = new Attributes();
 
@@ -226,7 +228,7 @@ class AttributesTest extends TestCase
         $this->assertJson($json);
     }
 
-    public function test_attributes_toJson_produces_json_that_represents_object()
+    public function test_attributes_toJson_produces_json_that_represents_object(): void
     {
         $Attributes = new Attributes();
 
@@ -248,9 +250,5 @@ class AttributesTest extends TestCase
         $NewAttributes->fromJson($json);
 
         $this->assertEquals($Attributes, $NewAttributes);
-
     }
-
-
-
 }

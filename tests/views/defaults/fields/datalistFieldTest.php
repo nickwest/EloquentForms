@@ -1,8 +1,11 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults\fields;
+<?php
 
-use Sunra\PhpSimple\HtmlDomParser;
+declare(strict_types=1);
+
+namespace Nickwest\EloquentForms\Test\view\defaults\fields;
 
 use Nickwest\EloquentForms\Field;
+use Sunra\PhpSimple\HtmlDomParser;
 use Nickwest\EloquentForms\Test\TestCase;
 use Nickwest\EloquentForms\Test\ThemeTestInterfaces\datalistFieldTestInterface;
 
@@ -15,7 +18,7 @@ class datalistFieldTest extends TestCase implements datalistFieldTestInterface
         '2016-05-15' => 'A date',
     ];
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -25,7 +28,7 @@ class datalistFieldTest extends TestCase implements datalistFieldTestInterface
         $this->Field->options->setOptions($this->options);
     }
 
-    public function test_field_not_there_if_no_options_set()
+    public function test_field_not_there_if_no_options_set(): void
     {
         $this->Field->options->setOptions([]);
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -34,7 +37,7 @@ class datalistFieldTest extends TestCase implements datalistFieldTestInterface
         $this->assertSame(false, $dom);
     }
 
-    public function test_field_works_if_options_are_set()
+    public function test_field_works_if_options_are_set(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $datalist = current($dom->find('datalist'));
@@ -42,17 +45,16 @@ class datalistFieldTest extends TestCase implements datalistFieldTestInterface
         $this->assertEquals('input-my_test_field', $datalist->id);
     }
 
-    public function test_field_options_in_datalist_are_as_expected()
+    public function test_field_options_in_datalist_are_as_expected(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $datalist = current($dom->find('datalist'));
 
         $actual = [];
-        foreach($datalist->find('option') as $option){
+        foreach ($datalist->find('option') as $option) {
             $actual[$option->value] = $option->label;
         }
 
         $this->assertEquals($this->options, $actual);
     }
-
 }

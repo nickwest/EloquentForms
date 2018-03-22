@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -11,9 +12,9 @@ class CreateSampleTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('sample', function (Blueprint $table) {
+        Schema::create('sample', function (Blueprint $table): void {
             $table->increments('id');
             $table->timestamps();
             $table->string('first_name');
@@ -23,12 +24,12 @@ class CreateSampleTable extends Migration
             $table->string('file_name')->nullable();
             $table->integer('favorite_number')->nullable();
             $table->boolean('is_hidden')->nullable();
-            $table->enum('favorite_season', array('Winter','Spring','Summer','Autumn'))->nullable();
-            $table->enum('beverage', array('Beer', 'Wine', 'Water'))->nullable();
+            $table->enum('favorite_season', ['Winter', 'Spring', 'Summer', 'Autumn'])->nullable();
+            $table->enum('beverage', ['Beer', 'Wine', 'Water'])->nullable();
             $table->string('fruits_liked')->nullable();
             $table->string('actors_liked')->nullable();
             $table->string('favorite_color')->nullable();
-            $table->enum('good_day', array('Yes', 'No'))->nullable();
+            $table->enum('good_day', ['Yes', 'No'])->nullable();
             $table->date('favorite_date')->nullable();
             $table->string('favorite_days')->nullable();
             $table->datetime('birthday')->nullable();
@@ -47,7 +48,7 @@ class CreateSampleTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('sample_subform');
     }

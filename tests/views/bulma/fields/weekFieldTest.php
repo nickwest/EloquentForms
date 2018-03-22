@@ -1,4 +1,8 @@
-<?php namespace Nickwest\EloquentForms\Test\views\bulma\fields;
+<?php
+
+declare(strict_types=1);
+
+namespace Nickwest\EloquentForms\Test\views\bulma\fields;
 
 use Nickwest\EloquentForms\Test\FieldViewBulmaTestCase;
 use Nickwest\EloquentForms\Test\ThemeTestInterfaces\weekFieldTestInterface;

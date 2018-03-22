@@ -1,8 +1,11 @@
-<?php namespace Nickwest\EloquentForms\Test\views\bulma\fields;
+<?php
 
-use Sunra\PhpSimple\HtmlDomParser;
+declare(strict_types=1);
+
+namespace Nickwest\EloquentForms\Test\views\bulma\fields;
 
 use Nickwest\EloquentForms\Field;
+use Sunra\PhpSimple\HtmlDomParser;
 use Nickwest\EloquentForms\Test\FieldViewBulmaTestCase;
 use Nickwest\EloquentForms\Test\ThemeTestInterfaces\checkboxFieldTestInterface;
 
@@ -16,10 +19,9 @@ class checkboxFieldTest extends FieldViewBulmaTestCase implements checkboxFieldT
 
     // Run all basic tests
 
-
     // Override some tests
 
-    public function test_field_has_correct_value_attribute()
+    public function test_field_has_correct_value_attribute(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
@@ -28,7 +30,7 @@ class checkboxFieldTest extends FieldViewBulmaTestCase implements checkboxFieldT
         $this->assertSame('1', $input->value);
     }
 
-    public function test_field_has_proper_label()
+    public function test_field_has_proper_label(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $labels = $dom->find('label');
@@ -41,7 +43,7 @@ class checkboxFieldTest extends FieldViewBulmaTestCase implements checkboxFieldT
         $this->assertEquals('Yes', trim($option_label->plaintext));
     }
 
-    public function test_field_has_proper_label_when_attributes_changed()
+    public function test_field_has_proper_label_when_attributes_changed(): void
     {
         $this->Field->attributes->id = 'new_id';
         $this->Field->attributes->name = 'new_name';
@@ -58,26 +60,23 @@ class checkboxFieldTest extends FieldViewBulmaTestCase implements checkboxFieldT
         $this->assertEquals('Yes', trim($option_label->plaintext));
     }
 
-
     // Add "selected" tests
 
-    public function test_field_has_selected_attribute_when_value_is_equal()
+    public function test_field_has_selected_attribute_when_value_is_equal(): void
     {
         $this->Field->attributes->value = 1;
 
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
 
-
         $this->assertSame(true, $input->checked);
     }
 
-    public function test_field_has_correct_class_attribute()
+    public function test_field_has_correct_class_attribute(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
 
         $this->assertSame(false, $input->class);
     }
-
 }

@@ -1,6 +1,10 @@
-<?php namespace Nickwest\EloquentForms\Test;
+<?php
 
-/**
+declare(strict_types=1);
+
+namespace Nickwest\EloquentForms\Test;
+
+/*
  * FieldViewTestCase includes basic field tests
  * Each Field view uses different templates and ruins different logic
  * It's necessary to test each field type for completely coverage
@@ -10,12 +14,9 @@
  *    contentblock, datalist,
  */
 
-use Sunra\PhpSimple\HtmlDomParser;
-
 use Nickwest\EloquentForms\Form;
 use Nickwest\EloquentForms\Field;
-
-use Nickwest\EloquentForms\Test\TestCase;
+use Sunra\PhpSimple\HtmlDomParser;
 
 abstract class FieldViewTestCase extends TestCase
 {
@@ -25,7 +26,7 @@ abstract class FieldViewTestCase extends TestCase
     protected $test_id_suffix = '';
     protected $test_options = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -33,14 +34,14 @@ abstract class FieldViewTestCase extends TestCase
 
         $this->Field->attributes->type = $this->test_type;
 
-        if(is_array($this->test_options)){
+        if (is_array($this->test_options)) {
             $this->Field->options->setOptions($this->test_options);
         }
     }
 
     // Attributes
 
-    public function test_field_has_correct_type_attribute()
+    public function test_field_has_correct_type_attribute(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
@@ -48,34 +49,34 @@ abstract class FieldViewTestCase extends TestCase
         $this->assertEquals($this->test_type, $input->type);
     }
 
-    public function test_field_has_correct_name_attribute()
+    public function test_field_has_correct_name_attribute(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
 
         $expected = 'my_test_field';
-        if($this->Field->attributes->type == 'checkbox' && count($this->Field->options->getOptions()) > 1){
+        if ($this->Field->attributes->type === 'checkbox' && count($this->Field->options->getOptions()) > 1) {
             $expected .= '[]';
         }
 
         $this->assertEquals($expected, $input->name);
     }
 
-    public function test_field_has_correct_name_attribute_when_changed()
+    public function test_field_has_correct_name_attribute_when_changed(): void
     {
         $this->Field->attributes->name = 'new_name';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
 
         $expected = 'new_name';
-        if($this->Field->attributes->type == 'checkbox' && count($this->Field->options->getOptions()) > 1){
+        if ($this->Field->attributes->type === 'checkbox' && count($this->Field->options->getOptions()) > 1) {
             $expected .= '[]';
         }
 
         $this->assertEquals($expected, $input->name);
     }
 
-    public function test_field_has_correct_id_attribute()
+    public function test_field_has_correct_id_attribute(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
@@ -83,7 +84,7 @@ abstract class FieldViewTestCase extends TestCase
         $this->assertEquals('input-my_test_field'.$this->test_id_suffix, $input->id);
     }
 
-    public function test_field_has_correct_id_attribute_when_changed()
+    public function test_field_has_correct_id_attribute_when_changed(): void
     {
         $this->Field->attributes->id = 'new_id';
 
@@ -93,7 +94,7 @@ abstract class FieldViewTestCase extends TestCase
         $this->assertEquals('input-new_id'.$this->test_id_suffix, $input->id);
     }
 
-    public function test_field_has_correct_id_attribute_when_prefix_changed()
+    public function test_field_has_correct_id_attribute_when_prefix_changed(): void
     {
         $this->Field->attributes->id_prefix = 'myprefix_';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -102,7 +103,7 @@ abstract class FieldViewTestCase extends TestCase
         $this->assertEquals('myprefix_my_test_field'.$this->test_id_suffix, $input->id);
     }
 
-    public function test_field_has_correct_class_attribute()
+    public function test_field_has_correct_class_attribute(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
@@ -110,7 +111,7 @@ abstract class FieldViewTestCase extends TestCase
         $this->assertEmpty($input->class);
     }
 
-    public function test_field_has_correct_class_attribute_when_one_class_added()
+    public function test_field_has_correct_class_attribute_when_one_class_added(): void
     {
         $this->Field->attributes->addClass('my-class');
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -119,7 +120,7 @@ abstract class FieldViewTestCase extends TestCase
         $this->assertEquals('my-class', trim($input->class));
     }
 
-    public function test_field_has_correct_class_attribute_when_many_classes_added()
+    public function test_field_has_correct_class_attribute_when_many_classes_added(): void
     {
         $this->Field->attributes->addClass('my-class');
         $this->Field->attributes->addClass('two');
@@ -130,7 +131,7 @@ abstract class FieldViewTestCase extends TestCase
         $this->assertEquals('my-class two three', trim($input->class));
     }
 
-    public function test_field_has_correct_class_attribute_when_classes_removed()
+    public function test_field_has_correct_class_attribute_when_classes_removed(): void
     {
         $this->Field->attributes->addClass('my-class');
         $this->Field->attributes->addClass('two');
@@ -142,7 +143,7 @@ abstract class FieldViewTestCase extends TestCase
         $this->assertEquals('my-class three', trim($input->class));
     }
 
-    public function test_field_has_correct_value_attribute()
+    public function test_field_has_correct_value_attribute(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
@@ -151,7 +152,7 @@ abstract class FieldViewTestCase extends TestCase
         $this->assertSame(true, $input->value);
     }
 
-    public function test_field_has_correct_value_attribute_when_changed()
+    public function test_field_has_correct_value_attribute_when_changed(): void
     {
         $this->Field->attributes->value = $this->test_value;
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -161,7 +162,7 @@ abstract class FieldViewTestCase extends TestCase
         $this->assertEquals($this->test_value, $input->value);
     }
 
-    public function test_field_can_have_valueless_attributes()
+    public function test_field_can_have_valueless_attributes(): void
     {
         $this->Field->attributes->required = null;
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -170,7 +171,7 @@ abstract class FieldViewTestCase extends TestCase
         $this->assertSame(true, $input->required);
     }
 
-    public function test_field_can_have_data_attributes()
+    public function test_field_can_have_data_attributes(): void
     {
         $this->Field->attributes->{'data-mydata'} = 42;
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -179,7 +180,7 @@ abstract class FieldViewTestCase extends TestCase
         $this->assertEquals('42', $input->{'data-mydata'});
     }
 
-    public function test_field_can_have_data_attributes_with_json_values()
+    public function test_field_can_have_data_attributes_with_json_values(): void
     {
         $this->Field->attributes->{'data-mydata'} = '{\'testing\':42}';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -188,7 +189,7 @@ abstract class FieldViewTestCase extends TestCase
         $this->assertEquals('{\'testing\':42}', $input->{'data-mydata'});
     }
 
-    public function test_field_can_have_invalid_attributes()
+    public function test_field_can_have_invalid_attributes(): void
     {
         $this->Field->attributes->unreal_attr = 'Unreal!';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -197,7 +198,7 @@ abstract class FieldViewTestCase extends TestCase
         $this->assertEquals('Unreal!', $input->unreal_attr);
     }
 
-    public function test_field_can_have_vue_js_style_attributes()
+    public function test_field_can_have_vue_js_style_attributes(): void
     {
         // Lots of funky types of attributes to support VueJS
 
@@ -228,10 +229,9 @@ abstract class FieldViewTestCase extends TestCase
         $this->assertSame(true, $input->{'v-else'});
     }
 
-
     // Labels
 
-    public function test_field_has_proper_label()
+    public function test_field_has_proper_label(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $label = current($dom->find('label'));
@@ -241,7 +241,7 @@ abstract class FieldViewTestCase extends TestCase
         $this->assertEquals('My test field', trim($label->plaintext));
     }
 
-    public function test_field_has_proper_label_when_attributes_changed()
+    public function test_field_has_proper_label_when_attributes_changed(): void
     {
         $this->Field->attributes->id = 'new_id';
         $this->Field->attributes->name = 'new_name';
@@ -254,7 +254,7 @@ abstract class FieldViewTestCase extends TestCase
         $this->assertEquals('My test field', trim($label->plaintext));
     }
 
-    public function test_field_has_proper_label_when_label_changed()
+    public function test_field_has_proper_label_when_label_changed(): void
     {
         $this->Field->label = 'Awesome new Label';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -263,20 +263,18 @@ abstract class FieldViewTestCase extends TestCase
         $this->assertEquals('Awesome new Label', trim($label->plaintext));
     }
 
-    public function test_field_has_proper_label_suffix_when_set()
+    public function test_field_has_proper_label_suffix_when_set(): void
     {
         $this->Field->label_suffix = ':';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $label = current($dom->find('label'));
 
         $this->assertEquals('My test field:', trim($label->plaintext));
-
     }
-
 
     // Properietary output stuff
 
-    public function test_field_has_multi_key_when_set()
+    public function test_field_has_multi_key_when_set(): void
     {
         $this->Field->attributes->multi_key = 4;
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -285,7 +283,7 @@ abstract class FieldViewTestCase extends TestCase
         $this->assertEquals('my_test_field[4]', trim($input->name));
     }
 
-    public function test_field_has_example_when_set()
+    public function test_field_has_example_when_set(): void
     {
         $this->Field->example = 'This is an <strong>awesome</strong> example';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -295,7 +293,7 @@ abstract class FieldViewTestCase extends TestCase
         $this->assertEquals('This is an <strong>awesome</strong> example', trim($example->innertext));
     }
 
-    public function test_field_has_note_when_set()
+    public function test_field_has_note_when_set(): void
     {
         $this->Field->note = 'Something <a href="https://google.com">to give</a> more info';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -305,7 +303,7 @@ abstract class FieldViewTestCase extends TestCase
         $this->assertEquals('Something <a href="https://google.com">to give</a> more info', trim($note->innertext));
     }
 
-    public function test_field_has_error_message_when_set()
+    public function test_field_has_error_message_when_set(): void
     {
         $Form = new Form();
         $Form->addField('awesome_stuff');
@@ -320,10 +318,9 @@ abstract class FieldViewTestCase extends TestCase
         $this->assertEquals('The awesome stuff field is required.', $error->plaintext);
     }
 
-
     // Container
 
-    public function test_field_has_a_container_div()
+    public function test_field_has_a_container_div(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $div = current($dom->find('div'));
@@ -331,13 +328,13 @@ abstract class FieldViewTestCase extends TestCase
         $this->assertNotSame(false, $div);
     }
 
-    public function test_field_container_div_has_valid_attributes()
+    public function test_field_container_div_has_valid_attributes(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $div = current($dom->find('div'));
 
         $expected = 'field-my_test_field';
-        if($this->Field->attributes->type == 'checkbox' && count($this->Field->options->getOptions()) > 1){
+        if ($this->Field->attributes->type === 'checkbox' && count($this->Field->options->getOptions()) > 1) {
             $expected .= '_1';
         }
 
@@ -347,5 +344,4 @@ abstract class FieldViewTestCase extends TestCase
         $actual = explode(' ', $div->class);
         $this->assertEquals(sort($expected), $actual = sort($actual));
     }
-
 }

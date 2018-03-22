@@ -1,9 +1,13 @@
-<?php namespace Nickwest\EloquentForms\Themes\bulma;
+<?php
+
+declare(strict_types=1);
+
+namespace Nickwest\EloquentForms\Themes\bulma;
 
 use Illuminate\Support\ServiceProvider;
 
-class EloquentFormsBulmaThemeServiceProvider extends ServiceProvider {
-
+class EloquentFormsBulmaThemeServiceProvider extends ServiceProvider
+{
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -16,7 +20,7 @@ class EloquentFormsBulmaThemeServiceProvider extends ServiceProvider {
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->loadViewsFrom(__DIR__.'/views', 'Nickwest\\EloquentForms\\bulma');
     }
@@ -26,7 +30,7 @@ class EloquentFormsBulmaThemeServiceProvider extends ServiceProvider {
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         //
     }
@@ -40,5 +44,4 @@ class EloquentFormsBulmaThemeServiceProvider extends ServiceProvider {
     {
         return [];
     }
-
 }

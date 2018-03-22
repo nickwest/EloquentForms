@@ -1,8 +1,11 @@
-<?php namespace Nickwest\EloquentForms\Test\views\bulma\fields;
+<?php
 
-use Sunra\PhpSimple\HtmlDomParser;
+declare(strict_types=1);
+
+namespace Nickwest\EloquentForms\Test\views\bulma\fields;
 
 use Nickwest\EloquentForms\Field;
+use Sunra\PhpSimple\HtmlDomParser;
 use Nickwest\EloquentForms\Test\FieldViewBulmaTestCase;
 use Nickwest\EloquentForms\Test\ThemeTestInterfaces\checkboxesFieldTestInterface;
 
@@ -15,10 +18,9 @@ class checkboxesFieldTest extends FieldViewBulmaTestCase implements checkboxesFi
 
     // Run all basic tests
 
-
     // Override some tests
 
-    public function test_field_has_correct_id_attribute()
+    public function test_field_has_correct_id_attribute(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $inputs = $dom->find($this->test_tag);
@@ -29,7 +31,7 @@ class checkboxesFieldTest extends FieldViewBulmaTestCase implements checkboxesFi
         $this->assertEquals('input-my_test_field-2', $no_input->id);
     }
 
-    public function test_field_has_correct_id_attribute_when_changed()
+    public function test_field_has_correct_id_attribute_when_changed(): void
     {
         $this->Field->attributes->id = 'new_id';
 
@@ -42,7 +44,7 @@ class checkboxesFieldTest extends FieldViewBulmaTestCase implements checkboxesFi
         $this->assertEquals('input-new_id-2', $no_input->id);
     }
 
-    public function test_field_has_correct_id_attribute_when_prefix_changed()
+    public function test_field_has_correct_id_attribute_when_prefix_changed(): void
     {
         $this->Field->attributes->id_prefix = 'myprefix_';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -54,7 +56,7 @@ class checkboxesFieldTest extends FieldViewBulmaTestCase implements checkboxesFi
         $this->assertEquals('myprefix_my_test_field-2', $no_input->id);
     }
 
-    public function test_field_has_correct_value_attribute()
+    public function test_field_has_correct_value_attribute(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $inputs = $dom->find($this->test_tag);
@@ -66,7 +68,7 @@ class checkboxesFieldTest extends FieldViewBulmaTestCase implements checkboxesFi
         $this->assertSame('2', $no_input->value);
     }
 
-    public function test_field_has_proper_label()
+    public function test_field_has_proper_label(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $labels = $dom->find('label');
@@ -83,7 +85,7 @@ class checkboxesFieldTest extends FieldViewBulmaTestCase implements checkboxesFi
         $this->assertEquals('No', trim($no_option_label->plaintext));
     }
 
-    public function test_field_has_proper_label_when_attributes_changed()
+    public function test_field_has_proper_label_when_attributes_changed(): void
     {
         $this->Field->attributes->id = 'new_id';
         $this->Field->attributes->name = 'new_name';
@@ -104,7 +106,7 @@ class checkboxesFieldTest extends FieldViewBulmaTestCase implements checkboxesFi
         $this->assertEquals('No', trim($no_option_label->plaintext));
     }
 
-    public function test_field_has_selected_attribute_when_value_is_equal()
+    public function test_field_has_selected_attribute_when_value_is_equal(): void
     {
         $this->Field->attributes->value = $this->test_value;
 
@@ -117,7 +119,7 @@ class checkboxesFieldTest extends FieldViewBulmaTestCase implements checkboxesFi
         $this->assertSame(true, $no_input->checked);
     }
 
-    public function test_field_has_correct_value_attribute_when_changed()
+    public function test_field_has_correct_value_attribute_when_changed(): void
     {
         $this->Field->attributes->value = '1';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -132,7 +134,7 @@ class checkboxesFieldTest extends FieldViewBulmaTestCase implements checkboxesFi
         $this->assertSame(false, $no_input->checked);
     }
 
-    public function test_field_can_have_multiple_values()
+    public function test_field_can_have_multiple_values(): void
     {
         $this->Field->attributes->value = [1, 2];
 
@@ -150,7 +152,7 @@ class checkboxesFieldTest extends FieldViewBulmaTestCase implements checkboxesFi
         $this->assertSame(true, $no_input->checked);
     }
 
-    public function test_fields_have_brackets_in_name_when_multiple_options_are_set()
+    public function test_fields_have_brackets_in_name_when_multiple_options_are_set(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $inputs = $dom->find($this->test_tag);
@@ -160,6 +162,4 @@ class checkboxesFieldTest extends FieldViewBulmaTestCase implements checkboxesFi
         $this->assertStringEndsWith('[]', $yes_input->name);
         $this->assertStringEndsWith('[]', $no_input->name);
     }
-
-
 }

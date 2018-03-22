@@ -1,16 +1,16 @@
-<?php namespace Nickwest\EloquentForms\Test\unit;
+<?php
 
-use Faker;
+declare(strict_types=1);
+
+namespace Nickwest\EloquentForms\Test\unit;
 
 use Nickwest\EloquentForms\Form;
 use Nickwest\EloquentForms\Field;
-
 use Nickwest\EloquentForms\Test\TestCase;
-use Nickwest\EloquentForms\Exceptions\OptionValueException;
 
 class FieldTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -18,7 +18,7 @@ class FieldTest extends TestCase
         $this->SubformField = $this->getSubformField();
     }
 
-    public function test_field_has_some_stuff_set_on_construct()
+    public function test_field_has_some_stuff_set_on_construct(): void
     {
         $this->assertEquals('my_field', $this->Field->attributes->name);
         $this->assertEquals('text', $this->Field->attributes->type);
@@ -29,7 +29,7 @@ class FieldTest extends TestCase
         $this->assertEquals('My field', $this->Field->label);
     }
 
-    public function test_field_getViewNamespace_returns_correct_name()
+    public function test_field_getViewNamespace_returns_correct_name(): void
     {
         // When it's a default theme
         $this->assertEquals('Nickwest\\EloquentForms', $this->Field->getViewNamespace());
@@ -39,12 +39,12 @@ class FieldTest extends TestCase
         $this->assertEquals('Nickwest\\EloquentForms\\bulma', $this->Field->getViewNamespace());
     }
 
-    public function test_field_isSubform_returns_if_field_is_a_subform()
+    public function test_field_isSubform_returns_if_field_is_a_subform(): void
     {
         $this->assertTrue($this->SubformField->isSubform());
     }
 
-    public function test_field_getTemplate_returns_the_correct_template_for_fields()
+    public function test_field_getTemplate_returns_the_correct_template_for_fields(): void
     {
         $this->Field->attributes->type = 'textarea';
         $this->assertEquals('Nickwest\EloquentForms::fields.textarea', $this->Field->getTemplate());
@@ -57,16 +57,14 @@ class FieldTest extends TestCase
         $this->assertEquals('Nickwest\EloquentForms\\bulma::fields.select', $this->Field->getTemplate());
     }
 
-
-
-    public function test_field_toJson_returns_a_valid_json_string()
+    public function test_field_toJson_returns_a_valid_json_string(): void
     {
         $json = $this->Field->toJson();
 
         $this->assertJson($json);
     }
 
-    public function test_field_converting_to_them_from_json_returns_a_matching_object()
+    public function test_field_converting_to_them_from_json_returns_a_matching_object(): void
     {
         $json = $this->Field->toJson();
 
@@ -76,7 +74,7 @@ class FieldTest extends TestCase
         $this->assertEquals($this->Field, $newField);
     }
 
-    public function test_field_converting_to_from_json_when_is_sub_form_works()
+    public function test_field_converting_to_from_json_when_is_sub_form_works(): void
     {
         $json = $this->Field->toJson();
 
@@ -86,14 +84,12 @@ class FieldTest extends TestCase
         $this->assertEquals($this->Field, $newField);
     }
 
-    public function test_field_can_make_a_view_without_breaking()
+    public function test_field_can_make_a_view_without_breaking(): void
     {
         $view = $this->Field->MakeView();
 
         $this->assertInstanceOf(\Illuminate\View\View::class, $view);
     }
-
-
 
     ///// HELPERS
 
@@ -106,7 +102,7 @@ class FieldTest extends TestCase
         $test_options = ['1' => 'one', '2' => 'two', '44' => 'Fourtyfour'];
         $Field->options->setOptions($test_options);
 
-        $Field->options->setDisabledOptions(['1','44']);
+        $Field->options->setDisabledOptions(['1', '44']);
 
         $Field->label_suffix = ':';
         $Field->example = 'This is an example';
@@ -138,6 +134,4 @@ class FieldTest extends TestCase
 
         return $Field;
     }
-
-
 }
