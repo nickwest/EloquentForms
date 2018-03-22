@@ -371,7 +371,7 @@ trait FormTrait
                     'type' => $this->getSQLType($column->Type),
                     'default' => $column->Default,
                     'length' => $this->getSQLLength($column->Type),
-                    'values' => $this->getSQLEnumOptions($column->Type, $column->null == 'YES'),
+                    'values' => $this->getSQLEnumOptions($column->Type, $column->{'Null'} == 'YES'),
                 ];
                 $this->valid_columns[$column->Field] = $column->Field;
             }
