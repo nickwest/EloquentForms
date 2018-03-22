@@ -1,77 +1,78 @@
-<?php namespace Nickwest\EloquentForms;
+<?php
+
+declare(strict_types=1);
+
+namespace Nickwest\EloquentForms;
 
 use View;
 use Route;
-
 use Illuminate\Support\Collection;
-
-use Nickwest\EloquentForms\Theme;
 use Nickwest\EloquentForms\Traits\Themeable;
 use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
 use Nickwest\EloquentForms\Exceptions\InvalidRouteException;
 
-class Table{
-
+class Table
+{
     use Themeable;
 
     /**
-     * Submit Button name (used for first submit button only)
+     * Submit Button name (used for first submit button only).
      *
      * @var Nickwest\EloquentForms\Attributes
      */
     public $attributes = null;
 
     /**
-     * Collection that the table will display
+     * Collection that the table will display.
      *
      * @var Illuminate\Support\Collection
      */
     public $Collection = [];
 
     /**
-     * Array of field names
+     * Array of field names.
      *
      * @var array
      */
     protected $display_fields = [];
 
     /**
-     * Array of field names
+     * Array of field names.
      *
      * @var array
      */
     protected $field_replacements = [];
 
     /**
-     * Theme to use
+     * Theme to use.
      *
      * @var string
      */
     protected $Theme = null;
 
     /**
-     * Array of labels, keyed by field_name
+     * Array of labels, keyed by field_name.
      *
      * @var array
      */
     protected $labels = [];
 
     /**
-     * Array of css classes
+     * Array of css classes.
      *
      * @var array
      */
     protected $classes = [];
 
     /**
-     * Array of column linking patterns keyed by field_name
+     * Array of column linking patterns keyed by field_name.
      *
      * @var array
      */
     protected $linking_patterns = [];
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @return void
      */
@@ -82,7 +83,7 @@ class Table{
     }
 
     /**
-     * Set the Collection data to the Table Object
+     * Set the Collection data to the Table Object.
      *
      * @param Illuminate\Support\Collection $Collection
      * @return void
@@ -93,20 +94,20 @@ class Table{
     }
 
     /**
-     * member mutator
+     * member mutator.
      *
      * @param array $field_names
      * @return void
      */
     public function setDisplayFields(array $field_names): void
     {
-        foreach($field_names as $field_name) {
+        foreach ($field_names as $field_name) {
             $this->display_fields[$field_name] = $field_name;
         }
     }
 
     /**
-     * Display Fields Accessor
+     * Display Fields Accessor.
      *
      * @return array
      */
@@ -116,7 +117,7 @@ class Table{
     }
 
     /**
-     * Add field labels to the existing labels
+     * Add field labels to the existing labels.
      *
      * @param array $labels
      * @return void
@@ -124,8 +125,8 @@ class Table{
      */
     public function setLabels(array $labels): void
     {
-        foreach($labels as $field_name => $label) {
-            if(isset($this->display_fields[$field_name])) {
+        foreach ($labels as $field_name => $label) {
+            if (isset($this->display_fields[$field_name])) {
                 $this->labels[$field_name] = $label;
             } else {
                 throw new InvalidFieldException('"'.$field_name.'" not set as a display field');
@@ -134,14 +135,14 @@ class Table{
     }
 
     /**
-     * Get a Label for a specific field
+     * Get a Label for a specific field.
      *
      * @param string $field_name
      * @return string
      */
     public function getLabel(string $field_name): string
     {
-        if(isset($this->labels[$field_name])) {
+        if (isset($this->labels[$field_name])) {
             return $this->labels[$field_name];
         }
 
@@ -151,7 +152,7 @@ class Table{
 
     /**
      * Set a replacement string for a given field's output. Use {field_name} to inject values
-     * field_name supports any field set in the given object/array that exists within the Collection
+     * field_name supports any field set in the given object/array that exists within the Collection.
      *
      * @param string $field field name
      * @param string $html non-escaped text to replace field value in output
@@ -163,7 +164,7 @@ class Table{
     }
 
     /**
-     * Check if a field has a replacement pattern
+     * Check if a field has a replacement pattern.
      *
      * @param string $field field name
      * @return bool
@@ -174,7 +175,7 @@ class Table{
     }
 
     /**
-     * Get a field's replacement value
+     * Get a field's replacement value.
      *
      * @param string $field field name
      * @param string $Object Object or array
@@ -188,11 +189,11 @@ class Table{
 
         $replaced = $this->field_replacements[$field];
 
-        if(is_array($results[0]) && is_array($results[1])) {
-            foreach($results[0] as $key => $match) {
-                if(is_object($Object) && isset($Object->{$results[1][$key]})) {
+        if (is_array($results[0]) && is_array($results[1])) {
+            foreach ($results[0] as $key => $match) {
+                if (is_object($Object) && isset($Object->{$results[1][$key]})) {
                     $replaced = str_replace($results[0][$key], e($Object->{$results[1][$key]}), $replaced);
-                } elseif(is_array($Object) && isset($Object[$results[1][$key]])) {
+                } elseif (is_array($Object) && isset($Object[$results[1][$key]])) {
                     $replaced = str_replace($results[0][$key], e($Object[$results[1][$key]]), $replaced);
                 }
             }
@@ -202,7 +203,7 @@ class Table{
     }
 
     /**
-     *  Convenience method for setting a linking pattern on a field
+     *  Convenience method for setting a linking pattern on a field.
      *
      * @param string $field_name
      * @param string $href
@@ -214,7 +215,7 @@ class Table{
     }
 
     /**
-     * Convenience method for creating a link replacement pattern by route name
+     * Convenience method for creating a link replacement pattern by route name.
      *
      * @param string $field_name
      * @param string $route_name
@@ -222,10 +223,10 @@ class Table{
      * @return void
      * @throws Nickwest\EloquentForms\InvalidRouteException
      */
-    public function addLinkingPatternByRoute(string $field_name, string $route_name, $query_string=[]): void
+    public function addLinkingPatternByRoute(string $field_name, string $route_name, $query_string = []): void
     {
         $Route = Route::getRoutes()->getByName($route_name);
-        if($Route == null) {
+        if ($Route === null) {
             throw new InvalidRouteException('Invalid route name '.$route_name);
         }
 
@@ -233,9 +234,8 @@ class Table{
         $this->field_replacements[$field_name] = '<a href="/'.$Route->uri.'">{'.$field_name.'}</a>';
     }
 
-
     /**
-     * Make a view and extend $extends in $section, $blade_data is the data array to pass to View::make()
+     * Make a view and extend $extends in $section, $blade_data is the data array to pass to View::make().
      *
      * @param array $blade_data
      * @param string $extends
@@ -250,7 +250,7 @@ class Table{
 
         $this->Theme->prepareTableView($this);
 
-        $template = ($extends != '' ? 'table-extend' : 'table');
+        $template = ($extends !== '' ? 'table-extend' : 'table');
 
         return $this->getThemeView($template, $blade_data);
     }

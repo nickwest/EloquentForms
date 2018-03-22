@@ -1,12 +1,16 @@
-<?php namespace Nickwest\EloquentForms;
+<?php
 
-use Illuminate\Database\Eloquent\Model;
+declare(strict_types=1);
+
+namespace Nickwest\EloquentForms;
+
 use Illuminate\Support\Facades\Event;
+use Illuminate\Database\Eloquent\Model;
 
-class FormObserver {
-
+class FormObserver
+{
     /**
-     * Fire the namespaced form event
+     * Fire the namespaced form event.
      *
      * @param  string $event
      * @param  \Illuminate\Database\Eloquent\Model $model
@@ -21,16 +25,16 @@ class FormObserver {
      * Register the validation event for saving the model.
      *
      * @param  \Illuminate\Database\Eloquent\Model $model
-     * @return boolean
+     * @return bool
      */
     public function saving(Model $model)
     {
         // Fire the namespaced version event if hooked in client code
-        if (!$model->validateOnSave() || $this->fireFormEvent('saving', $model) !== null) {
+        if (! $model->validateOnSave() || $this->fireFormEvent('saving', $model) !== null) {
             return;
         }
 
-        if($model->isFormValid()) {
+        if ($model->isFormValid()) {
             // Fire the versioning.passed event.
             $this->fireFormEvent('passed', $model);
         } else {
@@ -38,7 +42,5 @@ class FormObserver {
 
             return false;
         }
-
     }
-
 }

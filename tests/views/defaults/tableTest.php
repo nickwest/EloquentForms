@@ -1,15 +1,16 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults;
+<?php
+
+declare(strict_types=1);
+
+namespace Nickwest\EloquentForms\Test\view\defaults;
 
 use Faker;
-
-use Illuminate\Support\Collection;
-
-use Sunra\PhpSimple\HtmlDomParser;
-
 use Nickwest\EloquentForms\Table;
+use Illuminate\Support\Collection;
+use Sunra\PhpSimple\HtmlDomParser;
 use Nickwest\EloquentForms\Test\TestCase;
 
-class tableButtonsTest extends TestCase
+class tableTest extends TestCase
 {
     /**
      * @var array
@@ -26,7 +27,7 @@ class tableButtonsTest extends TestCase
      */
     protected $Table = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -38,7 +39,7 @@ class tableButtonsTest extends TestCase
         $this->Table->setDisplayFields($this->display_fields);
     }
 
-    public function test_table_view_has_a_table()
+    public function test_table_view_has_a_table(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Table->makeView()->render());
         $table = current($dom->find('table'));
@@ -46,7 +47,7 @@ class tableButtonsTest extends TestCase
         $this->assertNotFalse($table);
     }
 
-    public function test_table_can_have_classes()
+    public function test_table_can_have_classes(): void
     {
         $this->Table->attributes->addClasses(['red', 'big']);
 
@@ -56,7 +57,7 @@ class tableButtonsTest extends TestCase
         $this->assertEquals('red big', $table->class);
     }
 
-    public function test_table_can_have_any_attributes()
+    public function test_table_can_have_any_attributes(): void
     {
         $this->Table->attributes->{'v-hide:hidden'} = null;
         $this->Table->attributes->align = 'left';
@@ -70,7 +71,7 @@ class tableButtonsTest extends TestCase
         $this->assertEquals('my-table', $table->id);
     }
 
-    public function test_table_has_necessary_markup()
+    public function test_table_has_necessary_markup(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Table->makeView()->render());
         $table = current($dom->find('table'));
@@ -79,17 +80,17 @@ class tableButtonsTest extends TestCase
         $this->assertNotFalse($table->find('tbody'));
     }
 
-    public function test_table_has_headings_as_set()
+    public function test_table_has_headings_as_set(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Table->makeView()->render());
         $ths = $dom->find('thead tr th');
 
-        foreach($ths as $th){
+        foreach ($ths as $th) {
             $this->assertEquals(e($this->Table->getLabel($th->{'data-field'})), $th->plaintext);
         }
     }
 
-    public function test_table_has_cells_as_set()
+    public function test_table_has_cells_as_set(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Table->makeView()->render());
         $trs = $dom->find('tr');
@@ -97,15 +98,15 @@ class tableButtonsTest extends TestCase
         // Remove the first one since that's the headings
         array_shift($trs);
 
-        foreach($trs as $tr){
+        foreach ($trs as $tr) {
             $data = $this->Collection->shift();
-            foreach($tr->find('td') as $td){
+            foreach ($tr->find('td') as $td) {
                 $this->assertEquals(e($data[$td->{'data-field'}]), trim($td->innertext));
             }
         }
     }
 
-    public function test_table_can_have_custom_headings()
+    public function test_table_can_have_custom_headings(): void
     {
         $labels = ['name' => 'Full name', 'email' => 'E-mail'];
         $this->Table->setLabels($labels);
@@ -113,14 +114,14 @@ class tableButtonsTest extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Table->makeView()->render());
         $ths = $dom->find('thead tr th');
 
-        foreach($ths as $th){
-            if(isset($labels[$th->{'data-field'}])){
+        foreach ($ths as $th) {
+            if (isset($labels[$th->{'data-field'}])) {
                 $this->assertEquals(e($labels[$th->{'data-field'}]), trim($th->innertext));
             }
         }
     }
 
-    public function test_table_can_have_replacement_pattern()
+    public function test_table_can_have_replacement_pattern(): void
     {
         // Inject something nasty
         $Collection = new Collection();
@@ -139,27 +140,26 @@ class tableButtonsTest extends TestCase
         $tds = $dom->find('td');
 
         $data = $Collection->shift();
-        foreach($tds as $td){
-            if($td->{'data-field'} == 'birthday'){
+        foreach ($tds as $td) {
+            if ($td->{'data-field'} === 'birthday') {
                 // Value cleaned with e()
                 $this->assertEquals('<strong>'.e($data[$td->{'data-field'}]).'</strong>', trim($td->innertext));
-            }elseif($td->{'data-field'} == 'nname'){
+            } elseif ($td->{'data-field'} === 'nname') {
                 // Value cleaned with e()
                 $this->assertEquals('<a href="/my/url">'.e($data[$td->{'data-field'}]).'</a>', trim($td->innertext));
             }
         }
     }
 
-
     /**
-     *  Make a test collection full of data
+     *  Make a test collection full of data.
      *
      * @return Illuminate\Support\Collection
      */
     protected function makeData(int $count)
     {
         $Collection = new Collection();
-        for($i = 0; $i < $count; $i++){
+        for ($i = 0; $i < $count; $i++) {
             $Collection->push([
                 'name' => $this->Faker->name,
                 'email' => $this->Faker->email,
@@ -171,5 +171,4 @@ class tableButtonsTest extends TestCase
 
         return $Collection;
     }
-
 }

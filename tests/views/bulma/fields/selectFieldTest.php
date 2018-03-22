@@ -1,8 +1,10 @@
-<?php namespace Nickwest\EloquentForms\Test\views\bulma\fields;
+<?php
+
+declare(strict_types=1);
+
+namespace Nickwest\EloquentForms\Test\views\bulma\fields;
 
 use Sunra\PhpSimple\HtmlDomParser;
-
-use Nickwest\EloquentForms\Field;
 use Nickwest\EloquentForms\Test\FieldViewBulmaTestCase;
 use Nickwest\EloquentForms\Test\ThemeTestInterfaces\selectFieldTestInterface;
 
@@ -16,20 +18,20 @@ class selectFieldTest extends FieldViewBulmaTestCase implements selectFieldTestI
 
     // Run all basic tests
 
-    public function test_field_has_all_possible_options()
+    public function test_field_has_all_possible_options(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $options = $dom->find('option');
 
         $actual_options = [];
-        foreach($options as $option){
+        foreach ($options as $option) {
             $actual_options[$option->value] = trim($option->innertext);
         }
 
         $this->assertEquals($this->test_options, $actual_options);
     }
 
-    public function test_field_can_have_multiple_attribute_set()
+    public function test_field_can_have_multiple_attribute_set(): void
     {
         $this->Field->attributes->multi_key = true;
 
@@ -39,7 +41,7 @@ class selectFieldTest extends FieldViewBulmaTestCase implements selectFieldTestI
         $this->assertSame(true, $select->multiple);
     }
 
-    public function test_field_has_proper_option_selected_when_value_is_set()
+    public function test_field_has_proper_option_selected_when_value_is_set(): void
     {
         $this->Field->attributes->value = 1;
 
@@ -53,7 +55,7 @@ class selectFieldTest extends FieldViewBulmaTestCase implements selectFieldTestI
         $this->assertSame(false, $no_option->selected);
     }
 
-    public function test_field_can_have_multiple_values()
+    public function test_field_can_have_multiple_values(): void
     {
         $this->Field->attributes->value = [1, 2];
 
@@ -72,7 +74,7 @@ class selectFieldTest extends FieldViewBulmaTestCase implements selectFieldTestI
         $this->assertSame(true, $no_option->selected);
     }
 
-    public function test_field_has_correct_value_attribute()
+    public function test_field_has_correct_value_attribute(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
@@ -81,7 +83,7 @@ class selectFieldTest extends FieldViewBulmaTestCase implements selectFieldTestI
         $this->assertSame(false, $input->value);
     }
 
-    public function test_field_has_correct_value_attribute_when_changed()
+    public function test_field_has_correct_value_attribute_when_changed(): void
     {
         $this->Field->attributes->value = $this->test_value;
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -98,5 +100,4 @@ class selectFieldTest extends FieldViewBulmaTestCase implements selectFieldTestI
         $this->assertSame(false, $yes_option->selected);
         $this->assertSame(true, $no_option->selected);
     }
-
 }

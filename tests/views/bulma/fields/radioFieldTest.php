@@ -1,8 +1,11 @@
-<?php namespace Nickwest\EloquentForms\Test\views\bulma\fields;
+<?php
 
-use Sunra\PhpSimple\HtmlDomParser;
+declare(strict_types=1);
+
+namespace Nickwest\EloquentForms\Test\views\bulma\fields;
 
 use Nickwest\EloquentForms\Field;
+use Sunra\PhpSimple\HtmlDomParser;
 use Nickwest\EloquentForms\Test\FieldViewBulmaTestCase;
 use Nickwest\EloquentForms\Test\ThemeTestInterfaces\radioFieldTestInterface;
 
@@ -15,10 +18,9 @@ class radioFieldTest extends FieldViewBulmaTestCase implements radioFieldTestInt
 
     // Run all basic tests
 
-
     // Override some tests
 
-    public function test_field_has_correct_value_attribute()
+    public function test_field_has_correct_value_attribute(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $inputs = $dom->find($this->test_tag);
@@ -29,7 +31,7 @@ class radioFieldTest extends FieldViewBulmaTestCase implements radioFieldTestInt
         $this->assertSame('no', $no_input->value);
     }
 
-    public function test_field_has_proper_label()
+    public function test_field_has_proper_label(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $labels = $dom->find('label');
@@ -46,7 +48,7 @@ class radioFieldTest extends FieldViewBulmaTestCase implements radioFieldTestInt
         $this->assertEquals('No', trim($no_option_label->plaintext));
     }
 
-    public function test_field_has_proper_label_when_attributes_changed()
+    public function test_field_has_proper_label_when_attributes_changed(): void
     {
         $this->Field->attributes->id = 'new_id';
         $this->Field->attributes->name = 'new_name';
@@ -67,10 +69,9 @@ class radioFieldTest extends FieldViewBulmaTestCase implements radioFieldTestInt
         $this->assertEquals('No', trim($no_option_label->plaintext));
     }
 
-
     // Add "selected" tests
 
-    public function test_field_has_selected_attribute_when_value_is_equal()
+    public function test_field_has_selected_attribute_when_value_is_equal(): void
     {
         $this->Field->attributes->value = 'yes';
 
@@ -79,12 +80,11 @@ class radioFieldTest extends FieldViewBulmaTestCase implements radioFieldTestInt
         $yes_input = array_shift($inputs);
         $no_input = array_shift($inputs);
 
-
         $this->assertSame(true, $yes_input->checked);
         $this->assertSame(false, $no_input->checked);
     }
 
-    public function test_field_has_correct_id_attribute()
+    public function test_field_has_correct_id_attribute(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $inputs = $dom->find($this->test_tag);
@@ -95,7 +95,7 @@ class radioFieldTest extends FieldViewBulmaTestCase implements radioFieldTestInt
         $this->assertEquals('input-my_test_field-no', $no_input->id);
     }
 
-    public function test_field_has_correct_id_attribute_when_changed()
+    public function test_field_has_correct_id_attribute_when_changed(): void
     {
         $this->Field->attributes->id = 'new_id';
 
@@ -108,7 +108,7 @@ class radioFieldTest extends FieldViewBulmaTestCase implements radioFieldTestInt
         $this->assertEquals('input-new_id-no', $no_input->id);
     }
 
-    public function test_field_has_correct_id_attribute_when_prefix_changed()
+    public function test_field_has_correct_id_attribute_when_prefix_changed(): void
     {
         $this->Field->attributes->id_prefix = 'myprefix_';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -120,7 +120,7 @@ class radioFieldTest extends FieldViewBulmaTestCase implements radioFieldTestInt
         $this->assertEquals('myprefix_my_test_field-no', $no_input->id);
     }
 
-    public function test_field_has_correct_value_attribute_when_changed()
+    public function test_field_has_correct_value_attribute_when_changed(): void
     {
         $this->Field->attributes->value = 'no';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -134,5 +134,4 @@ class radioFieldTest extends FieldViewBulmaTestCase implements radioFieldTestInt
         $this->assertSame(false, $yes_input->checked);
         $this->assertSame(true, $no_input->checked);
     }
-
 }

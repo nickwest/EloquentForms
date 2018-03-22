@@ -1,14 +1,15 @@
-<?php namespace Nickwest\EloquentForms;
+<?php
 
-use \Illuminate\Support\MessageBag;
+declare(strict_types=1);
 
-interface FormInterface {
+namespace Nickwest\EloquentForms;
 
+interface FormInterface
+{
     /**
      * Boot the trait. Adds an observer class for form.
      *
      * @return void
      */
-    public static function bootFormTrait();
-
+    public static function bootFormTrait(): void;
 }

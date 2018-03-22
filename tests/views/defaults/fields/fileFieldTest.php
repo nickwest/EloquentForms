@@ -1,8 +1,10 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults\fields;
+<?php
+
+declare(strict_types=1);
+
+namespace Nickwest\EloquentForms\Test\view\defaults\fields;
 
 use Sunra\PhpSimple\HtmlDomParser;
-
-use Nickwest\EloquentForms\Field;
 use Nickwest\EloquentForms\Test\FieldViewTestCase;
 use Nickwest\EloquentForms\Test\ThemeTestInterfaces\fileFieldTestInterface;
 
@@ -13,7 +15,7 @@ class fileFieldTest extends FieldViewTestCase implements fileFieldTestInterface
 
     // Run all basic tests
 
-    public function test_field_has_correct_value_attribute_when_changed()
+    public function test_field_has_correct_value_attribute_when_changed(): void
     {
         $this->Field->attributes->value = $this->test_value;
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -24,7 +26,7 @@ class fileFieldTest extends FieldViewTestCase implements fileFieldTestInterface
         $this->assertEquals('yoda.pdf', trim($file_link->plaintext));
     }
 
-    public function test_remove_button_can_have_a_different_value()
+    public function test_remove_button_can_have_a_different_value(): void
     {
         $this->Field->attributes->value = $this->test_value;
         $this->Field->file_delete_button_value = 'Obliterate';

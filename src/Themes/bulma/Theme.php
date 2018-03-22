@@ -1,4 +1,8 @@
-<?php namespace Nickwest\EloquentForms\Themes\bulma;
+<?php
+
+declare(strict_types=1);
+
+namespace Nickwest\EloquentForms\Themes\bulma;
 
 use Nickwest\EloquentForms\Field;
 use Nickwest\EloquentForms\Table;
@@ -6,7 +10,7 @@ use Nickwest\EloquentForms\Table;
 class Theme extends \Nickwest\EloquentForms\Theme
 {
     /**
-     * Get the View namespace for this Theme
+     * Get the View namespace for this Theme.
      *
      * @return string
      */
@@ -16,7 +20,7 @@ class Theme extends \Nickwest\EloquentForms\Theme
     }
 
     /**
-     * Modify the field view
+     * Modify the field view.
      *
      * @param Nickwest\EloquentForms\Field
      * @return void
@@ -30,22 +34,21 @@ class Theme extends \Nickwest\EloquentForms\Theme
     }
 
     /**
-     * Modify a Form as necessary
+     * Modify a Form as necessary.
      *
      * @return void
      */
     public function prepareFormView(\Nickwest\EloquentForms\Form &$Form): void
     {
-        if(count($Form->getSubmitButtons()) == 1){
-            foreach($Form->getSubmitButtons() as $Button){
+        if (count($Form->getSubmitButtons()) === 1) {
+            foreach ($Form->getSubmitButtons() as $Button) {
                 $Button->attributes->addClass('is-success');
             }
         }
-
     }
 
     /**
-     * Modify the table view as necessary
+     * Modify the table view as necessary.
      *
      * @param Nickwest\EloquentForms\Table
      * @return void
@@ -53,33 +56,31 @@ class Theme extends \Nickwest\EloquentForms\Theme
     public function prepareTableView(Table &$Table): void
     {
         $Table->attributes->addClass('table');
-
-        return;
     }
 
     /**
-     * Add is-danger class to fields with errors
+     * Add is-danger class to fields with errors.
      *
      * @param Nickwest\EloquentForms\Field $Field
      * @return void
      */
     protected function setErrorClasses(Field &$Field): void
     {
-        if($Field->error_message) {
+        if ($Field->error_message) {
             $Field->attributes->addClass('is-danger');
             $Field->input_wrapper_class .= ' is-danger';
         }
     }
 
     /**
-     * Set type based classes to Field
+     * Set type based classes to Field.
      *
      * @param Nickwest\EloquentForms\Field $Field
      * @return void
      */
     public function setTypeClasses(Field &$Field): void
     {
-        switch($Field->attributes->type) {
+        switch ($Field->attributes->type) {
             case 'text':
             case 'email':
             case 'tel':
@@ -107,5 +108,4 @@ class Theme extends \Nickwest\EloquentForms\Theme
                 break;
         }
     }
-
 }

@@ -1,14 +1,17 @@
-<?php namespace Nickwest\EloquentForms\Test\view\bulma;
+<?php
 
-use Sunra\PhpSimple\HtmlDomParser;
+declare(strict_types=1);
+
+namespace Nickwest\EloquentForms\Test\view\bulma;
 
 use Nickwest\EloquentForms\Form;
-
+use Sunra\PhpSimple\HtmlDomParser;
 use Nickwest\EloquentForms\Test\TestCase;
 
 class submitButtonsTest extends TestCase
 {
-    public function setUp() {
+    public function setUp(): void
+    {
         parent::setUp();
 
         $this->Form = new Form();
@@ -16,7 +19,7 @@ class submitButtonsTest extends TestCase
         $this->Form->the_only_field = 'So lonely';
     }
 
-    public function test_form_view_has_submit_button_container()
+    public function test_form_view_has_submit_button_container(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Form->makeView()->render());
         $submit_container = current($dom->find('div[class=submit-buttons]'));
@@ -24,7 +27,7 @@ class submitButtonsTest extends TestCase
         $this->assertNotFalse($submit_container);
     }
 
-    public function test_form_view_has_default_submit_button()
+    public function test_form_view_has_default_submit_button(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Form->makeView()->render());
         $submit_container = current($dom->find('div[class=submit-buttons]'));
@@ -40,7 +43,7 @@ class submitButtonsTest extends TestCase
         $this->assertEquals('button', $submit_button->class);
     }
 
-    public function test_form_view_can_have_multiple_submit_buttons()
+    public function test_form_view_can_have_multiple_submit_buttons(): void
     {
         $this->Form->addSubmitButton('submit_delete', 'Delete', null, 'is-danger');
 
@@ -58,7 +61,7 @@ class submitButtonsTest extends TestCase
         $this->assertEquals('button is-danger', $submit_button->class);
     }
 
-    public function test_form_view_can_have_submit_buttons_removed()
+    public function test_form_view_can_have_submit_buttons_removed(): void
     {
         $this->Form->addSubmitButton('submit_delete', 'Delete', null, 'is-danger');
         // Remove the default button
@@ -78,7 +81,7 @@ class submitButtonsTest extends TestCase
         $this->assertEquals('button is-danger', $submit_button->class);
     }
 
-    public function test_form_view_can_have_submit_buttons_edited()
+    public function test_form_view_can_have_submit_buttons_edited(): void
     {
         $Button = $this->Form->getSubmitButton('submit_button', 'Submit');
         $Button->attributes->addClass('super-duper');
@@ -96,7 +99,7 @@ class submitButtonsTest extends TestCase
         $this->assertEquals('button super-duper', $submit_button->class);
     }
 
-    public function test_form_view_can_have_submit_buttons_renamed()
+    public function test_form_view_can_have_submit_buttons_renamed(): void
     {
         $this->Form->renameSubmitButton('submit_button', 'Submit', 'save_button', 'Save');
 
@@ -111,5 +114,4 @@ class submitButtonsTest extends TestCase
         $this->assertEquals('input-save_button', $submit_button->id);
         $this->assertEquals('button', $submit_button->class);
     }
-
 }

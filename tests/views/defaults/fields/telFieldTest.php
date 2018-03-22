@@ -1,4 +1,8 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults\fields;
+<?php
+
+declare(strict_types=1);
+
+namespace Nickwest\EloquentForms\Test\view\defaults\fields;
 
 use Nickwest\EloquentForms\Test\FieldViewTestCase;
 use Nickwest\EloquentForms\Test\ThemeTestInterfaces\telFieldTestInterface;

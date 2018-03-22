@@ -1,8 +1,11 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults\fields;
+<?php
 
-use Sunra\PhpSimple\HtmlDomParser;
+declare(strict_types=1);
+
+namespace Nickwest\EloquentForms\Test\view\defaults\fields;
 
 use Nickwest\EloquentForms\Field;
+use Sunra\PhpSimple\HtmlDomParser;
 use Nickwest\EloquentForms\Test\TestCase;
 use Nickwest\EloquentForms\Test\ThemeTestInterfaces\contentblockFieldTestInterface;
 
@@ -11,7 +14,7 @@ class contentblockFieldTest extends TestCase implements contentblockFieldTestInt
 {
     protected $test_value = 'Donut <strong>jelly-o</strong> wafer sugar plum marzipan toffee cheesecake topping. Muffin chocolate donut. Cake wafer sugar plum. Cookie halvah powder gingerbread oat cake muffin. Marshmallow chocolate bar candy cheesecake bear claw tiramisu sweet tootsie roll. Bonbon sesame snaps donut gummies cookie marshmallow pie. Bonbon jujubes toffee. Toffee muffin cotton candy gingerbread cotton candy jelly-o lollipop. Cookie chocolate sugar plum jelly powder pastry cheesecake. Candy canes tart powder pudding cookie marshmallow gummies bonbon topping. Dessert jelly-o gummi bears biscuit liquorice tootsie roll. Lollipop chocolate cake muffin toffee gingerbread. Bonbon icing jujubes gingerbread chocolate bar. Pie gummi bears pastry.';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -21,7 +24,7 @@ class contentblockFieldTest extends TestCase implements contentblockFieldTestInt
         $this->Field->attributes->value = $this->test_value;
     }
 
-    public function test_field_not_there_if_no_value()
+    public function test_field_not_there_if_no_value(): void
     {
         $this->Field->attributes->value = '';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -31,7 +34,7 @@ class contentblockFieldTest extends TestCase implements contentblockFieldTestInt
         $this->assertSame(false, $input);
     }
 
-    public function test_field_has_correct_id_attribute()
+    public function test_field_has_correct_id_attribute(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find('div[id=input-my_test_field]'));
@@ -40,7 +43,7 @@ class contentblockFieldTest extends TestCase implements contentblockFieldTestInt
         $this->assertEquals('input-my_test_field', $input->id);
     }
 
-    public function test_field_has_correct_id_attribute_when_changed()
+    public function test_field_has_correct_id_attribute_when_changed(): void
     {
         $this->Field->attributes->id = 'new_id';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -49,7 +52,7 @@ class contentblockFieldTest extends TestCase implements contentblockFieldTestInt
         $this->assertEquals('input-new_id', $input->id);
     }
 
-    public function test_field_has_correct_id_attribute_when_prefix_changed()
+    public function test_field_has_correct_id_attribute_when_prefix_changed(): void
     {
         $this->Field->attributes->id_prefix = 'myprefix_';
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -58,7 +61,7 @@ class contentblockFieldTest extends TestCase implements contentblockFieldTestInt
         $this->assertEquals('myprefix_my_test_field', $input->id);
     }
 
-    public function test_field_has_correct_class_attribute()
+    public function test_field_has_correct_class_attribute(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find('div[id=input-my_test_field]'));
@@ -66,7 +69,7 @@ class contentblockFieldTest extends TestCase implements contentblockFieldTestInt
         $this->assertEmpty($input->class);
     }
 
-    public function test_field_has_correct_class_attribute_when_one_class_added()
+    public function test_field_has_correct_class_attribute_when_one_class_added(): void
     {
         $this->Field->attributes->addClass('my-class');
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -75,7 +78,7 @@ class contentblockFieldTest extends TestCase implements contentblockFieldTestInt
         $this->assertEquals('my-class', trim($input->class));
     }
 
-    public function test_field_has_correct_class_attribute_when_many_classes_added()
+    public function test_field_has_correct_class_attribute_when_many_classes_added(): void
     {
         $this->Field->attributes->addClass('my-class');
         $this->Field->attributes->addClass('two');
@@ -86,7 +89,7 @@ class contentblockFieldTest extends TestCase implements contentblockFieldTestInt
         $this->assertEquals('my-class two three', trim($input->class));
     }
 
-    public function test_field_has_correct_class_attribute_when_classes_removed()
+    public function test_field_has_correct_class_attribute_when_classes_removed(): void
     {
         $this->Field->attributes->addClass('my-class');
         $this->Field->attributes->addClass('two');
@@ -98,7 +101,7 @@ class contentblockFieldTest extends TestCase implements contentblockFieldTestInt
         $this->assertEquals('my-class three', trim($input->class));
     }
 
-    public function test_field_has_proper_content()
+    public function test_field_has_proper_content(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find('div[id=input-my_test_field]'));
@@ -108,7 +111,7 @@ class contentblockFieldTest extends TestCase implements contentblockFieldTestInt
 
     // Container
 
-    public function test_field_has_a_container_div()
+    public function test_field_has_a_container_div(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $div = current($dom->find('div'));
@@ -116,7 +119,7 @@ class contentblockFieldTest extends TestCase implements contentblockFieldTestInt
         $this->assertNotSame(false, $div);
     }
 
-    public function test_field_container_div_has_valid_attributes()
+    public function test_field_container_div_has_valid_attributes(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $div = current($dom->find('div'));
@@ -127,6 +130,4 @@ class contentblockFieldTest extends TestCase implements contentblockFieldTestInt
         $actual = explode(' ', $div->class);
         $this->assertEquals(sort($expected), $actual = sort($actual));
     }
-
-
 }

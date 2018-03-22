@@ -1,8 +1,10 @@
-<?php namespace Nickwest\EloquentForms\Test\views\bulma\fields;
+<?php
+
+declare(strict_types=1);
+
+namespace Nickwest\EloquentForms\Test\views\bulma\fields;
 
 use Sunra\PhpSimple\HtmlDomParser;
-
-use Nickwest\EloquentForms\Field;
 use Nickwest\EloquentForms\Test\FieldViewBulmaTestCase;
 use Nickwest\EloquentForms\Test\ThemeTestInterfaces\fileFieldTestInterface;
 
@@ -13,7 +15,7 @@ class fileFieldTest extends FieldViewBulmaTestCase implements fileFieldTestInter
 
     // Run all basic tests
 
-    public function test_field_has_correct_value_attribute_when_changed()
+    public function test_field_has_correct_value_attribute_when_changed(): void
     {
         $this->Field->attributes->value = $this->test_value;
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -24,7 +26,7 @@ class fileFieldTest extends FieldViewBulmaTestCase implements fileFieldTestInter
         $this->assertEquals('yoda.pdf', trim($file_link->plaintext));
     }
 
-    public function test_remove_button_can_have_a_different_value()
+    public function test_remove_button_can_have_a_different_value(): void
     {
         $this->Field->attributes->value = $this->test_value;
         $this->Field->file_delete_button_value = 'Obliterate';
@@ -34,7 +36,7 @@ class fileFieldTest extends FieldViewBulmaTestCase implements fileFieldTestInter
         $this->assertEquals('Obliterate', $remove_button->value);
     }
 
-    public function test_field_has_correct_class_attribute()
+    public function test_field_has_correct_class_attribute(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
@@ -42,7 +44,7 @@ class fileFieldTest extends FieldViewBulmaTestCase implements fileFieldTestInter
         $this->assertEquals('file-input', $input->class);
     }
 
-    public function test_field_has_correct_class_attribute_when_one_class_added()
+    public function test_field_has_correct_class_attribute_when_one_class_added(): void
     {
         $this->Field->attributes->addClass('my-class');
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -51,7 +53,7 @@ class fileFieldTest extends FieldViewBulmaTestCase implements fileFieldTestInter
         $this->assertEquals('my-class file-input', trim($input->class));
     }
 
-    public function test_field_has_correct_class_attribute_when_many_classes_added()
+    public function test_field_has_correct_class_attribute_when_many_classes_added(): void
     {
         $this->Field->attributes->addClass('my-class');
         $this->Field->attributes->addClass('two');
@@ -62,7 +64,7 @@ class fileFieldTest extends FieldViewBulmaTestCase implements fileFieldTestInter
         $this->assertEquals('my-class two three file-input', trim($input->class));
     }
 
-    public function test_field_has_correct_class_attribute_when_classes_removed()
+    public function test_field_has_correct_class_attribute_when_classes_removed(): void
     {
         $this->Field->attributes->addClass('my-class');
         $this->Field->attributes->addClass('two');
@@ -73,6 +75,4 @@ class fileFieldTest extends FieldViewBulmaTestCase implements fileFieldTestInter
 
         $this->assertEquals('my-class three file-input', trim($input->class));
     }
-
-
 }

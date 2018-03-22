@@ -1,7 +1,10 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults\fields;
+<?php
+
+declare(strict_types=1);
+
+namespace Nickwest\EloquentForms\Test\view\defaults\fields;
 
 use Sunra\PhpSimple\HtmlDomParser;
-
 use Nickwest\EloquentForms\Test\FieldViewTestCase;
 use Nickwest\EloquentForms\Test\ThemeTestInterfaces\textareaFieldTestInterface;
 
@@ -13,7 +16,7 @@ class textareaFieldTest extends FieldViewTestCase implements textareaFieldTestIn
 
     // Run all basic tests
 
-    public function test_field_has_correct_type_attribute()
+    public function test_field_has_correct_type_attribute(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
@@ -21,7 +24,7 @@ class textareaFieldTest extends FieldViewTestCase implements textareaFieldTestIn
         $this->assertFalse($input->type);
     }
 
-    public function test_field_has_correct_value_attribute()
+    public function test_field_has_correct_value_attribute(): void
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
@@ -33,7 +36,7 @@ class textareaFieldTest extends FieldViewTestCase implements textareaFieldTestIn
         $this->assertEquals('', trim($input->innertext));
     }
 
-    public function test_field_has_correct_value_attribute_when_changed()
+    public function test_field_has_correct_value_attribute_when_changed(): void
     {
         $this->Field->attributes->value = $this->test_value;
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
@@ -45,6 +48,4 @@ class textareaFieldTest extends FieldViewTestCase implements textareaFieldTestIn
         // But the value between the tags should be equal to the value
         $this->assertEquals($this->test_value, trim($input->innertext));
     }
-
-
 }
