@@ -4,6 +4,7 @@ namespace Nickwest\EloquentForms\Traits;
 use Nickwest\EloquentForms\Field;
 use Nickwest\EloquentForms\Theme;
 use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
+use phpDocumentor\Reflection\Types\Void_;
 
 trait HasFields
 {
@@ -59,6 +60,18 @@ trait HasFields
     public function __set(string $field_name, $value): void
     {
         $this->setValue($field_name, $value);
+    }
+
+    /**
+     * Unset a field's value
+     *
+     * @param string $field_nname
+     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
+     * @return void
+     */
+    public function __unset(string $field_name): void
+    {
+        $this->setValue($field_name, null);
     }
 
     /**
