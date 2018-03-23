@@ -32,8 +32,8 @@ before_script:
   - chmod +x ./cc-test-reporter
 
 script:
-  - vendor/bin/phpunit --coverage-clover clover.xml
+  - vendor/bin/phpunit --coverage-clover ./clover.xml
 
 after_script:
-  - ./cc-test-reporter format-coverage clover.xml --input-type clover --output clover.json
-  - ./cc-test-reporter upload-coverage -i clover.json -r $CC_TEST_REPORTER_ID
+  - ./cc-test-reporter format-coverage ./clover.xml --input-type clover --output ./clover.json
+  - ./cc-test-reporter upload-coverage -i ./clover.json -r $CC_TEST_REPORTER_ID
