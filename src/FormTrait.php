@@ -217,7 +217,6 @@ trait FormTrait
                     $this->Form()->{$Field->getOriginalName()}->attributes->value = $Field->CustomField->hook_setAllFormValues($Field, $value);
                     continue;
                 } catch (NotImplementedException $e) {
-                    dump('caught');
                 }
             }
 

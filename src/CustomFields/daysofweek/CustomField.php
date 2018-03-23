@@ -33,12 +33,4 @@ class CustomField extends BaseCustomField
         return $value;
     }
 
-    // public function hook_setPostValues($value)
-    // {
-    //     if(is_array($value)){
-    //         return implode('|',$value);
-    //     }else{
-    //         return $value;
-    //     }
-    // }
 }

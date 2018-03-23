@@ -189,7 +189,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             'favorite_color' => $this->Faker->hexcolor,
             'good_day' => $this->Faker->randomElement(['', 'Yes', 'No']),
             'favorite_date' => $this->Faker->date,
-            'favorite_days' => ['T'],
+            'favorite_days' => ['M', 'W', 'F'],
             'birthday' => $this->Faker->date,
             'volume' => $this->Faker->numberBetween(1, 10),
             'favorite_month' => $this->Faker->month,

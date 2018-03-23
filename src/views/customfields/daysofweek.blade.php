@@ -4,13 +4,13 @@
 
         @foreach($daysofweek as $key => $value)
             @if($view_only)
-                @if( $Field->attributes->multi_key != '' && $key == $Field->attributes->multi_key)
+                @if( is_array($Field->attributes->value) && in_array($key, $Field->attributes->value))
                     <div>{{ $value }}</div>
                 @endif
             @else
                 <span class="{{ $Field->options->wrapper_class }}">
                     <label class="{{ $Field->options->label_class }}" for="{{ $Field->attributes->id }}_{{ $loop->index }}">
-                        <input type="checkbox" name="{{ $Field->attributes->name }}[]" value="{{ $key }}" id="{{ $Field->attributes->id }}_{{ $loop->index }}" {{ ($Field->attributes->multi_value != '' && $Field->attributes->multi_value == $key ? 'checked ' : '' )}}/>
+                        <input type="checkbox" name="{{ $Field->attributes->name }}[]" value="{{ $key }}" id="{{ $Field->attributes->id }}_{{ $loop->index }}" {{ (is_array($Field->attributes->value) && in_array($key, $Field->attributes->value) ? 'checked ' : '' )}}/>
                         {{ $value }}
                     </label>
                 </span>
