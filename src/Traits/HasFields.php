@@ -4,7 +4,6 @@ namespace Nickwest\EloquentForms\Traits;
 use Nickwest\EloquentForms\Field;
 use Nickwest\EloquentForms\Theme;
 use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
-use phpDocumentor\Reflection\Types\Void_;
 
 trait HasFields
 {
