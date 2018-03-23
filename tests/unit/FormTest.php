@@ -262,6 +262,14 @@ class FormTest extends TestCase
         $this->Form->setDisplayFields(['not_a_field']);
     }
 
+    public function test_setDisplayAfter_throws_exception_on_invalid_field()
+    {
+        $field_names = array_column($this->fields, 'name');
+
+        $this->expectException(InvalidFieldException::class);
+        $this->Form->setDisplayAfter(current($field_names), 'not_a_field');
+    }
+
     public function test_form_setLabels_sets_labels_on_multiple_fields()
     {
         $labels = array_column($this->fields, 'label', 'name');
@@ -449,7 +457,7 @@ class FormTest extends TestCase
     public function test_form_removeSubmitButton_throws_an_exception_when_invalid_name_passed()
     {
         $this->expectException(InvalidFieldException::class);
-        $Field = $this->Form->getSubmitButton('not_a_button', 'some_value');
+        $Field = $this->Form->removeSubmitButton('not_a_button', 'some_value');
     }
 
     public function test_form_getSubmitButton_gets_a_submit_button()
@@ -466,7 +474,7 @@ class FormTest extends TestCase
 
     public function test_form_renameSubmitButton_renames_the_button()
     {
-        $this->Form->renameSubmitButton('submit_button', 'Submit', 'save_button', 'Save');
+        $this->Form->renameSubmitButton('submit_button', 'Submit', 'save_button', 'Save', 'myLabel');
 
         $this->assertArrayHasKey('save_buttonSave', $this->Form->getSubmitButtons());
 
@@ -474,12 +482,7 @@ class FormTest extends TestCase
 
         $this->assertEquals('Save', $button->attributes->value);
         $this->assertEquals('save_button', $button->attributes->name);
-    }
-
-    public function test_form_renameSubmitButton_throws_exception_when_invalid_field_name()
-    {
-        $this->expectException(InvalidFieldException::class);
-        $this->Form->renameSubmitButton('not_a_field_valid', 'Submit', 'new_field_name');
+        $this->assertEquals('myLabel', $button->label);
     }
 
     public function test_form_renameSubmitButton_throws_exception_when_new_field_name_already_taken()
@@ -488,6 +491,20 @@ class FormTest extends TestCase
 
         $this->expectException(InvalidFieldException::class);
         $this->Form->renameSubmitButton('submit_button', 'Submit', 'resubmit_button', 'Resubmit');
+    }
+
+    public function test_form_renameSubmitButton_doesnt_require_new_value()
+    {
+        $this->Form->renameSubmitButton('submit_button', 'Submit', 'save_button');
+        $button = $this->Form->getSubmitButton('save_button', 'Submit');
+
+        $this->assertEquals('Submit', $button->attributes->value);
+    }
+
+    public function test_form_renameSubmitButton_throws_exception_when_invalid_field_name()
+    {
+        $this->expectException(InvalidFieldException::class);
+        $this->Form->renameSubmitButton('not_a_field_valid', 'Submit', 'new_field_name');
     }
 
     public function test_form_setTheme_sets_the_theme_on_the_form()
@@ -543,6 +560,23 @@ class FormTest extends TestCase
     {
         $this->Form->setTheme(new \Nickwest\EloquentForms\Themes\bulma\Theme());
         $view = $this->Form->MakeView();
+        $this->assertInstanceOf(\Illuminate\View\View::class, $view);
+
+        $view->render();
+    }
+
+    public function test_form_can_makeSubformView_without_breaking()
+    {
+        $view = $this->Form->MakeSubformView([]);
+        $this->assertInstanceOf(\Illuminate\View\View::class, $view);
+
+        $view->render();
+    }
+
+    public function test_form_can_makeSubformView_without_breaking_bulma_theme()
+    {
+        $this->Form->setTheme(new \Nickwest\EloquentForms\Themes\bulma\Theme());
+        $view = $this->Form->MakeSubformView([]);
         $this->assertInstanceOf(\Illuminate\View\View::class, $view);
 
         $view->render();

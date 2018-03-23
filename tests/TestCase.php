@@ -1,6 +1,7 @@
 <?php namespace Nickwest\EloquentForms\Test;
 
 use Cache;
+use Faker;
 
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +12,9 @@ use Nickwest\EloquentForms\Field;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
+
+    protected $Faker = null;
+
     /**
      * Define environment setup.
      *
@@ -26,6 +30,8 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 
     public function setUp() {
         parent::setUp();
+
+        $this->Faker = Faker\Factory::create();
 
         // Clear any cache
         Cache::flush();
@@ -177,7 +183,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             'favorite_number' => $this->Faker->numberBetween(10, 5000),
             'is_hidden' => [$this->Faker->numberBetween(0,1)],
             'favorite_season' => $this->Faker->randomElement(['', 'Winter', 'Spring', 'Summer', 'Autumn']),
-            'beverage' => '',
+            'beverage' => 'Water',
             'fruits_liked' => ['Banana', 'Peach'],
             'actors_liked' => ['RDN', 'MF'],
             'favorite_color' => $this->Faker->hexcolor,
@@ -396,6 +402,7 @@ class Sample extends Model
         //$this->Form()->laravel_csrf = false;
 
         $this->Form()->good_day->options->setOptions(['Yes' => 'Yes', 'No' => 'No']);
+        $this->Form()->beverage->options->setOptions(['Beer' => 'Beer', 'Wine' => 'Wine', 'Water' => 'Water']);
 
         $this->Form()->setExamples([
             'phone_number' => 'ex: 206-685-9937',

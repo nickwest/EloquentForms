@@ -1,6 +1,5 @@
 <?php namespace Nickwest\EloquentForms\Test\unit;
 
-use Faker;
 use Config;
 
 use Illuminate\View\View;
@@ -17,8 +16,6 @@ class FormTraitTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-
-        $this->Faker = Faker\Factory::create();
 
         $this->loadMigrationsFrom(realpath(__DIR__.'/../database/migrations/'));
 
@@ -169,6 +166,7 @@ class FormTraitTest extends TestCase
 
         $this->Model->setPostValues($this->getSimulatedPostValues());
 
+        // $this->Model->isFormValid();
         // foreach($this->Model->Form()->getFields() as $Field){
         //     if($Field->error_message != ''){
         //         dd($Field->attributes->name.' '.$Field->error_message);
