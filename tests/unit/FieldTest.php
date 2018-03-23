@@ -57,6 +57,28 @@ class FieldTest extends TestCase
         $this->assertEquals('Nickwest\EloquentForms\\bulma::fields.select', $this->Field->getTemplate());
     }
 
+    public function test_field_getFormattedValue_works_with_options()
+    {
+        $this->Field->attributes->type = 'checkbox';
+        $this->Field->attributes->value = 5;
+
+        $options = ['key' => 'value', '5' => 'May'];
+        $this->Field->options->setOptions($options);
+
+        $this->assertEquals('May', $this->Field->getFormattedValue());
+
+        $this->Field->attributes->value = 'key';
+        $this->assertEquals('value', $this->Field->getFormattedValue());
+    }
+
+    public function test_field_getFormattedValue_works_without_options()
+    {
+        $this->Field->attributes->type = 'checkbox';
+        $this->Field->attributes->value = 5;
+
+        $this->assertEquals('5', $this->Field->getFormattedValue());
+    }
+
 
 
     public function test_field_toJson_returns_a_valid_json_string()

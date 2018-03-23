@@ -327,7 +327,7 @@ class Field
      */
     public function getFormattedValue(): string
     {
-        return $this->formatValue($this->value);
+        return $this->formatValue($this->attributes->value);
     }
 
     //// View Methods
