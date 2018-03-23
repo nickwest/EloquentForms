@@ -202,30 +202,6 @@ trait FormTrait
             }
 
             $this->Form()->{$Field->getOriginalName()}->attributes->value = $value;
-
-            // if($Field->attributes->type == 'checkbox' || $Field->attributes->multi_key) {
-            //     if((!isset($this->{$Field->getOriginalName()}) || ($this->{$Field->getOriginalName()} == '' && $this->{$Field->getOriginalName()} !== 0)) && $this->Form()->{$Field->getOriginalName()}->default_value != '') {
-            //         $this->Form()->{$Field->getOriginalName()}->attributes->value = $this->Form()->{$Field->getOriginalName()}->default_value;
-            //     } else {
-            //         if(!is_array($this->{$Field->getOriginalName()})){
-            //             $values = array();
-            //             foreach(explode($this->multi_delimiter, $this->{$Field->getOriginalName()}) as $value) {
-            //                 $values[$value] = $value;
-            //             }
-            //         }else{
-            //             $values = $this->{$Field->getOriginalName()}->value; // The model
-            //         }
-
-            //         $this->Form()->{$Field->getOriginalName()}->attributes->value = $values;
-            //     }
-            // } else {
-            //     // If the model doesn't have this field, then use default or empty string as the starting value
-            //     if(isset($this->{$Field->getOriginalName()})){
-            //         $this->Form()->{$Field->getOriginalName()}->attributes->value = $this->{$Field->getOriginalName()};
-            //     } else {
-            //         $this->Form()->{$Field->getOriginalName()}->attributes->value = $this->Form()->{$Field->getOriginalName()}->default_value != null ? $this->Form()->{$Field->getOriginalName()}->default_value : '';
-            //     }
-            // }
         }
     }
 
@@ -363,38 +339,56 @@ trait FormTrait
 
         // If we have a MySQL Driver, then query directly to get Enum option values
         if (DB::connection()->getDriverName() == 'mysql') {
-            $query = 'SHOW COLUMNS FROM '.$this->getTable();
-
-            foreach (DB::connection($this->connection)->select($query) as $column) {
-                $this->columns[$column->Field] = [
-                    'name' => $column->Field,
-                    'type' => $this->getSQLType($column->Type),
-                    'default' => $column->Default,
-                    'length' => $this->getSQLLength($column->Type),
-                    'values' => $this->getSQLEnumOptions($column->Type, $column->{'Null'} == 'YES'),
-                ];
-                $this->valid_columns[$column->Field] = $column->Field;
-            }
+            $this->setColumnsFromMySQL();
         }
         // Otherwise query through Doctrine so we can get something still.
         else {
-            $columns = DB::connection()->getSchemaBuilder()->getColumnListing($this->table);
-
-            foreach ($columns as $column_name) {
-                $DoctrineColumn = DB::connection()->getDoctrineColumn($this->getTable(), $column_name);
-
-                $this->columns[$column_name] = [
-                    'name' => $column_name,
-                    'type' => $DoctrineColumn->getType()->getName(),
-                    'default' => $DoctrineColumn->getDefault(),
-                    'length' => $DoctrineColumn->getLength(),
-                    'values' => null,
-                ];
-                $this->valid_columns[$column_name] = $column_name;
-            }
+            $this->setColumnsFromOther();
         }
 
         return $this->columns;
+    }
+
+    /**
+     * Set columns using data we can get through Doctrine
+     */
+    private function setColumnsFromOther(): void
+    {
+        $columns = DB::connection()->getSchemaBuilder()->getColumnListing($this->table);
+
+        foreach ($columns as $column_name) {
+            $DoctrineColumn = DB::connection()->getDoctrineColumn($this->getTable(), $column_name);
+
+            $this->columns[$column_name] = [
+                'name' => $column_name,
+                'type' => $DoctrineColumn->getType()->getName(),
+                'default' => $DoctrineColumn->getDefault(),
+                'length' => $DoctrineColumn->getLength(),
+                'values' => null,
+            ];
+            $this->valid_columns[$column_name] = $column_name;
+        }
+    }
+
+    /**
+     * If we have a MySQL Driver, then query directly to get Enum option values
+     *
+     * @return void
+     */
+    private function setColumnsFromMySQL(): void
+    {
+        $query = 'SHOW COLUMNS FROM '.$this->getTable();
+
+        foreach (DB::connection($this->connection)->select($query) as $column) {
+            $this->columns[$column->Field] = [
+                'name' => $column->Field,
+                'type' => $this->getSQLType($column->Type),
+                'default' => $column->Default,
+                'length' => $this->getSQLLength($column->Type),
+                'values' => $this->getSQLEnumOptions($column->Type, $column->{'Null'} == 'YES'),
+            ];
+            $this->valid_columns[$column->Field] = $column->Field;
+        }
     }
 
     /**
