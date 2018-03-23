@@ -187,13 +187,15 @@ class Table
 
         $replaced = $this->field_replacements[$field];
 
-        if (is_array($results[0]) && is_array($results[1])) {
-            foreach ($results[0] as $key => $match) {
-                if (is_object($Object) && isset($Object->{$results[1][$key]})) {
-                    $replaced = str_replace($results[0][$key], e($Object->{$results[1][$key]}), $replaced);
-                } elseif (is_array($Object) && isset($Object[$results[1][$key]])) {
-                    $replaced = str_replace($results[0][$key], e($Object[$results[1][$key]]), $replaced);
-                }
+        if (!is_array($results[0]) || !is_array($results[1])) {
+            return $replaced;
+        }
+
+        foreach ($results[0] as $key => $match) {
+            if (is_object($Object) && isset($Object->{$results[1][$key]})) {
+                $replaced = str_replace($results[0][$key], e($Object->{$results[1][$key]}), $replaced);
+            } elseif (is_array($Object) && isset($Object[$results[1][$key]])) {
+                $replaced = str_replace($results[0][$key], e($Object[$results[1][$key]]), $replaced);
             }
         }
 

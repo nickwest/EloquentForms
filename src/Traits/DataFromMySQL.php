@@ -47,6 +47,8 @@ trait DataFromMySQL
                 return $key;
             }
         }
+
+        return 'varchar';
     }
 
     /**
