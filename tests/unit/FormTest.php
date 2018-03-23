@@ -37,6 +37,14 @@ class FormTest extends TestCase
         $this->assertInstanceOf(\Nickwest\EloquentForms\Form::class, $this->Form->another_subform->Subform);
     }
 
+    public function test_form_addSubForm_adds_a_subform_to_the_form_throws_exception()
+    {
+        $SubForm = new Form();
+
+        $this->expectException(InvalidFieldException::class);
+        $this->Form->addSubForm('another_subform', $SubForm, 'not_a_field');
+    }
+
     public function test_form_SubForm_fields_are_accessible()
     {
         foreach($this->sub_fields as $field){
@@ -246,6 +254,12 @@ class FormTest extends TestCase
         $field_names = array_slice($field_names, 2, 4, true);
         $this->Form->setDisplayFields($field_names);
         $this->assertEquals($field_names, $this->Form->getDisplayFieldNames());
+    }
+
+    public function test_form_setDisplayFields_throws_exception_on_invalid_field()
+    {
+        $this->expectException(InvalidFieldException::class);
+        $this->Form->setDisplayFields(['not_a_field']);
     }
 
     public function test_form_setLabels_sets_labels_on_multiple_fields()

@@ -79,8 +79,6 @@ class FieldTest extends TestCase
         $this->assertEquals('5', $this->Field->getFormattedValue());
     }
 
-
-
     public function test_field_toJson_returns_a_valid_json_string()
     {
         $json = $this->Field->toJson();

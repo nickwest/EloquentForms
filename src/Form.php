@@ -253,7 +253,7 @@ class Form
         // TODO: add validation on field_names?
         foreach ($field_names as $field) {
             if (! isset($this->Fields[$field])) {
-                throw new InvalidFieldException($field_name.' is not part of the Form');
+                throw new InvalidFieldException($field.' is not part of the Form');
             }
             $fields[$field] = $field;
         }
