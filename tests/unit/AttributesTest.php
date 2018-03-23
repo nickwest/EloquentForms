@@ -40,9 +40,11 @@ class AttributesTest extends TestCase
         // Set some attributes
         $Attributes->disabled = null;
         $Attributes->id = 'my id';
+        $Attributes->class = 'pizza';
 
         $this->assertTrue(isset($Attributes->disabled));
         $this->assertTrue(isset($Attributes->id));
+        $this->assertTrue(isset($Attributes->class));
     }
 
     public function test_attributes_unset_magic_method_unsets_an_attribute()
@@ -52,12 +54,15 @@ class AttributesTest extends TestCase
         // Set some attributes
         $Attributes->disabled = null;
         $Attributes->id = 'my id';
+        $Attributes->class = 'pizza';
 
         unset($Attributes->disabled);
         unset($Attributes->id);
+        unset($Attributes->class);
 
         $this->assertFalse(isset($Attributes->disabled));
         $this->assertFalse(isset($Attributes->id));
+        $this->assertFalse(isset($Attributes->class));
     }
 
     public function test_attributes_getting_an_invalid_attribute_returns_null()
@@ -203,6 +208,20 @@ class AttributesTest extends TestCase
 
         $Attributes->multi_key = 1;
         $this->assertEquals('name="people[1]" multiple', (string)$Attributes);
+    }
+
+    public function test_attributes_getString_returns_a_string_properly()
+    {
+        $Attributes = new Attributes();
+
+        $Attributes->name = 'people';
+        $Attributes->value = 'June';
+        $Attributes->{'data-test'} = '123abc';
+        $Attributes->multi_key = true;
+        $Attributes->addClass('test');
+        $Attributes->addClass('pizza');
+
+        $this->assertEquals('name="people[]" value="June" data-test="123abc" class="test pizza" multiple', $Attributes->getString());
     }
 
     public function test_attributes_toJson_produces_a_json_string()
