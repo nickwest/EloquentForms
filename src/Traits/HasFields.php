@@ -1,4 +1,5 @@
 <?php
+
 namespace Nickwest\EloquentForms\Traits;
 
 use Nickwest\EloquentForms\Field;
@@ -15,12 +16,12 @@ trait HasFields
     protected $Fields = [];
 
     /**
-     * Require getTheme method
+     * Require getTheme method.
      */
     abstract public function getTheme(): Theme;
 
     /**
-     * Require setTheme method
+     * Require setTheme method.
      */
     abstract public function setTheme(Theme $Theme): void;
 
@@ -62,7 +63,7 @@ trait HasFields
     }
 
     /**
-     * Unset a field's value
+     * Unset a field's value.
      *
      * @param string $field_nname
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
@@ -168,7 +169,7 @@ trait HasFields
         return isset($this->Fields[$field_name]) && is_object($this->Fields[$field_name]);
     }
 
-        /**
+    /**
      * Get an array of field values keyed by field name.
      *
      * @return array
@@ -238,6 +239,4 @@ trait HasFields
             }
         }
     }
-
-
 }

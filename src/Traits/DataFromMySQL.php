@@ -1,4 +1,5 @@
 <?php
+
 namespace Nickwest\EloquentForms\Traits;
 
 use Illuminate\Support\Facades\DB;
@@ -6,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 trait DataFromMySQL
 {
     /**
-     * If we have a MySQL Driver, then query directly to get Enum option values
+     * If we have a MySQL Driver, then query directly to get Enum option values.
      *
      * @return void
      */

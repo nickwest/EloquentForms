@@ -187,7 +187,7 @@ class Table
 
         $replaced = $this->field_replacements[$field];
 
-        if (!is_array($results[0]) || !is_array($results[1])) {
+        if (! is_array($results[0]) || ! is_array($results[1])) {
             return $replaced;
         }
 

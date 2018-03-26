@@ -32,5 +32,4 @@ class CustomField extends BaseCustomField
 
         return $value;
     }
-
 }

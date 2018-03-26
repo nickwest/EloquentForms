@@ -4,8 +4,8 @@ namespace Nickwest\EloquentForms;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Nickwest\EloquentForms\Exceptions\NotImplementedException;
 use Nickwest\EloquentForms\Traits\DataFromMySQL;
+use Nickwest\EloquentForms\Exceptions\NotImplementedException;
 
 trait FormTrait
 {
@@ -34,7 +34,7 @@ trait FormTrait
      */
     protected $blank_select_text = '-- Select One --';
 
-     /**
+    /**
      * @var string
      */
     protected $multi_delimiter = '|';
@@ -55,7 +55,7 @@ trait FormTrait
     }
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @return mixed
      */
@@ -77,7 +77,7 @@ trait FormTrait
     }
 
     /**
-     * Get the form object
+     * Get the form object.
      *
      * @return Form
      */
@@ -374,7 +374,7 @@ trait FormTrait
     }
 
     /**
-     * Set columns using data we can get through Doctrine
+     * Set columns using data we can get through Doctrine.
      */
     private function setColumnsFromOther(): void
     {

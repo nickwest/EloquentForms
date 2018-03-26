@@ -544,6 +544,7 @@ class Form
 
         if ($name == $new_name && $value == $new_value) {
             $this->SubmitFields[$name.$value]->label = $new_label;
+
             return;
         }
 
