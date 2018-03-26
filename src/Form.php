@@ -360,6 +360,19 @@ class Form
         }
     }
 
+     /**
+     * Add label suffix to all current fields
+     *
+     * @param string $suffix
+     * @return void
+     */
+    public function setLabelSuffix(string $suffix): void
+    {
+        foreach($this->Fields as $Field){
+            $Field->label_suffix = $suffix;
+        }
+    }
+
     /**
      * Get a list of all labels for the given $field_names, if $field_names is blank, get labels for all fields.
      *

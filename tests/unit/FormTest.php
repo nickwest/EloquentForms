@@ -439,7 +439,7 @@ class FormTest extends TestCase
 
     public function test_form_addSubmitButton_adds_a_submit_button()
     {
-        $this->Form->addSubmitButton('resubmit_button', 'Resubmit', 'is-warning');
+        $this->Form->addSubmitButton('resubmit_button', 'Resubmit', null, 'is-warning');
 
         $this->assertInstanceOf(\Nickwest\EloquentForms\Field::class, $this->Form->getSubmitButton('resubmit_button', 'Resubmit'));
         $this->assertArrayHasKey('resubmit_buttonResubmit', $this->Form->getSubmitButtons());
@@ -447,7 +447,7 @@ class FormTest extends TestCase
 
     public function test_form_removeSubmitButton_removes_a_submit_button()
     {
-        $this->Form->addSubmitButton('resubmit_button', 'Resubmit', 'is-warning');
+        $this->Form->addSubmitButton('resubmit_button', 'Resubmit', null, 'is-warning');
         $this->Form->removeSubmitButton('submit_button', 'Submit');
 
         $this->expectException(InvalidFieldException::class);
@@ -487,7 +487,7 @@ class FormTest extends TestCase
 
     public function test_form_renameSubmitButton_throws_exception_when_new_field_name_already_taken()
     {
-        $this->Form->addSubmitButton('resubmit_button', 'Resubmit', 'is-warning');
+        $this->Form->addSubmitButton('resubmit_button', 'Resubmit', null, 'is-warning');
 
         $this->expectException(InvalidFieldException::class);
         $this->Form->renameSubmitButton('submit_button', 'Submit', 'resubmit_button', 'Resubmit');
