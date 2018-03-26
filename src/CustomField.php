@@ -11,7 +11,7 @@ abstract class CustomField
     abstract public function makeView(Field $Field, bool $prev_inline = false);
 
     /**
-     * Hook for FormTrait::setAllFormValues allowing CustomField to modify value
+     * Hook for FormTrait::setAllFormValues allowing CustomField to modify value.
      *
      * @param Nickwest\EloquentForms\Field $Field
      * @param mixed $value
@@ -24,7 +24,7 @@ abstract class CustomField
     }
 
     /**
-     * Hook for FormTrait::setPostValues allowing CustomField to modify value
+     * Hook for FormTrait::setPostValues allowing CustomField to modify value.
      *
      * @param mixed $value
      *
