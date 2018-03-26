@@ -181,7 +181,7 @@ class Table
      */
     public function getFieldReplacement(string $field, &$Object): string
     {
-        $pattern = '/\{([a-zA-Z0-9_]+)\}/';
+        $pattern = '/\{([a-zA-Z0-9_\?]+)\}/';
         $results = [];
         preg_match_all($pattern, $this->field_replacements[$field], $results, PREG_PATTERN_ORDER);
 
@@ -192,10 +192,19 @@ class Table
         }
 
         foreach ($results[0] as $key => $match) {
+            // If it's an option parameter, drop the question market
+            $optional = false;
+            if(strpos($results[1][$key], '?') !== false){
+                $optional = true;
+                $results[1][$key] = str_replace('?', '', $results[1][$key]);
+            }
+
             if (is_object($Object) && isset($Object->{$results[1][$key]})) {
                 $replaced = str_replace($results[0][$key], e($Object->{$results[1][$key]}), $replaced);
             } elseif (is_array($Object) && isset($Object[$results[1][$key]])) {
                 $replaced = str_replace($results[0][$key], e($Object[$results[1][$key]]), $replaced);
+            }elseif($optional){
+                $replaced = str_replace($results[0][$key], '', $replaced);
             }
         }
 
@@ -219,19 +228,36 @@ class Table
      *
      * @param string $field_name
      * @param string $route_name
+     * @param array $replacement_map
      * @param mixed $query_string
      * @return void
      * @throws Nickwest\EloquentForms\InvalidRouteException
      */
-    public function addLinkingPatternByRoute(string $field_name, string $route_name, $query_string = []): void
+    public function addLinkingPatternByRoute(string $field_name, string $route_name, array $replacement_map=[], $query_string = []): void
     {
         $Route = Route::getRoutes()->getByName($route_name);
         if ($Route == null) {
             throw new InvalidRouteException('Invalid route name '.$route_name);
         }
 
+        $uri = $Route->uri;
+        foreach($replacement_map as $key => $new) {
+            $uri = str_replace($key, $new, $uri);
+        }
+
+        if(is_array($query_string) && count($query_string) > 0){
+            $uri .= '?'.implode('&', array_map(function($key, $val){
+                return $key.'='.$val;
+            }, array_keys($query_string), $query_string));
+        }elseif(is_string($query_string)){
+            $uri .= '?'.$query_string;
+        }
+
+        // If it already has a linking pattern, replace $field_name with that linking pattern
+        $link_text = (isset($this->field_replacements[$field_name]) ? $this->field_replacements[$field_name] : '{'.$field_name.'}');
+
         // Make and set the linking pattern
-        $this->field_replacements[$field_name] = '<a href="/'.$Route->uri.'">{'.$field_name.'}</a>';
+        $this->field_replacements[$field_name] = '<a href="/'.$uri.'">'.$link_text.'</a>';
     }
 
     /**
