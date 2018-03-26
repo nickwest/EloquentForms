@@ -507,6 +507,14 @@ class FormTest extends TestCase
         $this->Form->renameSubmitButton('not_a_field_valid', 'Submit', 'new_field_name');
     }
 
+    public function test_form_renameSubmitButton_can_be_used_to_only_change_label()
+    {
+        $this->Form->renameSubmitButton('submit_button', 'Submit', 'submit_button', 'Submit', 'New Label');
+        $button = $this->Form->getSubmitButton('submit_button', 'Submit');
+
+        $this->assertEquals('New Label', $button->label);
+    }
+
     public function test_form_setTheme_sets_the_theme_on_the_form()
     {
         // Verify it starts with the Default theme set

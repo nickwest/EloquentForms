@@ -542,6 +542,11 @@ class Form
             $new_value = $value;
         }
 
+        if ($name == $new_name && $value == $new_value) {
+            $this->SubmitFields[$name.$value]->label = $new_label;
+            return;
+        }
+
         if (isset($this->SubmitFields[$new_name.$new_value])) {
             throw new InvalidFieldException($new_name.' '.$new_value.' already exists');
         }
