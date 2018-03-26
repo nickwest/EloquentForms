@@ -26,7 +26,7 @@
         <whitelist>
             <directory suffix=".php">./src/</directory>
             <exclude>
-                <directory suffix=".php">./src/views</directory>
+                <directory suffix=".blade.php">./</directory>
             </exclude>
         </whitelist>
     </filter>
