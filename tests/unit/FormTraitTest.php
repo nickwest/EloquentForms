@@ -131,6 +131,19 @@ class FormTraitTest extends TestCase
         $this->assertEquals($expected, $this->Model->fruits_liked);
     }
 
+    public function test_formtrait_setPostValues_will_set_boolean_checkboxes_to_false_when_null()
+    {
+        $post_data = $this->getSimulatedPostValues();
+
+        // Single checkbox will not be in the post
+        unset($post_data['is_hidden']);
+
+        $this->Model->setPostValues($post_data);
+
+        $this->assertSame(false, $this->Model->is_hidden);
+        $this->assertSame(false, $this->Model->Form()->is_hidden->attributes->value);
+    }
+
     public function test_formtrait_models_force_validation_on_save_by_default()
     {
         $this->assertAttributeEquals(true, 'validate_on_save', $this->Model);
