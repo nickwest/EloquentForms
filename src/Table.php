@@ -28,6 +28,13 @@ class Table
     public $Collection = [];
 
     /**
+     * Fields that should not have htmlspecialchars applied
+     *
+     * @var array
+     */
+    public $raw_fields = [];
+
+    /**
      * Array of field names.
      *
      * @var array
@@ -200,9 +207,9 @@ class Table
             }
 
             if (is_object($Object) && isset($Object->{$results[1][$key]})) {
-                $replaced = str_replace($results[0][$key], e($Object->{$results[1][$key]}), $replaced);
+                $replaced = $this->fieldReplaceString($results[0][$key], $Object->{$results[1][$key]}, $replaced, $results[1][$key]);
             } elseif (is_array($Object) && isset($Object[$results[1][$key]])) {
-                $replaced = str_replace($results[0][$key], e($Object[$results[1][$key]]), $replaced);
+                $replaced = $this->fieldReplaceString($results[0][$key], $Object[$results[1][$key]], $replaced, $results[1][$key]);
             }elseif($optional){
                 $replaced = str_replace($results[0][$key], '', $replaced);
             }
@@ -210,6 +217,26 @@ class Table
 
         return $replaced;
     }
+
+    /**
+     * String replace for specific field, conditionally uses htmlspecialchars.
+     *
+     * @param string $search
+     * @param string $replace
+     * @param string $subject
+     * @param string $field
+     * @return string
+     */
+    protected function fieldReplaceString($search, $replace, $subject, $field){
+        if(in_array($field, $this->raw_fields)){
+            $replaced = str_replace($search, $replace, $subject);
+        }else{
+            $replaced = str_replace($search, e($replace), $subject);
+        }
+
+        return $replaced;
+    }
+
 
     /**
      *  Convenience method for setting a linking pattern on a field.
