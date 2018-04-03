@@ -10,7 +10,7 @@ use Nickwest\EloquentForms\Test\TestCase;
 
 class DataFromMySQLTraitTest extends TestCase
 {
-    use RefreshDatabase;
+    // use RefreshDatabase; // A bug in Laravel <5.6.4 causes this to fail tests
 
     public function setUp()
     {
