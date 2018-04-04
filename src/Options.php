@@ -236,7 +236,7 @@ class Options
         $array = json_decode($json);
 
         foreach ($array as $key => $value) {
-            if($key == 'options') {
+            if ($key == 'options') {
                 $this->setOptions((array) $value);
             } elseif (is_object($value)) {
                 $this->$key = (array) $value;

@@ -39,7 +39,7 @@ class Theme extends \Nickwest\EloquentForms\Theme
     public function prepareFormView(\Nickwest\EloquentForms\Form &$Form): void
     {
         foreach ($Form->getSubmitButtons() as $Button) {
-            if(strtolower($Button->label) == 'save' || strtolower($Button->label) == 'submit'){
+            if (strtolower($Button->label) == 'save' || strtolower($Button->label) == 'submit') {
                 $Button->attributes->addClass('is-success');
             }
         }
