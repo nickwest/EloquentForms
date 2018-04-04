@@ -413,7 +413,7 @@ class Sample extends Model
         $this->Form()->volume->attributes->step = 5;
         $this->Form()->volume->attributes->list = 'volumes';
 
-        $this->Form()->addDatalist('volumes', [ 5 => '5', 10 => '', 15 => '', 20 => '20', 25 => '', 30 => '', 35 => '', 40 => '40']);
+        $this->Form()->addDatalist('volumes', [ '5' => '5', '10' => '', '15' => '', '20' => '20', '25' => '', '30' => '', '35' => '', '40' => '40']);
 
         $this->Form()->phone_number->attributes->pattern = '\\d{3}[\\-]\\d{3}[\\-]\\d{4}';
         $this->Form()->phone_number->attributes->placeholder = '123-456-7890';
