@@ -28,7 +28,7 @@ class Table
     public $Collection = [];
 
     /**
-     * Fields that should not have htmlspecialchars applied
+     * Fields that should not have htmlspecialchars applied.
      *
      * @var array
      */
@@ -201,7 +201,7 @@ class Table
         foreach ($results[0] as $key => $match) {
             // If it's an option parameter, drop the question market
             $optional = false;
-            if(strpos($results[1][$key], '?') !== false){
+            if (strpos($results[1][$key], '?') !== false) {
                 $optional = true;
                 $results[1][$key] = str_replace('?', '', $results[1][$key]);
             }
@@ -210,7 +210,7 @@ class Table
                 $replaced = $this->fieldReplaceString($results[0][$key], $Object->{$results[1][$key]}, $replaced, $results[1][$key]);
             } elseif (is_array($Object) && isset($Object[$results[1][$key]])) {
                 $replaced = $this->fieldReplaceString($results[0][$key], $Object[$results[1][$key]], $replaced, $results[1][$key]);
-            }elseif($optional){
+            } elseif ($optional) {
                 $replaced = str_replace($results[0][$key], '', $replaced);
             }
         }
@@ -227,16 +227,16 @@ class Table
      * @param string $field
      * @return string
      */
-    protected function fieldReplaceString($search, $replace, $subject, $field){
-        if(in_array($field, $this->raw_fields)){
+    protected function fieldReplaceString($search, $replace, $subject, $field)
+    {
+        if (in_array($field, $this->raw_fields)) {
             $replaced = str_replace($search, $replace, $subject);
-        }else{
+        } else {
             $replaced = str_replace($search, e($replace), $subject);
         }
 
         return $replaced;
     }
-
 
     /**
      *  Convenience method for setting a linking pattern on a field.
@@ -260,7 +260,7 @@ class Table
      * @return void
      * @throws Nickwest\EloquentForms\InvalidRouteException
      */
-    public function addLinkingPatternByRoute(string $field_name, string $route_name, array $replacement_map=[], $query_string = []): void
+    public function addLinkingPatternByRoute(string $field_name, string $route_name, array $replacement_map = [], $query_string = []): void
     {
         $Route = Route::getRoutes()->getByName($route_name);
         if ($Route == null) {
@@ -268,15 +268,15 @@ class Table
         }
 
         $uri = $Route->uri;
-        foreach($replacement_map as $key => $new) {
+        foreach ($replacement_map as $key => $new) {
             $uri = str_replace($key, $new, $uri);
         }
 
-        if(is_array($query_string) && count($query_string) > 0){
-            $uri .= '?'.implode('&', array_map(function($key, $val){
+        if (is_array($query_string) && count($query_string) > 0) {
+            $uri .= '?'.implode('&', array_map(function ($key, $val) {
                 return $key.'='.$val;
             }, array_keys($query_string), $query_string));
-        }elseif(is_string($query_string)){
+        } elseif (is_string($query_string)) {
             $uri .= '?'.$query_string;
         }
 

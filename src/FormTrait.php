@@ -183,7 +183,7 @@ trait FormTrait
             }
 
             // If this is a boolean checkbox, set it to false when it's missing.
-            if($this->Form()->{$Field->getOriginalName()}->attributes->type == 'checkbox' && count($this->Form()->{$Field->getOriginalName()}->options->getOptions()) == 1){
+            if ($this->Form()->{$Field->getOriginalName()}->attributes->type == 'checkbox' && count($this->Form()->{$Field->getOriginalName()}->options->getOptions()) == 1) {
                 $this->Form()->{$Field->getOriginalName()}->attributes->value = false;
                 $this->{$Field->getOriginalName()} = false;
             }
