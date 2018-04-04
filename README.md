@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/nickwest/EloquentForms.svg?branch=5.5.x)](https://travis-ci.org/nickwest/EloquentForms) [![Latest Stable Version](https://poser.pugx.org/nickwest/eloquent-forms/v/stable)](https://packagist.org/packages/nickwest/eloquent-forms) [![License](https://poser.pugx.org/nickwest/eloquent-forms/license)](https://packagist.org/packages/nickwest/eloquent-forms) [![Style](https://styleci.io/repos/123993557/shield)](https://styleci.io/repos/123993557) [![Maintainability](https://api.codeclimate.com/v1/badges/f986a765708538da7e5e/maintainability)](https://codeclimate.com/github/nickwest/EloquentForms/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/f986a765708538da7e5e/test_coverage)](https://codeclimate.com/github/nickwest/EloquentForms/test_coverage)
+[![Build Status](https://travis-ci.org/nickwest/EloquentForms.svg?branch=5.6.x)](https://travis-ci.org/nickwest/EloquentForms) [![Latest Stable Version](https://poser.pugx.org/nickwest/eloquent-forms/v/stable)](https://packagist.org/packages/nickwest/eloquent-forms) [![License](https://poser.pugx.org/nickwest/eloquent-forms/license)](https://packagist.org/packages/nickwest/eloquent-forms) [![Style](https://styleci.io/repos/123993557/shield)](https://styleci.io/repos/123993557) [![Maintainability](https://api.codeclimate.com/v1/badges/f986a765708538da7e5e/maintainability)](https://codeclimate.com/github/nickwest/EloquentForms/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/f986a765708538da7e5e/test_coverage)](https://codeclimate.com/github/nickwest/EloquentForms/test_coverage)
 
 EloquentForms
 =================
@@ -11,7 +11,7 @@ EloquentForms can be easily themed to support various front-end css/js framework
 
 ## Installation
 
-EloquentForms requires PHP 7.2+. This particular version supports Laravel 5.5.x. It was not tested on older versions.
+EloquentForms requires PHP 7.1.3+. This particular version supports Laravel 5.6.x. To install on Laravel 5.5.x use the 5.5.x release of EloquentForms.
 
 To get the latest version you need only require the package via Composer.
 ```
@@ -90,7 +90,7 @@ class Sample extends Model{
         // Fields set up as Enums in the database will automatically have enum
         // options available, but enums are not requires for multiple choice fields
 
-        $this->Form()->fruits_they_like->setOptions([
+        $this->Form()->fruits_they_like->options->setOptions([
             'banana' => 'Banana',
             'strawberry' => 'Strawberry',
             'apple' => 'Apple',
@@ -102,7 +102,7 @@ class Sample extends Model{
             'pineapple' => 'Pineapple'
         ]);
 
-        $this->Form()->meal_choice->setOptions([
+        $this->Form()->meal_choice->options->setOptions([
             'cheap_meal' => 'Chicken',
             'average_meal' => 'Beef',
             'expensive_meal' => 'Lobster',
@@ -126,8 +126,8 @@ class Sample extends Model{
         // https://laravel.com/docs/5.5/validation
         $this->validation_rules = [
             'email' => 'email|max:256',
-            'fruits_they_like' => 'in:'.implode(',', array_keys($this->Form()->fruits_they_like->options)),
-            'meal_choice' => 'in:'.implode(',', array_keys($this->Form()->meal_choice->options)),
+            'fruits_they_like' => 'in:'.implode(',', array_keys($this->Form()->fruits_they_like->options->getOptions()),
+            'meal_choice' => 'in:'.implode(',', array_keys($this->Form()->meal_choice->options->getOptions())),
             // you can add an validation rules you want here.
         ];
 
