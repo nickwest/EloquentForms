@@ -162,7 +162,7 @@ use Nickwest\EloquentForms\TableTrait;
 class myController extends Controller
 {
     use TableTrait;
-    
+
     // Make a form, and display it extending another blade template
     public function myGetFormMethod(Request $request, int $id=0)
     {
@@ -192,7 +192,7 @@ class myController extends Controller
         return $Sample->getFormView($blade_data, 'base_layout', 'content');
     }
 
-	// Make a listing view (table output)
+    // Make a listing view (table output)
     public function myGetListingMethod()
     {
         // Use the bulma theme
@@ -212,18 +212,21 @@ class myController extends Controller
 
         // Get the collection
         $Samples = Sample::all();
-        
+
         // Return just the table, but this can also extend another view just like Forms (see TableTrait::getTableView() for details)
-        return $this->getTableView($Samples);    
+        return $this->getTableView($Samples);
     }
-    
+
     public functionn myExportMethod()
     {
-        $Table = new Table();
-        // put the data in there...
-        $Table->setData(collect($some_data)); // This can be any collection of data
+        // Get some data
+        $Samples = Sample::all();
 
-        return Excel::download($Table->Exporter, 'filename.xlsx');
+        // Set the data (It'll take any collection)
+        $this->Table()->setData($Samples);
+
+        // Export to excel
+        return Excel::download($this->Table()->Exporter, 'filename.xlsx');
     }
 }
 
