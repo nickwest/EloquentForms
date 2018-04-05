@@ -155,8 +155,16 @@ class Sample extends Model{
 ### The Controller
 
 ```
-    // The GET route for the form page
-    public function getForm(Request $request, int $id=0)
+use Excel;
+
+use Nickwest\EloquentForms\TableTrait;
+
+class myController extends Controller
+{
+    use TableTrait;
+    
+    // Make a form, and display it extending another blade template
+    public function myGetFormMethod(Request $request, int $id=0)
     {
         $blade_data = [
             'page_title' => 'Sample Form',
@@ -183,6 +191,42 @@ class Sample extends Model{
         // Make a view that extends 'base_layout'
         return $Sample->getFormView($blade_data, 'base_layout', 'content');
     }
+
+	// Make a listing view (table output)
+    public function myGetListingMethod()
+    {
+        // Use the bulma theme
+        $this->Table()->setTheme(new \Nickwest\EloquentForms\Themes\bulma\Theme());
+
+        // Set some extra bulma classes onto the table
+        $this->Table()->attributes->addClasses(['is-bordered', 'is-striped', 'is-narrow', 'is-fullwidth']);
+
+        // Column headings
+        $this->Table()->setLabels([
+            'phone_number' => 'Calling digits',
+        ]);
+
+        // Make it so this field links to somewhere
+        $this->Table()->addLinkingPattern('last_name', '/sample/form/{id}');
+        $this->Table()->addLinkingPattern('email', 'mailto:{email}');
+
+        // Get the collection
+        $Samples = Sample::all();
+        
+        // Return just the table, but this can also extend another view just like Forms (see TableTrait::getTableView() for details)
+        return $this->getTableView($Samples);    
+    }
+    
+    public functionn myExportMethod()
+    {
+        $Table = new Table();
+        // put the data in there...
+        $Table->setData(collect($some_data)); // This can be any collection of data
+
+        return Excel::download($Table->Exporter, 'filename.xlsx');
+    }
+}
+
 ```
 
 ### Submit buttons
@@ -206,6 +250,8 @@ Submit buttons can have duplicate names and the array of submit buttons is keyed
     $Form->renameSubmitButton('submit_button', 'Submit', 'save_button', 'Save');
 
 ```
+
+
 
 ## Misc
 
