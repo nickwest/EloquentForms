@@ -209,7 +209,7 @@ class TableTest extends TestCase
     public function test_table_collection_returns_a_collection()
     {
         $this->Table->setDisplayFields($this->display_fields);
-        $this->assertInstanceOf(Collection::class, $this->Table->collection());
+        $this->assertInstanceOf(Collection::class, $this->Table->Exporter->collection());
     }
 
     public function test_table_is_exportable_by_LaravelExcel_and_creates_a_file()
@@ -224,7 +224,7 @@ class TableTest extends TestCase
         $this->Table->setLabels($labels);
 
         // Make sure a file is generated
-        Excel::store($this->Table, 'test.xlsx');
+        Excel::store($this->Table->Exporter, 'test.xlsx');
         $this->assertTrue(Storage::exists('test.xlsx'));
 
         // And it is not empty
