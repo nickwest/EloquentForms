@@ -2,6 +2,7 @@
 
 use Faker;
 use Route;
+use Storage;
 
 use Illuminate\Support\Collection;
 
@@ -9,6 +10,8 @@ use Nickwest\EloquentForms\Table;
 use Nickwest\EloquentForms\Test\TestCase;
 use Nickwest\EloquentForms\Exceptions\InvalidRouteException;
 use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
+
+use Maatwebsite\Excel\Facades\Excel;
 
 class TableTest extends TestCase
 {
@@ -202,6 +205,35 @@ class TableTest extends TestCase
 
         $this->assertInstanceOf(\Illuminate\View\View::class, $View);
     }
+
+    public function test_table_collection_returns_a_collection()
+    {
+        $this->Table->setDisplayFields($this->display_fields);
+        $this->assertInstanceOf(Collection::class, $this->Table->collection());
+    }
+
+    public function test_table_is_exportable_by_LaravelExcel_and_creates_a_file()
+    {
+        $this->Table->setDisplayFields($this->display_fields);
+        $labels = [
+            'name' => 'Name',
+            'email' => 'E-mail',
+            'birthday' => 'Birthday',
+        ];
+
+        $this->Table->setLabels($labels);
+
+        // Make sure a file is generated
+        Excel::store($this->Table, 'test.xlsx');
+        $this->assertTrue(Storage::exists('test.xlsx'));
+
+        // And it is not empty
+        $this->assertGreaterThan(0, Storage::size('test.xlsx'));
+
+        // Clean up
+        Storage::delete('test.xlsx');
+    }
+
 
     /**
      *  Make a test collection full of data

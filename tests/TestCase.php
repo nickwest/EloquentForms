@@ -43,6 +43,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             \Orchestra\Database\ConsoleServiceProvider::class,
             \Nickwest\EloquentForms\EloquentFormsServiceProvider::class,
             \Nickwest\EloquentForms\Themes\bulma\EloquentFormsBulmaThemeServiceProvider::class,
+            \Maatwebsite\Excel\ExcelServiceProvider::class,
         ];
     }
 
