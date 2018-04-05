@@ -46,5 +46,5 @@ script:
   - if [ "$COVERAGE" == "0" ]; then vendor/bin/phpunit; fi
 
 after_script:
-  - ./cc-test-reporter format-coverage /home/travis/clover.xml --input-type clover --output /home/travis/clover.json
-  - ./cc-test-reporter upload-coverage -i /home/travis/clover.json -r $CC_TEST_REPORTER_ID
+  - if [ "$COVERAGE" == "1" ]; then ./cc-test-reporter format-coverage /home/travis/clover.xml --input-type clover --output /home/travis/clover.json; fi
+  - if [ "$COVERAGE" == "1" ]; them ./cc-test-reporter upload-coverage -i /home/travis/clover.json -r $CC_TEST_REPORTER_ID; fi
