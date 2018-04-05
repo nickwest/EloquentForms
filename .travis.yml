@@ -13,11 +13,13 @@ matrix:
   fast_finish: true
   include:
     - php: 7.2
+      env: COVERAGE=1
     - php: 7.2
-      env: setup=lowest
+      env: setup=lowest COVERAGE=0
     - php: 7.1
+      env: COVERAGE=0
     - php: 7.1
-      env: setup=lowest
+      env: setup=lowest COVERAGE=0
 
 sudo: false
 
@@ -40,7 +42,8 @@ before_script:
   - chmod +x ./cc-test-reporter
 
 script:
-  - vendor/bin/phpunit --coverage-clover /home/travis/clover.xml
+  - if [ "$COVERAGE" == "1" ]; then vendor/bin/phpunit --coverage-clover /home/travis/clover.xml; fi
+  - if [ "$COVERAGE" == "0" ]; then vendor/bin/phpunit; fi
 
 after_script:
   - ./cc-test-reporter format-coverage /home/travis/clover.xml --input-type clover --output /home/travis/clover.json
