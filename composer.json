@@ -10,9 +10,10 @@
     "license": "MIT",
     "require": {
         "php": ">=7.1",
-        "illuminate/support": "5.5.*",
+        "illuminate/support": "~5.5.40",
         "nesbot/carbon": "^1.23",
-        "doctrine/dbal": "~2.6"
+        "doctrine/dbal": "~2.6",
+        "maatwebsite/excel": "^3.0"
     },
     "autoload": {
         "classmap": [
@@ -29,7 +30,7 @@
         "phpunit/phpunit": "~6.0",
         "orchestra/testbench": "~3.5",
         "orchestra/database": "~3.5",
-        "laravel/laravel": "5.5.*",
+        "laravel/framework": "~5.5.40",
         "sunra/php-simple-html-dom-parser": "^1.5"
         },
     "extra": {

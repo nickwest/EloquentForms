@@ -23,12 +23,12 @@ class CreateSampleTable extends Migration
             $table->string('file_name')->nullable();
             $table->integer('favorite_number')->nullable();
             $table->boolean('is_hidden')->nullable();
-            $table->enum('favorite_season', array('Winter','Spring','Summer','Autumn'))->nullable();
-            $table->enum('beverage', array('Beer', 'Wine', 'Water'))->nullable();
+            $table->enum('favorite_season', array('', 'Winter','Spring','Summer','Autumn'))->nullable();
+            $table->enum('beverage', array('', 'Beer', 'Wine', 'Water'))->nullable();
             $table->string('fruits_liked')->nullable();
             $table->string('actors_liked')->nullable();
             $table->string('favorite_color')->nullable();
-            $table->enum('good_day', array('Yes', 'No'))->nullable();
+            $table->enum('good_day', array('', 'Yes', 'No'))->nullable();
             $table->date('favorite_date')->nullable();
             $table->string('favorite_days')->nullable();
             $table->datetime('birthday')->nullable();
@@ -49,6 +49,6 @@ class CreateSampleTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sample_subform');
+        Schema::dropIfExists('sample');
     }
 }

@@ -43,6 +43,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             \Orchestra\Database\ConsoleServiceProvider::class,
             \Nickwest\EloquentForms\EloquentFormsServiceProvider::class,
             \Nickwest\EloquentForms\Themes\bulma\EloquentFormsBulmaThemeServiceProvider::class,
+            \Maatwebsite\Excel\ExcelServiceProvider::class,
         ];
     }
 
@@ -183,7 +184,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             'favorite_number' => $this->Faker->numberBetween(10, 5000),
             'is_hidden' => [$this->Faker->numberBetween(0,1)],
             'favorite_season' => $this->Faker->randomElement(['', 'Winter', 'Spring', 'Summer', 'Autumn']),
-            'beverage' => 'Water',
+            'beverage' => '', // Test one enum with an empty string selected
             'fruits_liked' => ['Banana', 'Peach'],
             'actors_liked' => ['RDN', 'MF'],
             'favorite_color' => $this->Faker->hexcolor,
