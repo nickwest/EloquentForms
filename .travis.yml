@@ -38,7 +38,7 @@ install:
   - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-suggest; fi
 
 script:
-  - if [ "$COVERAGE" == "1" ]; then vendor/bin/phpunit --coverage-clover /home/travis/clover.xml; fi
+  - if [ "$COVERAGE" == "1" ]; then vendor/bin/phpunit --coverage-clover=coverage.xml; fi
   - if [ "$COVERAGE" == "0" ]; then vendor/bin/phpunit; fi
 
 after_success:
