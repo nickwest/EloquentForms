@@ -5,8 +5,8 @@ namespace Nickwest\EloquentForms\Exports;
 use Nickwest\EloquentForms\Table;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Events\AfterSheet;
-use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 
@@ -24,15 +24,16 @@ class TableExporter implements FromCollection, WithEvents
     public function collection()
     {
         // Get the collection from the table data
-        $collection = $this->Table->Collection->map(function($item){
+        $collection = $this->Table->Collection->map(function ($item) {
             $collection = new Collection($item);
+
             return $collection->only($this->Table->getDisplayFields())->all();
         });
 
         $headings = [];
 
         // Add Headings
-        foreach($this->Table->getDisplayFields() as $field){
+        foreach ($this->Table->getDisplayFields() as $field) {
             $headings[] = $this->Table->getLabel($field);
         }
         $collection->prepend($headings);
@@ -51,7 +52,7 @@ class TableExporter implements FromCollection, WithEvents
 
         // Set the font
         $event->sheet->getDelegate()->getParent()->getDefaultStyle()->getFont()->setName('Calibri');
-        $event->sheet->getDelegate()->getParent()->getDefaultStyle()->getFont()->setSize(16);;
+        $event->sheet->getDelegate()->getParent()->getDefaultStyle()->getFont()->setSize(16);
 
         // Set the margins
         self::setMargins($event->sheet, 0.7, 0.25, 0.25, 0.25);
@@ -76,7 +77,7 @@ class TableExporter implements FromCollection, WithEvents
             ->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP);
 
         // Set columns to auto size
-        for($c = 'A'; $c <= $highestColumn; $c++){
+        for ($c = 'A'; $c <= $highestColumn; $c++) {
             $event->sheet->getColumnDimension($c)->setAutoSize(true);
         }
 
@@ -94,8 +95,8 @@ class TableExporter implements FromCollection, WithEvents
     public static function applyZebraStriping(\Maatwebsite\Excel\Sheet &$sheet, int $highestRow, string $highestColumn): void
     {
         // Set Zebra stripes
-        for($i = 2; $i <= $highestRow; $i++){
-            if($i % 2 == 0){
+        for ($i = 2; $i <= $highestRow; $i++) {
+            if ($i % 2 == 0) {
                 $sheet->getStyle('A'.$i.':'.$highestColumn.$i)
                     ->getFill()
                     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)

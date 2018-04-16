@@ -4,7 +4,6 @@ namespace Nickwest\EloquentForms;
 
 use View;
 use Route;
-
 use Illuminate\Support\Collection;
 use Nickwest\EloquentForms\Traits\Themeable;
 use Nickwest\EloquentForms\Exports\TableExporter;
