@@ -487,6 +487,7 @@ class Form
     {
         $this->SubmitFields[$name.$value] = new Field($name);
         $this->SubmitFields[$name.$value]->attributes->value = $value;
+        $this->SubmitFields[$name.$value]->attributes->type = 'submit';
         $this->SubmitFields[$name.$value]->label = ($label !== null ? $label : ucfirst(str_replace('_', ' ', $value)));
         $this->SubmitFields[$name.$value]->attributes->addClass('button');
         if ($classes != '') {
@@ -555,7 +556,6 @@ class Form
         if ($new_value === null) {
             $new_value = $value;
         }
-
         if ($name == $new_name && $value == $new_value) {
             $this->SubmitFields[$name.$value]->label = $new_label;
 
@@ -567,6 +567,7 @@ class Form
         }
 
         $this->SubmitFields[$name.$value]->attributes->name = $new_name;
+        $this->SubmitFields[$name.$value]->attributes->id = $new_name;
         if ($new_value !== null) {
             $this->SubmitFields[$name.$value]->attributes->value = $new_value;
         }
