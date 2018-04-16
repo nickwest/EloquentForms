@@ -17,7 +17,7 @@
         <div class="field submit-buttons">
             <p class="control">
                 @foreach($Form->getSubmitButtons() as $button)
-                    <button name="{{ $button->attributes->name }}" id="input-{{ $button->attributes->name }}" class="button {{ $button->attributes->class }}" type="submit" value="{{ $button->attributes->value }}">{{ $button->label }}</button>
+                    <button {!! $button->attributes !!}>{{ $button->label }}</button>
                 @endforeach
             </p>
         </div>
