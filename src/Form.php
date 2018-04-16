@@ -488,8 +488,9 @@ class Form
         $this->SubmitFields[$name.$value] = new Field($name);
         $this->SubmitFields[$name.$value]->attributes->value = $value;
         $this->SubmitFields[$name.$value]->label = ($label !== null ? $label : ucfirst(str_replace('_', ' ', $value)));
+        $this->SubmitFields[$name.$value]->attributes->addClass('button');
         if ($classes != '') {
-            $this->SubmitFields[$name.$value]->attributes->class = $classes;
+            $this->SubmitFields[$name.$value]->attributes->addClasses(explode(' ', $classes));
         }
     }
 
