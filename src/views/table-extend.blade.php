@@ -16,7 +16,7 @@
         @endforeach
         </tr>
     </thead>
-    <tobdy>
+    <tbody>
         @foreach($Table->Collection as $row)
         <tr>
             @foreach($Table->getDisplayFields() as $field_name)
