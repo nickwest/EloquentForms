@@ -131,6 +131,23 @@ trait HasFields
     }
 
     /**
+     * Clone an existing field.
+     *
+     * @param string $field_name
+     * @param string $new_name
+     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
+     * @return void
+     */
+    public function cloneField(string $field_name, string $new_name): void
+    {
+        if(!isset($this->Fields[$field_name])){
+            throw new InvalidFieldException('Source field is not valid');
+        }
+
+        $this->Fields[$new_name] = clone $this->Fields[$field_name];
+    }
+
+    /**
      * Remove a single field from the form if it exists.
      *
      * @param string $field_name
