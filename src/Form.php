@@ -630,6 +630,8 @@ class Form
         $blade_data['Form'] = $this;
         $blade_data['view_only'] = $view_only;
 
+        $this->Theme->prepareSubformView($this);
+
         if ($this->Theme->getViewNamespace() != '' && View::exists($this->Theme->getViewNamespace().'::subform')) {
             return View::make($this->Theme->getViewNamespace().'::subform', $blade_data);
         }

@@ -39,6 +39,15 @@ abstract class Theme
     }
 
     /**
+     * Modify a field as necessary.
+     *
+     * @return void
+     */
+    public function prepareSubformView(\Nickwest\EloquentForms\Form &$Form)
+    {
+    }
+
+    /**
      * Modify a table as necessary.
      *
      * @return void
