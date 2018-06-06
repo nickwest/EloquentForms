@@ -1,5 +1,5 @@
 {{--  This is a really raw general purpose view that will show raw values as plain text  --}}
-@eloquentforms_component($Field->getViewNamespace().'::components.field', ['Field' => $Field, 'prev_inline' => $prev_inline])
+@eloquentforms_component($Field->getViewNamespace().'::components.field', ['Field' => $Field, 'prev_inline' => $prev_inline, 'display_only' => true])
 
     @slot('field_markup')
         @eloquentforms_include($Field->getViewNamespace().'::pieces.label', ['Field' => $Field])
