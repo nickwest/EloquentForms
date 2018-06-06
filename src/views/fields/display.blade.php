@@ -14,7 +14,7 @@
                     @endif
                 @endforeach
             @else
-                @if($Field->options->hasOptions() && $Field->options->hasOption($Field->attributes->value)
+                @if($Field->options->hasOptions() && $Field->options->hasOption($Field->attributes->value))
                     {{ $Field->options->getOption($Field->attributes->value) }}
                 @else
                     @if($Field->attributes->type == 'textarea')
