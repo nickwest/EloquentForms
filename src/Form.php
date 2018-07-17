@@ -610,6 +610,10 @@ class Form
         $blade_data['section'] = $section;
         $blade_data['view_only'] = $view_only;
 
+        if($view_only){
+            $this->attributes->addClass('display_only');
+        }
+
         $this->setMultipartIfNeeded();
         $this->Theme->prepareFormView($this);
 
