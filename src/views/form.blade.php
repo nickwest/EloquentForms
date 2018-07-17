@@ -6,7 +6,11 @@
         @php($prev_inline = false)
         @foreach($Form->getDisplayFields() as $Field)
             @if(!$Field->isSubform())
-                {!! $Field->makeView($prev_inline, $view_only) !!}
+                @if($view_only)
+                    {!! $Field->makeDisplayView($prev_inline) !!}
+                @else
+                    {!! $Field->makeView($prev_inline) !!}
+                @endif
             @else
                 {!! $Field->Subform->makeSubformView($Field->subform_data, $view_only)->render() !!}
             @endif
