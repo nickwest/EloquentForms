@@ -161,7 +161,22 @@ class TableTest extends TestCase
         $this->Table->addFieldReplacement('birthday', '<strong>{email} {birthday}</strong>');
 
         $item = $this->Collection->pop();
-        $this->assertEquals('<strong>'.$item['email'].' '.$item['birthday'].'</strong>', $this->Table->getFieldReplacement('birthday', $item));
+        $this->assertEquals('<strong>'.htmlspecialchars($item['email'], ENT_QUOTES).' '.htmlspecialchars($item['birthday'], ENT_QUOTES).'</strong>', $this->Table->getFieldReplacement('birthday', $item));
+    }
+
+    public function test_table_field_with_apostrophe()
+    {
+        $this->Table->addFieldReplacement('birthday', '<strong>{email} {birthday}</strong>');
+
+        // Test with an apostrophe
+        $item = [
+            'name' => 'Ernesto D\'Angelo',
+            'email' => 'enestod\'angelo@google.com',
+            'birthday' => '2017-04-10',
+            'phone_number' => '011-321-5778',
+            'bio' => 'Blah',
+        ];
+        $this->assertEquals('<strong>'.htmlspecialchars($item['email'], ENT_QUOTES).' '.htmlspecialchars($item['birthday'], ENT_QUOTES).'</strong>', $this->Table->getFieldReplacement('birthday', $item));
     }
 
     public function test_table_addLinkingPattern_adds_a_linking_patter_form_a_field()
