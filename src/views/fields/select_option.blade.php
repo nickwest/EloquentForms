@@ -1,1 +1,1 @@
-<option	value="{{ $key }}"{{ ($Field->attributes->value == $key ? ' selected' : '') }}{{ (is_array($Field->attributes->value) && in_array($key, $Field->attributes->value) ? ' selected' : '') }}>{{ $value }}</option>
+<option	value="{{ $key }}"{{ ($Field->attributes->value == $key || $Field->default_value == $key ? ' selected' : '') }}{{ (is_array($Field->attributes->value) && in_array($key, $Field->attributes->value) ? ' selected' : '') }}>{{ $value }}</option>

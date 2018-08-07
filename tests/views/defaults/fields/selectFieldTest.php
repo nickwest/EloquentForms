@@ -98,4 +98,21 @@ class selectFieldTest extends FieldViewTestCase implements selectFieldTestInterf
         $this->assertSame(true, $no_option->selected);
     }
 
+    public function test_field_has_default_set_properly_on_display()
+    {
+        $this->Field->default_value = 2;
+
+        $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
+        $input = current($dom->find($this->test_tag));
+        $options = $dom->find('option');
+
+        $yes_option = array_shift($options);
+        $no_option = array_shift($options);
+
+        // Both are checked
+        $this->assertSame(false, $yes_option->selected);
+        $this->assertSame(true, $no_option->selected);
+    }
+
+
 }

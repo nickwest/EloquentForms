@@ -13,6 +13,7 @@ class CreateSampleTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('sample');
         Schema::create('sample', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
