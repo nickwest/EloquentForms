@@ -5,15 +5,14 @@ namespace Nickwest\EloquentForms;
 use View;
 use Route;
 use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Events\AfterSheet;
+use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\WithEvents;
 use Nickwest\EloquentForms\Traits\Themeable;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
 use Nickwest\EloquentForms\Exceptions\InvalidRouteException;
-
-use Maatwebsite\Excel\Events\AfterSheet;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithEvents;
-use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 
 class Table implements FromCollection, WithEvents
 {
@@ -318,15 +317,16 @@ class Table implements FromCollection, WithEvents
     public function collection()
     {
         // Get the collection from the table data
-        $collection = $this->Collection->map(function($item){
+        $collection = $this->Collection->map(function ($item) {
             $collection = new Collection($item);
+
             return $collection->only($this->getDisplayFields())->all();
         });
 
         $headings = [];
 
         // Add Headings
-        foreach($this->getDisplayFields() as $field){
+        foreach ($this->getDisplayFields() as $field) {
             $headings[] = $this->getLabel($field);
         }
         $collection->prepend($headings);
@@ -345,7 +345,7 @@ class Table implements FromCollection, WithEvents
 
         // Set the font
         $event->sheet->getDelegate()->getParent()->getDefaultStyle()->getFont()->setName('Calibri');
-        $event->sheet->getDelegate()->getParent()->getDefaultStyle()->getFont()->setSize(16);;
+        $event->sheet->getDelegate()->getParent()->getDefaultStyle()->getFont()->setSize(16);
 
         // Set the margins
         $event->sheet->getPageMargins()->setTop(0.7);
@@ -373,13 +373,13 @@ class Table implements FromCollection, WithEvents
             ->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP);
 
         // Set columns to auto size
-        for($c = 'A'; $c <= $highestColumn; $c++){
+        for ($c = 'A'; $c <= $highestColumn; $c++) {
             $event->sheet->getColumnDimension($c)->setAutoSize(true);
         }
 
         // Set Zebra stripes
-        for($i = 2; $i <= $highestRow; $i++){
-            if($i % 2 == 0){
+        for ($i = 2; $i <= $highestRow; $i++) {
+            if ($i % 2 == 0) {
                 $event->sheet->getStyle('A'.$i.':'.$highestColumn.$i)
                     ->getFill()
                     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
