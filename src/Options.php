@@ -51,7 +51,7 @@ class Options
      */
     public function __get(?string $key)
     {
-        return $this->getOption((string)$key);
+        return $this->getOption((string) $key);
     }
 
     /**
@@ -63,7 +63,7 @@ class Options
      */
     public function __set(?string $key, $value): void
     {
-        $this->setOption((string)$key, $value);
+        $this->setOption((string) $key, $value);
     }
 
     /**
@@ -86,7 +86,7 @@ class Options
      */
     public function __unset(?string $key): void
     {
-        $this->removeOption((string)$key);
+        $this->removeOption((string) $key);
     }
 
     /**
@@ -98,11 +98,11 @@ class Options
      */
     public function getOption(?string $key)
     {
-        if (! isset($this->options[(string)$key])) {
+        if (! isset($this->options[(string) $key])) {
             throw new InvalidOptionException;
         }
 
-        return $this->options[(string)$key];
+        return $this->options[(string) $key];
     }
 
     /**
@@ -114,7 +114,7 @@ class Options
      */
     public function setOption(?string $key, $value): void
     {
-        $this->options[(string)$key] = $value;
+        $this->options[(string) $key] = $value;
     }
 
     /**
@@ -125,7 +125,7 @@ class Options
      */
     public function hasOption(?string $key): bool
     {
-        return isset($this->options[(string)$key]);
+        return isset($this->options[(string) $key]);
     }
 
     /**
@@ -137,11 +137,11 @@ class Options
      */
     public function removeOption(?string $key): void
     {
-        if (! isset($this->options[(string)$key])) {
+        if (! isset($this->options[(string) $key])) {
             throw new InvalidOptionException;
         }
 
-        unset($this->options[(string)$key]);
+        unset($this->options[(string) $key]);
     }
 
     /**
@@ -184,7 +184,7 @@ class Options
                 throw new OptionValueException('Option values must be strings');
             }
 
-            $this->setOption((string)$key, $value);
+            $this->setOption((string) $key, $value);
         }
     }
 
@@ -204,11 +204,11 @@ class Options
         }
 
         foreach ($keys as $key) {
-            if (! isset($this->options[(string)$key])) {
+            if (! isset($this->options[(string) $key])) {
                 throw new InvalidOptionException;
             }
 
-            $this->disabled_options[] = (string)$key;
+            $this->disabled_options[] = (string) $key;
         }
     }
 
@@ -241,7 +241,7 @@ class Options
             } elseif (is_object($value)) {
                 $this->$key = (array) $value;
             } else {
-                $this->{(string)$key} = $value;
+                $this->{(string) $key} = $value;
             }
         }
     }
