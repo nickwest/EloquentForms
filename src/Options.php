@@ -49,9 +49,9 @@ class Options
      * @return mixed
      * @throws Nickwest\EloquentForms\Exceptions\InvalidOptionException
      */
-    public function __get(string $key)
+    public function __get(?string $key)
     {
-        return $this->getOption($key);
+        return $this->getOption((string)$key);
     }
 
     /**
@@ -61,9 +61,9 @@ class Options
      * @param mixed $value
      * @return void
      */
-    public function __set(string $key, $value): void
+    public function __set(?string $key, $value): void
     {
-        $this->setOption($key, $value);
+        $this->setOption((string)$key, $value);
     }
 
     /**
@@ -72,7 +72,7 @@ class Options
      * @param $key
      * @return bool
      */
-    public function __isset(string $key): bool
+    public function __isset(?string $key): bool
     {
         return $this->hasOption($key);
     }
@@ -84,9 +84,9 @@ class Options
      * @return void
      * @throws Nickwest\EloquentForms\Exceptions\InvalidOptionException
      */
-    public function __unset(string $key): void
+    public function __unset(?string $key): void
     {
-        $this->removeOption($key);
+        $this->removeOption((string)$key);
     }
 
     /**
@@ -96,13 +96,13 @@ class Options
      * @return mixed
      * @throws Nickwest\EloquentForms\Exceptions\InvalidOptionException
      */
-    public function getOption(string $key)
+    public function getOption(?string $key)
     {
-        if (! isset($this->options[$key])) {
+        if (! isset($this->options[(string)$key])) {
             throw new InvalidOptionException;
         }
 
-        return $this->options[$key];
+        return $this->options[(string)$key];
     }
 
     /**
@@ -112,9 +112,9 @@ class Options
      * @param mixed $value
      * @return void
      */
-    public function setOption(string $key, $value): void
+    public function setOption(?string $key, $value): void
     {
-        $this->options[$key] = $value;
+        $this->options[(string)$key] = $value;
     }
 
     /**
@@ -123,25 +123,25 @@ class Options
      * @param $key
      * @return bool
      */
-    public function hasOption(string $key): bool
+    public function hasOption(?string $key): bool
     {
-        return isset($this->options[$key]);
+        return isset($this->options[(string)$key]);
     }
 
     /**
      *  Unset an option by key.
      *
-     * @param $key
+     * @param string $key
      * @return void
      * @throws Nickwest\EloquentForms\Exceptions\InvalidOptionException
      */
-    public function removeOption($key): void
+    public function removeOption(?string $key): void
     {
-        if (! isset($this->options[$key])) {
+        if (! isset($this->options[(string)$key])) {
             throw new InvalidOptionException;
         }
 
-        unset($this->options[$key]);
+        unset($this->options[(string)$key]);
     }
 
     /**
@@ -184,7 +184,7 @@ class Options
                 throw new OptionValueException('Option values must be strings');
             }
 
-            $this->setOption($key, $value);
+            $this->setOption((string)$key, $value);
         }
     }
 
@@ -204,11 +204,11 @@ class Options
         }
 
         foreach ($keys as $key) {
-            if (! isset($this->options[$key])) {
+            if (! isset($this->options[(string)$key])) {
                 throw new InvalidOptionException;
             }
 
-            $this->disabled_options[] = $key;
+            $this->disabled_options[] = (string)$key;
         }
     }
 
@@ -241,7 +241,7 @@ class Options
             } elseif (is_object($value)) {
                 $this->$key = (array) $value;
             } else {
-                $this->$key = $value;
+                $this->{(string)$key} = $value;
             }
         }
     }

@@ -134,4 +134,14 @@ class OptionsTest extends TestCase
         $this->expectException(InvalidOptionException::class);
         $this->Options->setDisabledOptions(['1','44','4']);
     }
+
+    public function test_null_is_equal_to_empty_string()
+    {
+        $test_options = ['' => 'empty', '2' => 'two', '44' => 'Fourtyfour'];
+
+        $this->Options->setOptions($test_options);
+
+        $this->assertEquals("empty", $this->Options->getOption(""));
+        $this->assertEquals("empty", $this->Options->getOption(null));
+    }
 }
