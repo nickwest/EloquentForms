@@ -140,7 +140,7 @@ trait HasFields
      */
     public function cloneField(string $field_name, string $new_name): void
     {
-        if(!isset($this->Fields[$field_name])){
+        if (! isset($this->Fields[$field_name])) {
             throw new InvalidFieldException('Source field is not valid');
         }
 
