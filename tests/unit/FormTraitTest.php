@@ -28,7 +28,7 @@ class FormTraitTest extends TestCase
     {
         $array = $this->Model->getColumnsArray();
 
-        $this->assertEquals($this->expectedDBStructure(), $array);
+        $this->assertEquals($this->expectedDBStructure(true), $array);
     }
 
     public function test_formtrait_form_returns_a_form_object()
