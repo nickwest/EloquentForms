@@ -31,7 +31,7 @@ services:
 
 before_install:
   - travis_retry composer self-update
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS EloquentFormsTest;'
+  - mysql -e 'CREATE DATABASE EloquentFormsTest;'
 
 install:
   - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-suggest; fi
