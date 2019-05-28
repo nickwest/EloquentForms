@@ -24,9 +24,17 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
      */
     protected function getEnvironmentSetUp($app)
     {
-        // SQLite
+        // SQL
         $app['config']->set('database.default', env('DB_CONNECTION'));
-    }
+        $app['config']->set('database.connections.testing', [
+            'driver'   => 'mysql',
+            'host'      => env('DB_HOST', 'localhost'),
+            'database' => env('DB_DATABASE'),
+            'username'  => env('DB_USERNAME'),
+            'password'  => env('DB_PASSWORD'),
+            'prefix'   => '',
+        ]);
+        }
 
     public function setUp() {
         parent::setUp();
