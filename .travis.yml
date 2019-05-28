@@ -25,8 +25,6 @@ cache:
   directories:
     - $HOME/.composer/cache
 
-services:
-
 before_install:
   - travis_retry composer self-update
   - mysql -e 'CREATE DATABASE EloquentFormsTest;'
