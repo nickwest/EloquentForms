@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/nickwest/EloquentForms.svg?branch=5.7.x)](https://travis-ci.org/nickwest/EloquentForms) [![Latest Stable Version](https://poser.pugx.org/nickwest/eloquent-forms/v/stable)](https://packagist.org/packages/nickwest/eloquent-forms) [![License](https://poser.pugx.org/nickwest/eloquent-forms/license)](https://packagist.org/packages/nickwest/eloquent-forms) [![Style](https://styleci.io/repos/123993557/shield)](https://styleci.io/repos/123993557) [![Maintainability](https://api.codeclimate.com/v1/badges/f986a765708538da7e5e/maintainability)](https://codeclimate.com/github/nickwest/EloquentForms/maintainability) [![codecov](https://codecov.io/gh/nickwest/EloquentForms/branch/master/graph/badge.svg)](https://codecov.io/gh/nickwest/EloquentForms)
+[![Build Status](https://travis-ci.org/nickwest/EloquentForms.svg?branch=5.8.x)](https://travis-ci.org/nickwest/EloquentForms) [![Latest Stable Version](https://poser.pugx.org/nickwest/eloquent-forms/v/stable)](https://packagist.org/packages/nickwest/eloquent-forms) [![License](https://poser.pugx.org/nickwest/eloquent-forms/license)](https://packagist.org/packages/nickwest/eloquent-forms) [![Style](https://styleci.io/repos/123993557/shield)](https://styleci.io/repos/123993557) [![Maintainability](https://api.codeclimate.com/v1/badges/f986a765708538da7e5e/maintainability)](https://codeclimate.com/github/nickwest/EloquentForms/maintainability) [![codecov](https://codecov.io/gh/nickwest/EloquentForms/branch/master/graph/badge.svg)](https://codecov.io/gh/nickwest/EloquentForms)
 
 
 EloquentForms
@@ -12,7 +12,7 @@ EloquentForms can be easily themed to support various front-end css/js framework
 
 ## Installation
 
-EloquentForms requires PHP 7.1.3+. This particular version supports Laravel 5.6.x. To install on Laravel 5.5.x use the 5.5.x release of EloquentForms.
+EloquentForms requires PHP 7.1.3+. This particular version supports Laravel 5.8.x. To install on Laravel 5.5.x use the 5.5.x release of EloquentForms.
 
 To get the latest version you need only require the package via Composer.
 ```
