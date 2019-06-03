@@ -7,7 +7,8 @@ use Nickwest\EloquentForms\Test\TestCase;
 
 class AttributesTest extends TestCase
 {
-    public function setUp(){
+    public function setUp(): void
+    {
         parent::setUp();
     }
 

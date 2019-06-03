@@ -26,7 +26,7 @@ class tableButtonsTest extends TestCase
      */
     protected $Table = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

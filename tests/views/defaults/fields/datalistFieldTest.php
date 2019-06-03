@@ -15,7 +15,7 @@ class datalistFieldTest extends TestCase implements datalistFieldTestInterface
         '2016-05-15' => 'A date',
     ];
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -10,7 +10,8 @@ use Nickwest\EloquentForms\Exceptions\InvalidOptionException;
 
 class OptionsTest extends TestCase
 {
-    public function setUp(){
+    public function setUp(): void
+    {
         parent::setUp();
 
         $this->Options = new Options;

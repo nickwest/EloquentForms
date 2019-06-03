@@ -11,7 +11,7 @@ class contentblockFieldTest extends TestCase implements contentblockFieldTestInt
 {
     protected $test_value = 'Donut <strong>jelly-o</strong> wafer sugar plum marzipan toffee cheesecake topping. Muffin chocolate donut. Cake wafer sugar plum. Cookie halvah powder gingerbread oat cake muffin. Marshmallow chocolate bar candy cheesecake bear claw tiramisu sweet tootsie roll. Bonbon sesame snaps donut gummies cookie marshmallow pie. Bonbon jujubes toffee. Toffee muffin cotton candy gingerbread cotton candy jelly-o lollipop. Cookie chocolate sugar plum jelly powder pastry cheesecake. Candy canes tart powder pudding cookie marshmallow gummies bonbon topping. Dessert jelly-o gummi bears biscuit liquorice tootsie roll. Lollipop chocolate cake muffin toffee gingerbread. Bonbon icing jujubes gingerbread chocolate bar. Pie gummi bears pastry.';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

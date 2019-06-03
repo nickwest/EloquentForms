@@ -10,7 +10,8 @@ use Nickwest\EloquentForms\Test\TestCase;
 
 class DaysOfWeekFieldTest extends TestCase
 {
-    public function setUp(){
+    public function setUp(): void
+    {
         parent::setUp();
 
         $this->loadMigrationsFrom(realpath(__DIR__.'/../../database/migrations/'));

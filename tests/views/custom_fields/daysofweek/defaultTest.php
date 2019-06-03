@@ -11,7 +11,7 @@ use Nickwest\EloquentForms\CustomFields\daysofweek\CustomField as DaysOfWeekFiel
 
 class defaultTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

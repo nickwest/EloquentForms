@@ -8,7 +8,8 @@ use Nickwest\EloquentForms\Test\TestCase;
 
 class submitButtonsTest extends TestCase
 {
-    public function setUp() {
+    public function setUp(): void
+    {
         parent::setUp();
 
         $this->Form = new Form();

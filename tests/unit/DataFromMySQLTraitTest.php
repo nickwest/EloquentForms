@@ -12,7 +12,7 @@ class DataFromMySQLTraitTest extends TestCase
 {
     // use RefreshDatabase; // A bug in Laravel <5.6.4 causes this to fail tests
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

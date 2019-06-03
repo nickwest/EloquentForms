@@ -27,7 +27,7 @@ abstract class FieldViewBulmaTestCase extends TestCase
     protected $test_options = null;
     protected $expected_type_class = 'input';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

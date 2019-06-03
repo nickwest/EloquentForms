@@ -25,7 +25,7 @@ abstract class FieldViewTestCase extends TestCase
     protected $test_id_suffix = '';
     protected $test_options = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

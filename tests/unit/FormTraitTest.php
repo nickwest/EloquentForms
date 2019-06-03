@@ -10,7 +10,7 @@ use Nickwest\EloquentForms\Test\TestCase;
 
 class FormTraitTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
