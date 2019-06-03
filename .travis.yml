@@ -20,10 +20,6 @@ matrix:
       env: COVERAGE=1
     - php: 7.2
       env: setup=lowest COVERAGE=0
-    - php: 7.1
-      env: COVERAGE=0
-    - php: 7.1
-      env: setup=lowest COVERAGE=0
 
 sudo: false
 
