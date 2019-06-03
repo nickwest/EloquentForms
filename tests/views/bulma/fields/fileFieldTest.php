@@ -1,6 +1,6 @@
 <?php namespace Nickwest\EloquentForms\Test\views\bulma\fields;
 
-use Sunra\PhpSimple\HtmlDomParser;
+use KubAT\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Field;
 use Nickwest\EloquentForms\Test\FieldViewBulmaTestCase;
@@ -18,7 +18,7 @@ class fileFieldTest extends FieldViewBulmaTestCase implements fileFieldTestInter
         $this->Field->attributes->value = $this->test_value;
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $remove_button = current($dom->find($this->test_tag));
-        $file_link = current($dom->find('span[class=file-name]'));
+        $file_link = current($dom->find('span.file-name'));
 
         $this->assertEquals('Remove', $remove_button->value);
         $this->assertEquals('yoda.pdf', trim($file_link->plaintext));

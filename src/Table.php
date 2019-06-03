@@ -165,6 +165,16 @@ class Table
     }
 
     /**
+     * Get array of Labels.
+     *
+     * @return array
+     */
+    public function getLabels(): array
+    {
+        return $this->labels;
+    }
+
+    /**
      * Set a replacement string for a given field's output. Use {field_name} to inject values
      * field_name supports any field set in the given object/array that exists within the Collection.
      *
@@ -225,6 +235,16 @@ class Table
         }
 
         return $replaced;
+    }
+
+    /**
+     * Get array of Field Replacements.
+     *
+     * @return array
+     */
+    public function getFieldReplacements(): array
+    {
+        return $this->field_replacements;
     }
 
     /**

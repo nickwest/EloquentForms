@@ -155,7 +155,6 @@ class AttributesTest extends TestCase
 
         $expected = ['red' => 'red', 'bold' => 'bold', 'big' => 'big'];
 
-        $this->assertAttributeEquals($expected, 'classes', $Attributes);
         $this->assertEquals('red bold big', $Attributes->class);
         $this->assertEquals('class="red bold big"', (string)$Attributes);
 

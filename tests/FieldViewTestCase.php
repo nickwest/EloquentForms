@@ -10,7 +10,7 @@
  *    contentblock, datalist,
  */
 
-use Sunra\PhpSimple\HtmlDomParser;
+use KubAT\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Form;
 use Nickwest\EloquentForms\Field;

@@ -1,6 +1,6 @@
 <?php namespace Nickwest\EloquentForms\Test\views\bulma\fields;
 
-use Sunra\PhpSimple\HtmlDomParser;
+use KubAT\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Test\FieldViewBulmaTestCase;
 use Nickwest\EloquentForms\Test\ThemeTestInterfaces\textareaFieldTestInterface;

@@ -53,13 +53,13 @@ class TableTest extends TestCase
 
     public function test_table_has_some_stuff_when_created()
     {
-        $this->assertAttributeInstanceOf(\Nickwest\EloquentForms\Attributes::class, 'attributes', $this->Table);
-        $this->assertAttributeInstanceOf(\Nickwest\EloquentForms\Theme::class, 'Theme', $this->Table);
+        $this->assertInstanceOf(\Nickwest\EloquentForms\Attributes::class, $this->Table->attributes);
+        $this->assertInstanceOf(\Nickwest\EloquentForms\Theme::class, $this->Table->getTheme());
     }
 
     public function test_table_setData_will_assign_data_to_object()
     {
-        $this->assertattributeEquals($this->Collection, 'Collection', $this->Table);
+        $this->assertEquals($this->Collection, $this->Table->Collection);
     }
 
     public function test_table_setDisplayFields_sets_display_fields()
@@ -67,7 +67,7 @@ class TableTest extends TestCase
         // The can be set with non-keyed array
         $this->Table->setDisplayFields(['name', 'birthday', 'email']);
 
-        $this->assertAttributeEquals($this->display_fields, 'display_fields', $this->Table);
+        $this->assertEquals($this->display_fields, $this->Table->getDisplayFields());
     }
 
     public function test_table_getDisplayFields_retrieves_display_fields()
@@ -100,7 +100,7 @@ class TableTest extends TestCase
 
         $this->Table->setLabels($labels);
 
-        $this->assertAttributeEquals($labels, 'labels', $this->Table);
+        $this->assertEquals($labels, $this->Table->getLabels());
     }
 
     public function test_table_setLabels_throws_exception_when_invalid_field_passed()
@@ -137,7 +137,7 @@ class TableTest extends TestCase
     {
         $this->Table->addFieldReplacement('birthday', '<strong>{birthday}</strong>');
 
-        $this->assertAttributeEquals(['birthday' => '<strong>{birthday}</strong>'], 'field_replacements', $this->Table);
+        $this->assertEquals(['birthday' => '<strong>{birthday}</strong>'], $this->Table->getFieldReplacements());
     }
 
     public function test_table_hasFieldReplacement_confirms_existence_of_replacement_pattern()
@@ -189,14 +189,14 @@ class TableTest extends TestCase
             'name' => '<a href="https://google.com">{name}</a>'
         ];
 
-        $this->assertAttributeEquals($expected, 'field_replacements', $this->Table);
+        $this->assertEquals($expected, $this->Table->getFieldReplacements());
     }
 
     public function test_table_addLinkingPatternByRoute_adds_a_linking_pattern_for_a_field()
     {
         $this->Table->addLinkingPatternByRoute('name', 'sample');
 
-        $this->assertAttributeEquals(['name' => '<a href="/sample/data">{name}</a>'], 'field_replacements', $this->Table);
+        $this->assertEquals(['name' => '<a href="/sample/data">{name}</a>'], $this->Table->getFieldReplacements());
     }
 
     public function test_table_addLinkingPatternByRoute_throws_exception_on_invalid_route()

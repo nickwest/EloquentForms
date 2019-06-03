@@ -2,7 +2,7 @@
 use Faker;
 
 use Illuminate\Support\Collection;
-use Sunra\PhpSimple\HtmlDomParser;
+use KubAT\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Field;
 use Nickwest\EloquentForms\Test\TestCase;
@@ -44,7 +44,7 @@ class bulmaTest extends TestCase
     public function test_field_has_wrapper()
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
-        $field = $dom->find('div[class=daysofweek]');
+        $field = $dom->find('div.daysofweek');
 
         $this->assertNotFalse($field);
     }
@@ -52,7 +52,7 @@ class bulmaTest extends TestCase
     public function test_field_has_each_day_wrapper()
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
-        $spans = $dom->find('span[class='.$this->Field->options->wrapper_class.']');
+        $spans = $dom->find('span.'.$this->Field->options->wrapper_class);
 
         $this->assertEquals(7, count($spans));
     }
@@ -99,7 +99,7 @@ class bulmaTest extends TestCase
         $this->Field->attributes->value = ['M','W','F'];
 
         $dom = HtmlDomParser::str_get_html($this->Field->makeView(false, true)->render());
-        $values = $dom->find('div[class=daysofweek] div');
+        $values = $dom->find('div.daysofweek div');
 
         $days = [];
         foreach($values as $value){

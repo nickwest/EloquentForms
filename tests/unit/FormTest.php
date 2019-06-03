@@ -424,7 +424,7 @@ class FormTest extends TestCase
         $this->assertTrue(isset($this->Form->my_data));
 
         // It's in the display array
-        $this->assertAttributeContains('my_data', 'display_fields', $this->Form);
+        $this->assertArrayHasKey('my_data', $this->Form->getDisplayFields());
 
         // Make sure they got set accurately too
         $this->assertEquals($data, $this->Form->my_data->options->getOptions());

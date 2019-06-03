@@ -2,7 +2,7 @@
 
 use Faker;
 
-use Sunra\PhpSimple\HtmlDomParser;
+use KubAT\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Test\Sample;
 use Nickwest\EloquentForms\Test\TestCase;
@@ -32,7 +32,7 @@ class formTest extends TestCase
     public function test_view_has_all_the_fields()
     {
         $dom = HtmlDomParser::str_get_html($this->Model->getFormView([])->render());
-        $fields = $dom->find('div[class="field"]');
+        $fields = $dom->find('div.field');
 
         $this->assertEquals(count($this->Model->Form()->getDisplayFields()), count($fields)-1); // -1 for submit buttons
     }
@@ -48,7 +48,7 @@ class formTest extends TestCase
     public function test_form_has_submit_buttons()
     {
         $dom = HtmlDomParser::str_get_html($this->Model->getFormView([])->render());
-        $buttons = current($dom->find('div[class="submit-buttons"]'));
+        $buttons = current($dom->find('div.submit-buttons'));
 
         $this->assertNotFalse($buttons);
     }

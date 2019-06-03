@@ -12,6 +12,10 @@ services:
 matrix:
   fast_finish: true
   include:
+    - php: 7.3
+      env: COVERAGE=1
+    - php: 7.3
+      env: setup=lowest COVERAGE=0
     - php: 7.2
       env: COVERAGE=1
     - php: 7.2

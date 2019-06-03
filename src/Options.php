@@ -213,6 +213,16 @@ class Options
     }
 
     /**
+     * Get disabled options.
+     *
+     * @return array
+     */
+    public function getDisabledOptions()
+    {
+        return $this->disabled_options;
+    }
+
+    /**
      * Create a json representation of options.
      *
      * @return string JSON

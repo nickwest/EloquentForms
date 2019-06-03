@@ -1,6 +1,6 @@
 <?php namespace Nickwest\EloquentForms\Test\view\bulma;
 
-use Sunra\PhpSimple\HtmlDomParser;
+use KubAT\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Form;
 
@@ -20,7 +20,7 @@ class submitButtonsTest extends TestCase
     public function test_form_view_has_submit_button_container()
     {
         $dom = HtmlDomParser::str_get_html($this->Form->makeView()->render());
-        $submit_container = current($dom->find('div[class=submit-buttons]'));
+        $submit_container = current($dom->find('div.submit-buttons'));
 
         $this->assertNotFalse($submit_container);
     }
@@ -28,7 +28,7 @@ class submitButtonsTest extends TestCase
     public function test_form_view_has_default_submit_button()
     {
         $dom = HtmlDomParser::str_get_html($this->Form->makeView()->render());
-        $submit_container = current($dom->find('div[class=submit-buttons]'));
+        $submit_container = current($dom->find('div.submit-buttons'));
         $submit_buttons = $submit_container->find('button');
 
         $this->assertEquals(1, count($submit_buttons));
@@ -46,7 +46,7 @@ class submitButtonsTest extends TestCase
         $this->Form->addSubmitButton('submit_delete', 'Delete', null, 'is-danger');
 
         $dom = HtmlDomParser::str_get_html($this->Form->makeView()->render());
-        $submit_container = current($dom->find('div[class=submit-buttons]'));
+        $submit_container = current($dom->find('div.submit-buttons'));
         $submit_buttons = $submit_container->find('button');
 
         $this->assertEquals(2, count($submit_buttons));
@@ -66,7 +66,7 @@ class submitButtonsTest extends TestCase
         $this->Form->removeSubmitButton('submit_button', 'Submit');
 
         $dom = HtmlDomParser::str_get_html($this->Form->makeView()->render());
-        $submit_container = current($dom->find('div[class=submit-buttons]'));
+        $submit_container = current($dom->find('div.submit-buttons'));
         $submit_buttons = $submit_container->find('button');
 
         $this->assertEquals(1, count($submit_buttons));
@@ -86,7 +86,7 @@ class submitButtonsTest extends TestCase
         $Button->attributes->value = 'Super';
 
         $dom = HtmlDomParser::str_get_html($this->Form->makeView()->render());
-        $submit_container = current($dom->find('div[class=submit-buttons]'));
+        $submit_container = current($dom->find('div.submit-buttons'));
         $submit_buttons = $submit_container->find('button');
         $submit_button = current($submit_buttons);
 
@@ -102,7 +102,7 @@ class submitButtonsTest extends TestCase
         $this->Form->renameSubmitButton('submit_button', 'Submit', 'save_button', 'Save');
 
         $dom = HtmlDomParser::str_get_html($this->Form->makeView()->render());
-        $submit_container = current($dom->find('div[class=submit-buttons]'));
+        $submit_container = current($dom->find('div.submit-buttons'));
         $submit_buttons = $submit_container->find('button');
         $submit_button = current($submit_buttons);
 

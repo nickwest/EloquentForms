@@ -4,7 +4,7 @@ use Faker;
 
 use Illuminate\Support\Collection;
 
-use Sunra\PhpSimple\HtmlDomParser;
+use KubAT\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Table;
 use Nickwest\EloquentForms\Test\TestCase;

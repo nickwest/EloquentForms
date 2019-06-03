@@ -19,7 +19,7 @@ class OptionsTest extends TestCase
 
     public function test_options_starts_empty()
     {
-        $this->assertAttributeEmpty('options', $this->Options);
+        $this->assertEmpty($this->Options->getOptions());
     }
 
     public function test_options_magic_method_set_works()
@@ -29,7 +29,7 @@ class OptionsTest extends TestCase
 
         $expected = ['test' => 1, 'test2' => 2];
 
-        $this->assertAttributeEquals($expected, 'options', $this->Options);
+        $this->assertEquals($expected, $this->Options->getOptions());
     }
 
     public function test_options_magic_method_get_works()
@@ -97,7 +97,7 @@ class OptionsTest extends TestCase
 
         $expected = ['test' => 1, 'test2' => 2];
 
-        $this->assertAttributeEquals($expected, 'options', $this->Options);
+        $this->assertEquals($expected, $this->Options->getOptions());
     }
 
     public function test_hasOption_determines_if_option_exists()
@@ -124,7 +124,7 @@ class OptionsTest extends TestCase
         $this->Options->test = 'Yippee!';
         $this->Options->setDisabledOptions(['test']);
 
-        $this->assertAttributeEquals(['test'], 'disabled_options', $this->Options);
+        $this->assertEquals(['test'], $this->Options->getDisabledOptions());
     }
 
     public function test_setDisalbedOptions_throws_an_exception_if_invalid_options_are_passed()

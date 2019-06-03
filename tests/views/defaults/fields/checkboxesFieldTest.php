@@ -1,6 +1,6 @@
 <?php namespace Nickwest\EloquentForms\Test\views\defaults\fields;
 
-use Sunra\PhpSimple\HtmlDomParser;
+use KubAT\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Field;
 use Nickwest\EloquentForms\Test\FieldViewTestCase;

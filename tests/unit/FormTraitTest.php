@@ -146,7 +146,7 @@ class FormTraitTest extends TestCase
 
     public function test_formtrait_models_force_validation_on_save_by_default()
     {
-        $this->assertAttributeEquals(true, 'validate_on_save', $this->Model);
+        $this->assertSame(true, $this->Model->validate_on_save);
     }
 
     public function test_formtrait_adds_extra_validation_and_that_works()
