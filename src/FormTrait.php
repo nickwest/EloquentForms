@@ -63,7 +63,9 @@ trait FormTrait
     {
         $this->validate_on_save = $validate_on_save;
 
-        return parent::__construct($attributes);
+        if(method_exists(get_parent_class($this), '__construct')){
+            return parent::__construct($attributes);
+        }
     }
 
     /**
