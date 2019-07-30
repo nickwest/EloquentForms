@@ -158,7 +158,7 @@ abstract class FieldViewTestCase extends TestCase
         $input = current($dom->find($this->test_tag));
 
         // & for good measure
-        $this->assertEquals($this->test_value, $input->value);
+        $this->assertEquals(e($this->test_value), $input->value);
     }
 
     public function test_field_can_have_valueless_attributes()
