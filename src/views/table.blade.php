@@ -1,4 +1,6 @@
 {{-- The funny tabbing in this file makes for clean HTML output --}}
+@yield('above_table')
+
 <table {!! $Table->attributes !!}>
     <thead>
         <tr>
@@ -17,3 +19,5 @@
     @endforeach
 </tbody>
 </table>
+
+@yield('below_table')
