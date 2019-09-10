@@ -2,6 +2,8 @@
 
 namespace Nickwest\EloquentForms;
 
+use Arr;
+
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
@@ -26,9 +28,9 @@ class EloquentFormsServiceProvider extends ServiceProvider
 
         Blade::directive('eloquentforms_include', function ($expression) {
             return '<?php if(View::exists('.EloquentFormsServiceProvider::getViewFromExpression($expression).')){
-                echo $__env->make('.$expression.', array_except(get_defined_vars(), array(\'__data\', \'__path\')))->render();
+                echo $__env->make('.$expression.', Arr::except(get_defined_vars(), array(\'__data\', \'__path\')))->render();
             }else{
-                echo $__env->make(\''.DefaultTheme::getDefaultNamespace().'::'.substr($expression, strpos($expression, '::') + 2).', array_except(get_defined_vars(), array(\'__data\', \'__path\')))->render();
+                echo $__env->make(\''.DefaultTheme::getDefaultNamespace().'::'.substr($expression, strpos($expression, '::') + 2).', Arr::except(get_defined_vars(), array(\'__data\', \'__path\')))->render();
             } ?>';
         });
 
