@@ -26,22 +26,15 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     {
         // SQL
         $app['config']->set('database.default', env('DB_CONNECTION'));
-        $app['config']->set('database.connections.'.env('DB_CONNECTION'), [
+        $app['config']->set('database.connections.testing', [
             'driver'   => 'mysql',
             'host'      => env('DB_HOST', 'localhost'),
-            'port'      => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE'),
             'username'  => env('DB_USERNAME'),
             'password'  => env('DB_PASSWORD'),
             'prefix'   => '',
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'strict' => true,
-            'engine' => 'InnoDB ROW_FORMAT=DYNAMIC',
-            'ssl' => 0,
-            'options' => [],
         ]);
-    }
+        }
 
     public function setUp(): void
     {

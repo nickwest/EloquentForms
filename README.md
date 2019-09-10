@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/nickwest/EloquentForms.svg?branch=5.8.x)](https://travis-ci.org/nickwest/EloquentForms) [![Latest Stable Version](https://poser.pugx.org/nickwest/eloquent-forms/v/stable)](https://packagist.org/packages/nickwest/eloquent-forms) [![License](https://poser.pugx.org/nickwest/eloquent-forms/license)](https://packagist.org/packages/nickwest/eloquent-forms) [![Style](https://styleci.io/repos/123993557/shield)](https://styleci.io/repos/123993557) [![Maintainability](https://api.codeclimate.com/v1/badges/f986a765708538da7e5e/maintainability)](https://codeclimate.com/github/nickwest/EloquentForms/maintainability) [![codecov](https://codecov.io/gh/nickwest/EloquentForms/branch/master/graph/badge.svg)](https://codecov.io/gh/nickwest/EloquentForms)
 
 
-EloquentForms v6.0.x
+EloquentForms
 =================
 
 EloquentForms was created by and is maintained by [Nick West](https://github.com/nickwest). It was created to minimize the time and effort required to create simple HTML forms generated from Eloquent Models to support CRUD functionality.
@@ -12,13 +12,13 @@ EloquentForms can be easily themed to support various front-end css/js framework
 
 ## Installation
 
-EloquentForms requires PHP 7.2^. This particular version supports Laravel 6.0.x. To install on earlier versions of laravel Laravel use the X.Y.z release of EloquentForms where X.Y matches the versions of Laravel you're using.
+EloquentForms requires PHP 7.1.3+. This particular version supports Laravel 5.8.x. To install on Laravel 5.5.x use the 5.5.x release of EloquentForms.
 
 To get the latest version you need only require the package via Composer.
 ```
 Composer require nickwest/EloquentForms
 ```
-EloquentForms supports [Laravel Auto-Discovery](https://medium.com/@taylorotwell/package-auto-discovery-in-laravel-5-5-ea9e3ab20518). It shouldn't be necessary with Laravel 5.5^, but to manually add the package the following providers should be added in your config/app.php:
+EloquentForms supports [Laravel Auto-Discovery](https://medium.com/@taylorotwell/package-auto-discovery-in-laravel-5-5-ea9e3ab20518). It shouldn't be necessary with Laravel 5.5+, but to manually add the package the following providers should be added in your config/app.php:
 ```
 Nickwest\EloquentForms\EloquentFormsServiceProvider::class,
 Nickwest\EloquentForms\Themes\bulma\EloquentFormsBulmaThemeServiceProvider::class
