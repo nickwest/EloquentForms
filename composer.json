@@ -13,7 +13,8 @@
         "illuminate/support": "^6.0",
         "nesbot/carbon": "^2.0",
         "doctrine/dbal": "~2.9",
-        "maatwebsite/excel": "^3.1"
+        "maatwebsite/excel": "^3.1",
+        "nickwest/blossom-php": "^1.0"
     },
     "autoload": {
         "classmap": [
