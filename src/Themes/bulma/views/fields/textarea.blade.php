@@ -8,7 +8,7 @@
                 {!! nl2br($Field->extra_blade_data['value']) !!}
             @else
                 @php unset($Field->attributes->type) @endphp
-                <textarea {!! $Field->attributes !!}>{!! $Field->extra_blade_data['value'] !!}</textarea>
+                <textarea {!! $Field->attributes !!}>{{ $Field->extra_blade_data['value'] }}</textarea>
             @endif
         </div>
 
