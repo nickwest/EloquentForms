@@ -43,7 +43,7 @@ class textareaFieldTest extends FieldViewTestCase implements textareaFieldTestIn
         $this->assertSame(false, $input->value);
 
         // But the value between the tags should be equal to the value
-        $this->assertEquals($this->test_value, trim($input->innertext));
+        $this->assertEquals(htmlspecialchars($this->test_value), trim($input->innertext));
     }
 
 
