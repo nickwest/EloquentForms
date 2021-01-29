@@ -21,7 +21,7 @@
         ],
         "psr-4": {
             "Nickwest\\EloquentForms\\": "src/",
-            "Nickwest\\EloquentForms\\Test\\": "tests/"
+            "Nickwest\\EloquentForms\\test\\": "tests/"
         }
     },
     "minimum-stability": "stable",
