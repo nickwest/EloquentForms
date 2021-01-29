@@ -1,10 +1,10 @@
-<?php namespace Nickwest\EloquentForms\Test\views\bulma\fields;
+<?php namespace Nickwest\EloquentForms\test\views\bulma\fields;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Field;
-use Nickwest\EloquentForms\Test\TestCase;
-use Nickwest\EloquentForms\Test\ThemeTestInterfaces\contentblockFieldTestInterface;
+use Nickwest\EloquentForms\test\TestCase;
+use Nickwest\EloquentForms\test\ThemeTestInterfaces\contentblockFieldTestInterface;
 
 // Extend TestCase since Contentblock isn't a real field
 class contentblockFieldTest extends TestCase implements contentblockFieldTestInterface

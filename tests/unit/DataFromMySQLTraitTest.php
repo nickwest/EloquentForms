@@ -1,12 +1,12 @@
-<?php namespace Nickwest\EloquentForms\Test\unit;
+<?php namespace Nickwest\EloquentForms\test\unit;
 
 use Faker;
 use Config;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-use Nickwest\EloquentForms\Test\Sample;
-use Nickwest\EloquentForms\Test\TestCase;
+use Nickwest\EloquentForms\test\Sample;
+use Nickwest\EloquentForms\test\TestCase;
 
 class DataFromMySQLTraitTest extends TestCase
 {

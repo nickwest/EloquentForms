@@ -1,11 +1,11 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults;
+<?php namespace Nickwest\EloquentForms\test\view\defaults;
 
 use Faker;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
-use Nickwest\EloquentForms\Test\Sample;
-use Nickwest\EloquentForms\Test\TestCase;
+use Nickwest\EloquentForms\test\Sample;
+use Nickwest\EloquentForms\test\TestCase;
 
 class formTest extends TestCase
 {

@@ -1,7 +1,7 @@
-<?php namespace Nickwest\EloquentForms\Test\views\bulma\fields;
+<?php namespace Nickwest\EloquentForms\test\views\bulma\fields;
 
-use Nickwest\EloquentForms\Test\FieldViewBulmaTestCase;
-use Nickwest\EloquentForms\Test\ThemeTestInterfaces\colorFieldTestInterface;
+use Nickwest\EloquentForms\test\FieldViewBulmaTestCase;
+use Nickwest\EloquentForms\test\ThemeTestInterfaces\colorFieldTestInterface;
 
 class colorFieldTest extends FieldViewBulmaTestCase implements colorFieldTestInterface
 {

@@ -1,4 +1,4 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults;
+<?php namespace Nickwest\EloquentForms\test\view\defaults;
 
 use Faker;
 
@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 use KubAT\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Table;
-use Nickwest\EloquentForms\Test\TestCase;
+use Nickwest\EloquentForms\test\TestCase;
 
 class tableButtonsTest extends TestCase
 {

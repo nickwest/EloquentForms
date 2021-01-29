@@ -1,10 +1,10 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults\fields;
+<?php namespace Nickwest\EloquentForms\test\view\defaults\fields;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Field;
-use Nickwest\EloquentForms\Test\FieldViewTestCase;
-use Nickwest\EloquentForms\Test\ThemeTestInterfaces\radioFieldTestInterface;
+use Nickwest\EloquentForms\test\FieldViewTestCase;
+use Nickwest\EloquentForms\test\ThemeTestInterfaces\radioFieldTestInterface;
 
 class radioFieldTest extends FieldViewTestCase implements radioFieldTestInterface
 {

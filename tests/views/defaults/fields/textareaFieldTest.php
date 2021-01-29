@@ -1,9 +1,9 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults\fields;
+<?php namespace Nickwest\EloquentForms\test\view\defaults\fields;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
-use Nickwest\EloquentForms\Test\FieldViewTestCase;
-use Nickwest\EloquentForms\Test\ThemeTestInterfaces\textareaFieldTestInterface;
+use Nickwest\EloquentForms\test\FieldViewTestCase;
+use Nickwest\EloquentForms\test\ThemeTestInterfaces\textareaFieldTestInterface;
 
 class textareaFieldTest extends FieldViewTestCase implements textareaFieldTestInterface
 {

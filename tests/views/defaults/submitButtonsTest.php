@@ -1,10 +1,10 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults;
+<?php namespace Nickwest\EloquentForms\test\view\defaults;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Form;
 
-use Nickwest\EloquentForms\Test\TestCase;
+use Nickwest\EloquentForms\test\TestCase;
 
 class submitButtonsTest extends TestCase
 {

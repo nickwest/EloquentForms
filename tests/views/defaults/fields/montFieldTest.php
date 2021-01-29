@@ -1,7 +1,7 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults\fields;
+<?php namespace Nickwest\EloquentForms\test\view\defaults\fields;
 
-use Nickwest\EloquentForms\Test\FieldViewTestCase;
-use Nickwest\EloquentForms\Test\ThemeTestInterfaces\monthFieldTestInterface;
+use Nickwest\EloquentForms\test\FieldViewTestCase;
+use Nickwest\EloquentForms\test\ThemeTestInterfaces\monthFieldTestInterface;
 
 class monthFieldTest extends FieldViewTestCase implements monthFieldTestInterface
 {

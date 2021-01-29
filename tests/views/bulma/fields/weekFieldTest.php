@@ -1,7 +1,7 @@
-<?php namespace Nickwest\EloquentForms\Test\views\bulma\fields;
+<?php namespace Nickwest\EloquentForms\test\views\bulma\fields;
 
-use Nickwest\EloquentForms\Test\FieldViewBulmaTestCase;
-use Nickwest\EloquentForms\Test\ThemeTestInterfaces\weekFieldTestInterface;
+use Nickwest\EloquentForms\test\FieldViewBulmaTestCase;
+use Nickwest\EloquentForms\test\ThemeTestInterfaces\weekFieldTestInterface;
 
 class weekFieldTest extends FieldViewBulmaTestCase implements weekFieldTestInterface
 {

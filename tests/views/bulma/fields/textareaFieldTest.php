@@ -1,9 +1,9 @@
-<?php namespace Nickwest\EloquentForms\Test\views\bulma\fields;
+<?php namespace Nickwest\EloquentForms\test\views\bulma\fields;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
-use Nickwest\EloquentForms\Test\FieldViewBulmaTestCase;
-use Nickwest\EloquentForms\Test\ThemeTestInterfaces\textareaFieldTestInterface;
+use Nickwest\EloquentForms\test\FieldViewBulmaTestCase;
+use Nickwest\EloquentForms\test\ThemeTestInterfaces\textareaFieldTestInterface;
 
 class textareaFieldTest extends FieldViewBulmaTestCase implements textareaFieldTestInterface
 {

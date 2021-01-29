@@ -1,11 +1,11 @@
-<?php namespace Nickwest\EloquentForms\Test\unit;
+<?php namespace Nickwest\EloquentForms\test\unit;
 
 use Faker;
 
 use Nickwest\EloquentForms\Form;
 use Nickwest\EloquentForms\Field;
 
-use Nickwest\EloquentForms\Test\TestCase;
+use Nickwest\EloquentForms\test\TestCase;
 use Nickwest\EloquentForms\Exceptions\OptionValueException;
 
 class FieldTest extends TestCase

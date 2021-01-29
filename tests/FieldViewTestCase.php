@@ -1,4 +1,4 @@
-<?php namespace Nickwest\EloquentForms\Test;
+<?php namespace Nickwest\EloquentForms\test;
 
 /**
  * FieldViewTestCase includes basic field tests
@@ -15,7 +15,7 @@ use KubAT\PhpSimple\HtmlDomParser;
 use Nickwest\EloquentForms\Form;
 use Nickwest\EloquentForms\Field;
 
-use Nickwest\EloquentForms\Test\TestCase;
+use Nickwest\EloquentForms\test\TestCase;
 
 abstract class FieldViewTestCase extends TestCase
 {

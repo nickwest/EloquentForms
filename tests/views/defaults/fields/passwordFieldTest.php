@@ -1,9 +1,9 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults\fields;
+<?php namespace Nickwest\EloquentForms\test\view\defaults\fields;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
-use Nickwest\EloquentForms\Test\FieldViewTestCase;
-use Nickwest\EloquentForms\Test\ThemeTestInterfaces\passwordFieldTestInterface;
+use Nickwest\EloquentForms\test\FieldViewTestCase;
+use Nickwest\EloquentForms\test\ThemeTestInterfaces\passwordFieldTestInterface;
 
 class passwordFieldTest extends FieldViewTestCase implements passwordFieldTestInterface
 {

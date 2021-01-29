@@ -1,10 +1,10 @@
-<?php namespace Nickwest\EloquentForms\Test\views\bulma\fields;
+<?php namespace Nickwest\EloquentForms\test\views\bulma\fields;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Field;
-use Nickwest\EloquentForms\Test\FieldViewBulmaTestCase;
-use Nickwest\EloquentForms\Test\ThemeTestInterfaces\checkboxFieldTestInterface;
+use Nickwest\EloquentForms\test\FieldViewBulmaTestCase;
+use Nickwest\EloquentForms\test\ThemeTestInterfaces\checkboxFieldTestInterface;
 
 class checkboxFieldTest extends FieldViewBulmaTestCase implements checkboxFieldTestInterface
 {

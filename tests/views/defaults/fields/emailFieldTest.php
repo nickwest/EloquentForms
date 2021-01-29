@@ -1,7 +1,7 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults\fields;
+<?php namespace Nickwest\EloquentForms\test\view\defaults\fields;
 
-use Nickwest\EloquentForms\Test\FieldViewTestCase;
-use Nickwest\EloquentForms\Test\ThemeTestInterfaces\emailFieldTestInterface;
+use Nickwest\EloquentForms\test\FieldViewTestCase;
+use Nickwest\EloquentForms\test\ThemeTestInterfaces\emailFieldTestInterface;
 
 class emailFieldTest extends FieldViewTestCase implements emailFieldTestInterface
 {

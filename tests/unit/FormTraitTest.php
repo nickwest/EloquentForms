@@ -1,12 +1,12 @@
-<?php namespace Nickwest\EloquentForms\Test\unit;
+<?php namespace Nickwest\EloquentForms\test\unit;
 
 use Config;
 
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Artisan;
 
-use Nickwest\EloquentForms\Test\Sample;
-use Nickwest\EloquentForms\Test\TestCase;
+use Nickwest\EloquentForms\test\Sample;
+use Nickwest\EloquentForms\test\TestCase;
 
 class FormTraitTest extends TestCase
 {

@@ -1,10 +1,10 @@
-<?php namespace Nickwest\EloquentForms\Test\views\defaults\fields;
+<?php namespace Nickwest\EloquentForms\test\views\defaults\fields;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Field;
-use Nickwest\EloquentForms\Test\FieldViewTestCase;
-use Nickwest\EloquentForms\Test\ThemeTestInterfaces\checkboxesFieldTestInterface;
+use Nickwest\EloquentForms\test\FieldViewTestCase;
+use Nickwest\EloquentForms\test\ThemeTestInterfaces\checkboxesFieldTestInterface;
 
 class checkboxesFieldTest extends FieldViewTestCase implements checkboxesFieldTestInterface
 {

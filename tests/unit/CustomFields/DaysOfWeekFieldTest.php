@@ -1,12 +1,12 @@
-<?php namespace Nickwest\EloquentForms\Test\unit\CustomFields;
+<?php namespace Nickwest\EloquentForms\test\unit\CustomFields;
 
 use Faker;
 
 use Illuminate\View\View;
 
 use Nickwest\EloquentForms\Attributes;
-use Nickwest\EloquentForms\Test\Sample;
-use Nickwest\EloquentForms\Test\TestCase;
+use Nickwest\EloquentForms\test\Sample;
+use Nickwest\EloquentForms\test\TestCase;
 
 class DaysOfWeekFieldTest extends TestCase
 {

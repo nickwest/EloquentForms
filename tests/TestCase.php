@@ -1,4 +1,4 @@
-<?php namespace Nickwest\EloquentForms\Test;
+<?php namespace Nickwest\EloquentForms\test;
 
 use Cache;
 use Faker;

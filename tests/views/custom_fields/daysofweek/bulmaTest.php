@@ -1,11 +1,11 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults;
+<?php namespace Nickwest\EloquentForms\test\view\defaults;
 use Faker;
 
 use Illuminate\Support\Collection;
 use KubAT\PhpSimple\HtmlDomParser;
 
 use Nickwest\EloquentForms\Field;
-use Nickwest\EloquentForms\Test\TestCase;
+use Nickwest\EloquentForms\test\TestCase;
 use Nickwest\EloquentForms\Themes\bulma\Theme as Bulma;
 use Nickwest\EloquentForms\CustomFields\daysofweek\CustomField as DaysOfWeekField;
 

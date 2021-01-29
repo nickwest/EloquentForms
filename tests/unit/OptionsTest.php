@@ -1,9 +1,9 @@
-<?php namespace Nickwest\EloquentForms\Test\unit;
+<?php namespace Nickwest\EloquentForms\test\unit;
 
 use Faker;
 
 use Nickwest\EloquentForms\Options;
-use Nickwest\EloquentForms\Test\TestCase;
+use Nickwest\EloquentForms\test\TestCase;
 
 use Nickwest\EloquentForms\Exceptions\OptionValueException;
 use Nickwest\EloquentForms\Exceptions\InvalidOptionException;

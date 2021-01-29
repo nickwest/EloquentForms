@@ -1,4 +1,4 @@
-<?php namespace Nickwest\EloquentForms\Test\unit;
+<?php namespace Nickwest\EloquentForms\test\unit;
 
 use Faker;
 use Route;
@@ -7,7 +7,7 @@ use Storage;
 use Illuminate\Support\Collection;
 
 use Nickwest\EloquentForms\Table;
-use Nickwest\EloquentForms\Test\TestCase;
+use Nickwest\EloquentForms\test\TestCase;
 use Nickwest\EloquentForms\Exceptions\InvalidRouteException;
 use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
 

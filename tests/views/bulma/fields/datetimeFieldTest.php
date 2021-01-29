@@ -1,9 +1,9 @@
-<?php namespace Nickwest\EloquentForms\Test\views\bulma\fields;
+<?php namespace Nickwest\EloquentForms\test\views\bulma\fields;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
-use Nickwest\EloquentForms\Test\FieldViewBulmaTestCase;
-use Nickwest\EloquentForms\Test\ThemeTestInterfaces\datetimeFieldTestInterface;
+use Nickwest\EloquentForms\test\FieldViewBulmaTestCase;
+use Nickwest\EloquentForms\test\ThemeTestInterfaces\datetimeFieldTestInterface;
 
 class datetimeFieldTest extends FieldViewBulmaTestCase implements datetimeFieldTestInterface
 {

@@ -1,4 +1,4 @@
-<?php namespace Nickwest\EloquentForms\Test\unit;
+<?php namespace Nickwest\EloquentForms\test\unit;
 
 use Faker;
 
@@ -6,7 +6,7 @@ use Nickwest\EloquentForms\Theme;
 use Nickwest\EloquentForms\DefaultTheme;
 use Nickwest\EloquentForms\Themes\bulma\Theme as bulmaTheme;
 
-use Nickwest\EloquentForms\Test\TestCase;
+use Nickwest\EloquentForms\test\TestCase;
 
 class ThemeTest extends TestCase
 {

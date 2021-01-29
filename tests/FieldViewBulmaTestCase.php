@@ -1,4 +1,4 @@
-<?php namespace Nickwest\EloquentForms\Test;
+<?php namespace Nickwest\EloquentForms\test;
 
 /**
  * FieldViewTestCase includes basic field tests
@@ -16,7 +16,7 @@ use Nickwest\EloquentForms\Form;
 use Nickwest\EloquentForms\Field;
 use Nickwest\EloquentForms\Themes\bulma\Theme;
 
-use Nickwest\EloquentForms\Test\TestCase;
+use Nickwest\EloquentForms\test\TestCase;
 
 abstract class FieldViewBulmaTestCase extends TestCase
 {

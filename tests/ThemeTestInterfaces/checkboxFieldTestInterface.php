@@ -1,4 +1,4 @@
-<?php namespace Nickwest\EloquentForms\Test\ThemeTestInterfaces;
+<?php namespace Nickwest\EloquentForms\test\ThemeTestInterfaces;
 /**
  * The required tests each theme should implement
  */
