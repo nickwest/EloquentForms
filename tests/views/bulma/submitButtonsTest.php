@@ -1,4 +1,4 @@
-<?php namespace Nickwest\EloquentForms\test\view\bulma;
+<?php namespace Nickwest\EloquentForms\test\views\bulma;
 
 use KubAT\PhpSimple\HtmlDomParser;
 

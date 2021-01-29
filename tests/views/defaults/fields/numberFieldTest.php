@@ -1,4 +1,4 @@
-<?php namespace Nickwest\EloquentForms\test\view\defaults\fields;
+<?php namespace Nickwest\EloquentForms\test\views\defaults\fields;
 
 use Nickwest\EloquentForms\test\FieldViewTestCase;
 use Nickwest\EloquentForms\test\ThemeTestInterfaces\numberFieldTestInterface;

@@ -1,4 +1,4 @@
-<?php namespace Nickwest\EloquentForms\test\view\defaults;
+<?php namespace Nickwest\EloquentForms\test\views\defaults;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
