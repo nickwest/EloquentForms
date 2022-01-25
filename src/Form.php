@@ -12,10 +12,9 @@ use Nickwest\EloquentForms\Exceptions\InvalidCustomFieldObjectException;
 
 class Form
 {
-    use Themeable{
-        setTheme as parentSetTheme;
+    use HasFields, Themeable{
+        Themeable::setTheme as parentSetTheme;
     }
-    use HasFields;
 
     /**
      * Use Laravel csrf_field() method for creating a CSRF field in the form?
