@@ -2,13 +2,13 @@
 
 namespace Nickwest\EloquentForms;
 
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\View;
+use Nickwest\EloquentForms\Exceptions\InvalidCustomFieldObjectException;
+use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
 use Nickwest\EloquentForms\Traits\HasFields;
 use Nickwest\EloquentForms\Traits\Themeable;
-use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
-use Nickwest\EloquentForms\Exceptions\InvalidCustomFieldObjectException;
 
 class Form
 {
@@ -66,10 +66,11 @@ class Form
     /**
      * Add a Subform into the current form.
      *
-     * @param string $name
-     * @param Nickwest\EloquentForms\Form $form
-     * @param string $before_field
+     * @param  string  $name
+     * @param  Nickwest\EloquentForms\Form  $form
+     * @param  string  $before_field
      * @return void
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function addSubform(string $name, self $Form, string $before_field = ''): void
@@ -101,8 +102,9 @@ class Form
      * Set multiple field names at once [original_name] => new_name
      * Simple way to change all buttons to have the same name attribute in HTML.
      *
-     * @param array $names [original_name] => new_name
+     * @param  array  $names  [original_name] => new_name
      * @return void
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function setNames(array $names): void
@@ -119,8 +121,9 @@ class Form
     /**
      * Set multiple field types at once [field_name] => type.
      *
-     * @param array $types
+     * @param  array  $types
      * @return void
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidCustomFieldObjectException
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
@@ -149,8 +152,9 @@ class Form
     /**
      * Set multiple field examples at once [field_name] => value.
      *
-     * @param array $examples
+     * @param  array  $examples
      * @return void
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function setExamples($examples): void
@@ -167,8 +171,9 @@ class Form
     /**
      * Set multiple field default values at once [field_name] => value.
      *
-     * @param array $default_values
+     * @param  array  $default_values
      * @return void
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function setDefaultValues(array $default_values): void
@@ -185,8 +190,9 @@ class Form
     /**
      * Set multiple field required fields at oncel takes array of field names.
      *
-     * @param array $required_fields
+     * @param  array  $required_fields
      * @return void
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function setRequiredFields(array $required_fields): void
@@ -206,8 +212,9 @@ class Form
     /**
      * set inline fields.
      *
-     * @param array $fields an array of field names
+     * @param  array  $fields  an array of field names
      * @return void
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function setInline(array $fields): void
@@ -224,8 +231,8 @@ class Form
     /**
      * Add a data list to the form.
      *
-     * @param array $name
-     * @param array $options
+     * @param  array  $name
+     * @param  array  $options
      * @return void
      */
     public function addDatalist(string $name, array $options)
@@ -242,8 +249,9 @@ class Form
     /**
      * Set the array of fields to be displayed (order matters).
      *
-     * @param array $field_names
+     * @param  array  $field_names
      * @return void
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function setDisplayFields(array $field_names): void
@@ -263,7 +271,7 @@ class Form
     /**
      * Add multiple display fields field.
      *
-     * @param array $field_names
+     * @param  array  $field_names
      * @return void
      */
     public function addDisplayFields(array $field_names): void
@@ -276,7 +284,7 @@ class Form
     /**
      * Remove multiple display fields field.
      *
-     * @param array $field_names
+     * @param  array  $field_names
      * @return void
      */
     public function removeDisplayFields(array $field_names): void
@@ -291,9 +299,10 @@ class Form
     /**
      * Add $display_field to the display array after $after_field.
      *
-     * @param string $display_field
-     * @param string $after_field
+     * @param  string  $display_field
+     * @param  string  $after_field
      * @return void
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function setDisplayAfter(string $display_field, string $after_field): void
@@ -344,8 +353,9 @@ class Form
     /**
      * Add field labels to the existing labels.
      *
-     * @param array $labels
+     * @param  array  $labels
      * @return void
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function setLabels(array $labels): void
@@ -362,7 +372,7 @@ class Form
     /**
      * Add label suffix to all current fields.
      *
-     * @param string $suffix
+     * @param  string  $suffix
      * @return void
      */
     public function setLabelSuffix(string $suffix): void
@@ -375,8 +385,9 @@ class Form
     /**
      * Get a list of all labels for the given $field_names, if $field_names is blank, get labels for all fields.
      *
-     * @param array $field_names
+     * @param  array  $field_names
      * @return array
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function getLabels(array $field_names = []): array
@@ -400,7 +411,7 @@ class Form
     /**
      * Set validation rules to Field(s).
      *
-     * @param array $validation_rules [field_name] => rules
+     * @param  array  $validation_rules  [field_name] => rules
      * @return void
      */
     public function setValidationRules(array $validation_rules): void
@@ -476,10 +487,10 @@ class Form
     /**
      * Add a submit button to the bottom of the form.
      *
-     * @param string $name
-     * @param string $value
-     * @param string $label
-     * @param string $classes
+     * @param  string  $name
+     * @param  string  $value
+     * @param  string  $label
+     * @param  string  $classes
      * @return void
      */
     public function addSubmitButton(string $name, string $value, string $label = null, string $classes = ''): void
@@ -497,9 +508,10 @@ class Form
     /**
      * Remove a submit button to the bottom of the form.
      *
-     * @param string $name
-     * @param string $value
+     * @param  string  $name
+     * @param  string  $value
      * @return void
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function removeSubmitButton(string $name, string $value): void
@@ -514,9 +526,10 @@ class Form
     /**
      * Get a submit button from the bottom of the form.
      *
-     * @param string $name
-     * @param string $value
+     * @param  string  $name
+     * @param  string  $value
      * @return Nickwest\EloquentForms\Field
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function getSubmitButton(string $name, string $value): Field
@@ -541,9 +554,10 @@ class Form
     /**
      * Rename a submit button, and optionally also update its value.
      *
-     * @param string $name
-     * @param string $new_name
-     * @param string $new_value
+     * @param  string  $name
+     * @param  string  $new_name
+     * @param  string  $new_value
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function renameSubmitButton(string $name, string $value, string $new_name, string $new_value = null, string $new_label = null): void
@@ -581,7 +595,7 @@ class Form
     /**
      * Set the theme.
      *
-     * @param Nickwest\EloquentForms\Theme $Theme
+     * @param  Nickwest\EloquentForms\Theme  $Theme
      * @return void
      */
     public function setTheme(Theme $Theme): void
@@ -596,10 +610,10 @@ class Form
     /**
      * Make a view and extend $extends in section $section, $blade_data is the data array to pass to View::make().
      *
-     * @param array $blade_data
-     * @param string $extends
-     * @param string $section
-     * @param bool $view_only
+     * @param  array  $blade_data
+     * @param  string  $extends
+     * @param  string  $section
+     * @param  bool  $view_only
      * @return Illuminate\View\View
      */
     public function makeView(array $blade_data = [], string $extends = '', string $section = '', bool $view_only = false): \Illuminate\View\View
@@ -624,8 +638,8 @@ class Form
     /**
      * Make a view, $blade_data is the data array to pass to View::make().
      *
-     * @param array $blade_data
-     * @param bool $view_only
+     * @param  array  $blade_data
+     * @param  bool  $view_only
      * @return View
      */
     public function makeSubformView(array $blade_data, bool $view_only = false)
@@ -672,7 +686,7 @@ class Form
     /**
      * Make A Form from JSON.
      *
-     * @param string $json
+     * @param  string  $json
      * @return Nickwest\EloquentForms\Form
      */
     public function fromJson(string $json): self
