@@ -226,9 +226,9 @@ class Table
             }
 
             if (is_object($Object) && isset($Object->{$results[1][$key]})) {
-                $replaced = $this->fieldReplaceString($results[0][$key], $Object->{$results[1][$key]}, $replaced, $results[1][$key]);
+                $replaced = $this->fieldReplaceString($results[0][$key], $Object->{$results[1][$key]}, $replaced, $field);
             } elseif (is_array($Object) && isset($Object[$results[1][$key]])) {
-                $replaced = $this->fieldReplaceString($results[0][$key], $Object[$results[1][$key]], $replaced, $results[1][$key]);
+                $replaced = $this->fieldReplaceString($results[0][$key], $Object[$results[1][$key]], $replaced, $field);
             } elseif ($optional) {
                 $replaced = str_replace($results[0][$key], '', $replaced);
             }
