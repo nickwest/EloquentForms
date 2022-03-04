@@ -22,9 +22,7 @@ jobs:
       fail-fast: true
       matrix:
         php: ['8.0']
-        stability: [prefer-stable]
-        # php: ['8.0', '8.1']
-        # stability: [prefer-lowest, prefer-stable]
+        stability: [prefer-lowest, prefer-stable]
 
     name: PHP ${{ matrix.php }} - ${{ matrix.stability }}
     
@@ -51,13 +49,13 @@ jobs:
           tools: composer:v2
           coverage: none
 
-      # - name: Set Minimum PHP 8.0 Versions
-      #   uses: nick-invision/retry@v1
-      #   with:
-      #     timeout_minutes: 5
-      #     max_attempts: 5
-      #     command: composer require guzzlehttp/guzzle:^7.2 --no-interaction --no-update
-      #   if: matrix.php >= 8
+      - name: Set Minimum PHP 8.0 Versions
+        uses: nick-invision/retry@v1
+        with:
+          timeout_minutes: 5
+          max_attempts: 5
+          command: composer require guzzlehttp/guzzle:^7.2 --no-interaction --no-update
+        if: matrix.php >= 8
 
       # - name: Set Minimum PHP 8.1 Versions
       #   uses: nick-invision/retry@v1
