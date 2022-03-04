@@ -29,18 +29,18 @@ class DataFromMySQLTraitTest extends TestCase
     public function test_form_trait_will_generate_a_form_using_extra_mysql_field_data_db_structure()
     {
         // If MySQL connection fails, then skip this test
-        try{
-            // Switch to MySQL
-            Config::set('database.default', 'mysql');
+        // try{
+        //     // Switch to MySQL
+        //     Config::set('database.default', 'mysql');
 
-            // Rerun setup
-            $this->setUp();
-        } catch(\Exception $e){
-            throw $e;
-            $this->markTestSkipped(
-                'The MySQL Connection is not working. See phpunit.xml to add connection info'
-              );
-        }
+        //     // Rerun setup
+        //     $this->setUp();
+        // } catch(\Exception $e){
+        //     throw $e;
+        //     $this->markTestSkipped(
+        //         'The MySQL Connection is not working. See phpunit.xml to add connection info'
+        //       );
+        // }
         $array = $this->Model->getColumnsArray();
 
         $this->assertEquals($this->expectedDBStructure(true), $array);
