@@ -4,8 +4,8 @@ namespace Nickwest\EloquentForms;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Nickwest\EloquentForms\Traits\DataFromMySQL;
 use Nickwest\EloquentForms\Exceptions\NotImplementedException;
+use Nickwest\EloquentForms\Traits\DataFromMySQL;
 
 trait FormTrait
 {
@@ -105,10 +105,10 @@ trait FormTrait
     /**
      * Make a View for the form and return the rendered output.
      *
-     * @param array $blade_data
-     * @param string $extends
-     * @param string $section
-     * @param bool $view_only
+     * @param  array  $blade_data
+     * @param  string  $extends
+     * @param  string  $section
+     * @param  bool  $view_only
      * @return View
      */
     public function getFormView(array $blade_data, string $extends = '', string $section = '', bool $view_only = false): \Illuminate\View\View
@@ -119,8 +119,8 @@ trait FormTrait
     /**
      * Make a View for the field and return the rendered output.
      *
-     * @param string $field_name
-     * @param array $options
+     * @param  string  $field_name
+     * @param  array  $options
      * @return View
      */
     public function getFieldView(string $field_name): \Illuminate\View\View
@@ -131,8 +131,8 @@ trait FormTrait
     /**
      * Make a View for the field and return the rendered output.
      *
-     * @param string $field_name
-     * @param array $options
+     * @param  string  $field_name
+     * @param  array  $options
      * @return View
      */
     public function getFieldDisplayView(string $field_name, array $options = []): \Illuminate\View\View
@@ -143,7 +143,7 @@ trait FormTrait
     /**
      * String to append to each label.
      *
-     * @param string $suffix
+     * @param  string  $suffix
      * @return void
      */
     public function setLabelSuffix(string $suffix)
@@ -157,7 +157,7 @@ trait FormTrait
      * Set the values from a post data array to $this model,
      * returned bool indicates if anything changed.
      *
-     * @param array $post_data
+     * @param  array  $post_data
      * @return void
      */
     public function setPostValues(array $post_data): void
@@ -239,7 +239,7 @@ trait FormTrait
     /**
      * Create the Form object from Json.
      *
-     * @param string $json
+     * @param  string  $json
      * @return void
      */
     public function generateFormFromJson(string $json): void
@@ -251,7 +251,7 @@ trait FormTrait
     /**
      * Determine if $field_name is a Column in the table this model models.
      *
-     * @param string $field_name
+     * @param  string  $field_name
      * @return bool
      */
     public function isColumn(string $field_name): bool
@@ -404,7 +404,7 @@ trait FormTrait
     /**
      * Get the field type based on column type.
      *
-     * @param string $type
+     * @param  string  $type
      * @return string
      */
     private function getFormTypeFromColumnType(string $type): string

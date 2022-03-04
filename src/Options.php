@@ -2,8 +2,8 @@
 
 namespace Nickwest\EloquentForms;
 
-use Nickwest\EloquentForms\Exceptions\OptionValueException;
 use Nickwest\EloquentForms\Exceptions\InvalidOptionException;
+use Nickwest\EloquentForms\Exceptions\OptionValueException;
 
 class Options
 {
@@ -45,8 +45,9 @@ class Options
     /**
      * Get an option by key.
      *
-     * @param string $key
+     * @param  string  $key
      * @return mixed
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidOptionException
      */
     public function __get(?string $key)
@@ -57,8 +58,8 @@ class Options
     /**
      * Set an option by key.
      *
-     * @param string $key
-     * @param mixed $value
+     * @param  string  $key
+     * @param  mixed  $value
      * @return void
      */
     public function __set(?string $key, $value): void
@@ -82,6 +83,7 @@ class Options
      *
      * @param $key
      * @return void
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidOptionException
      */
     public function __unset(?string $key): void
@@ -92,8 +94,9 @@ class Options
     /**
      * Get an option's value.
      *
-     * @param string $key
+     * @param  string  $key
      * @return mixed
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidOptionException
      */
     public function getOption(?string $key)
@@ -108,8 +111,8 @@ class Options
     /**
      * Set an option by key.
      *
-     * @param string $key
-     * @param mixed $value
+     * @param  string  $key
+     * @param  mixed  $value
      * @return void
      */
     public function setOption(?string $key, $value): void
@@ -131,8 +134,9 @@ class Options
     /**
      *  Unset an option by key.
      *
-     * @param string $key
+     * @param  string  $key
      * @return void
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidOptionException
      */
     public function removeOption(?string $key): void
@@ -167,8 +171,9 @@ class Options
     /**
      * Set options replacing all current options with those in the given array.
      *
-     * @param array $options
+     * @param  array  $options
      * @return void
+     *
      * @throws Nickwest\EloquentForms\Exceptions\OptionValueException
      */
     public function setOptions(array $options): void
@@ -191,8 +196,9 @@ class Options
     /**
      * Set options that should be disabled.
      *
-     * @param array $keys
+     * @param  array  $keys
      * @return void
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidOptionException
      */
     public function setDisabledOptions(array $keys): void

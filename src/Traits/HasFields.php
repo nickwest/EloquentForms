@@ -2,9 +2,9 @@
 
 namespace Nickwest\EloquentForms\Traits;
 
+use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
 use Nickwest\EloquentForms\Field;
 use Nickwest\EloquentForms\Theme;
-use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
 
 trait HasFields
 {
@@ -28,9 +28,10 @@ trait HasFields
     /**
      * Field value accessor.
      *
-     * @param string $field_name
-     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
+     * @param  string  $field_name
      * @return Nickwest\EloquentForms\Field
+     *
+     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function __get(string $field_name): Field
     {
@@ -40,9 +41,10 @@ trait HasFields
     /**
      * Field value isset.
      *
-     * @param string $field_name
-     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
+     * @param  string  $field_name
      * @return bool
+     *
+     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function __isset(string $field_name): bool
     {
@@ -52,10 +54,11 @@ trait HasFields
     /**
      * Field value mutator.
      *
-     * @param string $field_name
-     * @param mixed $value
-     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
+     * @param  string  $field_name
+     * @param  mixed  $value
      * @return void
+     *
+     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function __set(string $field_name, $value): void
     {
@@ -65,9 +68,10 @@ trait HasFields
     /**
      * Unset a field's value.
      *
-     * @param string $field_nname
-     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
+     * @param  string  $field_nname
      * @return void
+     *
+     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function __unset(string $field_name): void
     {
@@ -77,8 +81,9 @@ trait HasFields
     /**
      * get a single field.
      *
-     * @param string $field_name
+     * @param  string  $field_name
      * @return Nickwest\EloquentForms\Field
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function getField(string $field_name): Field
@@ -103,7 +108,7 @@ trait HasFields
     /**
      * Add a single field to the form.
      *
-     * @param string $field_name
+     * @param  string  $field_name
      * @return void
      */
     public function addField(string $field_name): void
@@ -117,7 +122,7 @@ trait HasFields
     /**
      * Add a bunch of fields to the form, New fields will overwrite old ones with the same name.
      *
-     * @param array $field_names
+     * @param  array  $field_names
      * @return void
      */
     public function addFields(array $field_names): void
@@ -133,10 +138,11 @@ trait HasFields
     /**
      * Clone an existing field.
      *
-     * @param string $field_name
-     * @param string $new_name
-     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
+     * @param  string  $field_name
+     * @param  string  $new_name
      * @return void
+     *
+     * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function cloneField(string $field_name, string $new_name): void
     {
@@ -150,7 +156,7 @@ trait HasFields
     /**
      * Remove a single field from the form if it exists.
      *
-     * @param string $field_name
+     * @param  string  $field_name
      * @return void
      */
     public function removeField(string $field_name): void
@@ -163,7 +169,7 @@ trait HasFields
     /**
      * Remove a bunch of fields to the form if they exist.
      *
-     * @param array $field_names
+     * @param  array  $field_names
      * @return void
      */
     public function removeFields(array $field_names): void
@@ -178,7 +184,7 @@ trait HasFields
     /**
      * Is $field_name a field.
      *
-     * @param string $field_name
+     * @param  string  $field_name
      * @return bool
      */
     public function isField(string $field_name): bool
@@ -208,9 +214,10 @@ trait HasFields
     /**
      * Set a single field's value.
      *
-     * @param string $field_name
-     * @param mixed $value
+     * @param  string  $field_name
+     * @param  mixed  $value
      * @return void
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function setValue(string $field_name, $value): void
@@ -225,8 +232,9 @@ trait HasFields
     /**
      * Get a single field's value.
      *
-     * @param string $field_name
+     * @param  string  $field_name
      * @return mixed
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function getValue(string $field_name)
@@ -241,9 +249,10 @@ trait HasFields
     /**
      * Set multiple field values at once [field_name] => value.
      *
-     * @param array $values
-     * @param bool $ignore_invalid
+     * @param  array  $values
+     * @param  bool  $ignore_invalid
      * @return void
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function setValues(array $values, bool $ignore_invalid = false): void

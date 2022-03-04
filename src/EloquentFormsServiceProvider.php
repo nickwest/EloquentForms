@@ -2,8 +2,8 @@
 
 namespace Nickwest\EloquentForms;
 
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class EloquentFormsServiceProvider extends ServiceProvider
@@ -64,7 +64,7 @@ class EloquentFormsServiceProvider extends ServiceProvider
     /**
      * Extract the view from a template string.
      *
-     * @param string $expression
+     * @param  string  $expression
      * @return string
      */
     public static function getViewFromExpression(string $expression): string

@@ -2,16 +2,16 @@
 
 namespace Nickwest\EloquentForms;
 
-use Illuminate\Support\Facades\Event;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Event;
 
 class FormObserver
 {
     /**
      * Fire the namespaced form event.
      *
-     * @param  string $event
-     * @param  \Illuminate\Database\Eloquent\Model $model
+     * @param  string  $event
+     * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return mixed
      */
     protected function fireFormEvent($event, Model $model)
@@ -22,7 +22,7 @@ class FormObserver
     /**
      * Register the validation event for saving the model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model $model
+     * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return bool
      */
     public function saving(Model $model)

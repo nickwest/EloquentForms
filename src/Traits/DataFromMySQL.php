@@ -30,7 +30,7 @@ trait DataFromMySQL
     /**
      * Isolate and return the column type.
      *
-     * @param string $type
+     * @param  string  $type
      * @return string
      */
     protected function getSQLType(string $type): string
@@ -55,7 +55,7 @@ trait DataFromMySQL
     /**
      * Isolate and return the column length.
      *
-     * @param string $type
+     * @param  string  $type
      * @return mixed
      */
     protected function getSQLLength(string $type)
@@ -86,8 +86,8 @@ trait DataFromMySQL
     /**
      * Isolate and return the values for enums.
      *
-     * @param string $type
-     * @param bool $nullable
+     * @param  string  $type
+     * @param  bool  $nullable
      * @return mixed
      */
     protected function getSQLEnumOptions(string $type, bool $nullable = false)

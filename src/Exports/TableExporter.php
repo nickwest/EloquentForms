@@ -2,13 +2,13 @@
 
 namespace Nickwest\EloquentForms\Exports;
 
-use Nickwest\EloquentForms\Table;
 use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterSheet;
+use Nickwest\EloquentForms\Table;
 
 class TableExporter implements FromCollection, WithEvents
 {
@@ -87,9 +87,9 @@ class TableExporter implements FromCollection, WithEvents
     /**
      * Apply Zebra striping to the sheet.
      *
-     * @param Maatwebsite\Excel\Sheet $sheet
-     * @param int $highestRow
-     * @param string $highestColumn
+     * @param  Maatwebsite\Excel\Sheet  $sheet
+     * @param  int  $highestRow
+     * @param  string  $highestColumn
      * @return void
      */
     public static function applyZebraStriping(\Maatwebsite\Excel\Sheet &$sheet, int $highestRow, string $highestColumn): void
@@ -108,11 +108,11 @@ class TableExporter implements FromCollection, WithEvents
     /**
      * Set the margins on a sheet.
      *
-     * @param Maatwebsite\Excel\Sheet $sheet
-     * @param float $top
-     * @param float $right
-     * @param float $left
-     * @param float $bottom
+     * @param  Maatwebsite\Excel\Sheet  $sheet
+     * @param  float  $top
+     * @param  float  $right
+     * @param  float  $left
+     * @param  float  $bottom
      * @return void
      */
     public static function setMargins(\Maatwebsite\Excel\Sheet &$sheet, float $top = 0.7, float $right = 0.25, float $left = 0.25, float $bottom = 0.25): void

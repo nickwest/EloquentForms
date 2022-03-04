@@ -3,8 +3,8 @@
 namespace Nickwest\EloquentForms;
 
 use Carbon\Carbon;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\View;
 use Nickwest\EloquentForms\Traits\Themeable;
 
 class Field
@@ -154,8 +154,8 @@ class Field
     /**
      * Constructor.
      *
-     * @param string $field_name
-     * @param string $type
+     * @param  string  $field_name
+     * @param  string  $type
      * @return void
      */
     public function __construct(string $field_name, string $type = null)
@@ -259,7 +259,7 @@ class Field
     /**
      * Populate Field from Json representation.
      *
-     * @param string $json
+     * @param  string  $json
      * @return void
      */
     public function fromJson($json): void
@@ -336,7 +336,8 @@ class Field
      * Make a form view for this field.
      *
      * @var bool Was the previous field inline?
-     * @var bool $view_only
+     * @var bool
+     *
      * @return \Illuminate\View\View
      */
     public function makeView(bool $prev_inline = false, bool $view_only = false): \Illuminate\View\View
@@ -385,9 +386,9 @@ class Field
     /**
      * Make an option view for this field.
      *
-     * @param string $key
-     * @param mixed $value
-     * @param bool $view_only
+     * @param  string  $key
+     * @param  mixed  $value
+     * @param  bool  $view_only
      * @return \Illuminate\View\View
      */
     public function makeOptionView(string $key, $value, bool $view_only = false): \Illuminate\View\View
@@ -437,7 +438,7 @@ class Field
     /**
      * Return the formatted value of the $value.
      *
-     * @param string $value
+     * @param  string  $value
      * @return string
      */
     protected function formatValue(string $value): string
