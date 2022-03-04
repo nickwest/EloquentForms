@@ -26,9 +26,9 @@ class EloquentFormsServiceProvider extends ServiceProvider
 
         Blade::directive('eloquentforms_include', function ($expression) {
             return '<?php if(View::exists('.self::getViewFromExpression($expression).')){
-                echo $__env->make('.$expression.', Arr::except(get_defined_vars(), array(\'__data\', \'__path\')))->render();
+                echo $__env->make('.$expression.', \Illuminate\Support\Arr::except(get_defined_vars(), array(\'__data\', \'__path\')))->render();
             }else{
-                echo $__env->make(\''.DefaultTheme::getDefaultNamespace().'::'.substr($expression, strpos($expression, '::') + 2).', Arr::except(get_defined_vars(), array(\'__data\', \'__path\')))->render();
+                echo $__env->make(\''.DefaultTheme::getDefaultNamespace().'::'.substr($expression, strpos($expression, '::') + 2).', \Illuminate\Support\Arr::except(get_defined_vars(), array(\'__data\', \'__path\')))->render();
             } ?>';
         });
 
