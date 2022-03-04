@@ -2,10 +2,10 @@
 
 namespace Nickwest\EloquentForms\CustomFields\daysofweek;
 
-use Nickwest\EloquentForms\Field;
 use Illuminate\Support\Facades\View;
-use Nickwest\EloquentForms\DefaultTheme;
 use Nickwest\EloquentForms\CustomField as BaseCustomField;
+use Nickwest\EloquentForms\DefaultTheme;
+use Nickwest\EloquentForms\Field;
 
 class CustomField extends BaseCustomField
 {

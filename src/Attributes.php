@@ -42,7 +42,7 @@ class Attributes
     /**
      * Field property and attribute accessor.
      *
-     * @param string $attribute
+     * @param  string  $attribute
      * @return mixed
      */
     public function __get(string $attribute)
@@ -61,8 +61,8 @@ class Attributes
     /**
      * Field property mutator.
      *
-     * @param string $attribute
-     * @param mixed $value
+     * @param  string  $attribute
+     * @param  mixed  $value
      * @return void
      */
     public function __set(string $attribute, $value): void
@@ -89,7 +89,7 @@ class Attributes
     /**
      * Field property mutator.
      *
-     * @param string $attribute
+     * @param  string  $attribute
      * @return bool
      */
     public function __isset(string $attribute): bool
@@ -104,7 +104,7 @@ class Attributes
     /**
      * Unset an attribute.
      *
-     * @param string $attribute
+     * @param  string  $attribute
      * @return void
      */
     public function __unset(string $attribute): void
@@ -141,7 +141,7 @@ class Attributes
     /**
      * Add a css class.
      *
-     * @param string $class_name
+     * @param  string  $class_name
      * @return void
      */
     public function addClass(string $class_name): void
@@ -154,7 +154,7 @@ class Attributes
     /**
      * Add multiple css classes.
      *
-     * @param array $class_names
+     * @param  array  $class_names
      * @return void
      */
     public function addClasses(array $class_names): void
@@ -167,7 +167,7 @@ class Attributes
     /**
      * Remove a css class.
      *
-     * @param string $class_name
+     * @param  string  $class_name
      * @return void
      */
     public function removeClass(string $class_name): void
@@ -178,7 +178,7 @@ class Attributes
     /**
      * Check if classes has a specific class.
      *
-     * @param string $class_name
+     * @param  string  $class_name
      * @return bool
      */
     public function hasClass(string $class_name): bool
@@ -189,7 +189,7 @@ class Attributes
     /**
      * Output all attributes as a string.
      *
-     * @param array $skip Skip attributes listed here
+     * @param  array  $skip  Skip attributes listed here
      * @return string
      */
     public function getString(array $skip = []): string

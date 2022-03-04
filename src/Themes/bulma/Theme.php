@@ -59,7 +59,7 @@ class Theme extends \Nickwest\EloquentForms\Theme
     /**
      * Add is-danger class to fields with errors.
      *
-     * @param Nickwest\EloquentForms\Field $Field
+     * @param  Nickwest\EloquentForms\Field  $Field
      * @return void
      */
     protected function setErrorClasses(Field &$Field): void
@@ -73,7 +73,7 @@ class Theme extends \Nickwest\EloquentForms\Theme
     /**
      * Set type based classes to Field.
      *
-     * @param Nickwest\EloquentForms\Field $Field
+     * @param  Nickwest\EloquentForms\Field  $Field
      * @return void
      */
     public function setTypeClasses(Field &$Field): void

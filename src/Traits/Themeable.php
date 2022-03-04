@@ -2,9 +2,9 @@
 
 namespace Nickwest\EloquentForms\Traits;
 
-use View;
-use Nickwest\EloquentForms\Theme;
 use Nickwest\EloquentForms\DefaultTheme;
+use Nickwest\EloquentForms\Theme;
+use View;
 
 trait Themeable
 {
@@ -16,7 +16,7 @@ trait Themeable
     /**
      * Set the theme.
      *
-     * @param Nickwest\EloquentForms\Theme $Theme
+     * @param  Nickwest\EloquentForms\Theme  $Theme
      * @return void
      */
     public function setTheme(Theme $Theme): void
@@ -37,8 +37,8 @@ trait Themeable
     /**
      * Get the View for the given theme, or return the default.
      *
-     * @param string $template
-     * @param array $blade_data
+     * @param  string  $template
+     * @param  array  $blade_data
      * @return Illuminate\View\View
      */
     public function getThemeView(string $template, array $blade_data = []): \Illuminate\View\View

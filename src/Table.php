@@ -2,13 +2,13 @@
 
 namespace Nickwest\EloquentForms;
 
-use View;
-use Route;
 use Illuminate\Support\Collection;
-use Nickwest\EloquentForms\Traits\Themeable;
-use Nickwest\EloquentForms\Exports\TableExporter;
 use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
 use Nickwest\EloquentForms\Exceptions\InvalidRouteException;
+use Nickwest\EloquentForms\Exports\TableExporter;
+use Nickwest\EloquentForms\Traits\Themeable;
+use Route;
+use View;
 
 class Table
 {
@@ -99,7 +99,7 @@ class Table
     /**
      * Set the Collection data to the Table Object.
      *
-     * @param Illuminate\Support\Collection $Collection
+     * @param  Illuminate\Support\Collection  $Collection
      * @return void
      */
     public function setData(Collection $Collection): void
@@ -110,7 +110,7 @@ class Table
     /**
      * member mutator.
      *
-     * @param array $field_names
+     * @param  array  $field_names
      * @return void
      */
     public function setDisplayFields(array $field_names): void
@@ -133,8 +133,9 @@ class Table
     /**
      * Add field labels to the existing labels.
      *
-     * @param array $labels
+     * @param  array  $labels
      * @return void
+     *
      * @throws Nickwest\EloquentForms\Exceptions\InvalidFieldException
      */
     public function setLabels(array $labels): void
@@ -151,7 +152,7 @@ class Table
     /**
      * Get a Label for a specific field.
      *
-     * @param string $field_name
+     * @param  string  $field_name
      * @return string
      */
     public function getLabel(string $field_name): string
@@ -178,8 +179,8 @@ class Table
      * Set a replacement string for a given field's output. Use {field_name} to inject values
      * field_name supports any field set in the given object/array that exists within the Collection.
      *
-     * @param string $field field name
-     * @param string $html non-escaped text to replace field value in output
+     * @param  string  $field  field name
+     * @param  string  $html  non-escaped text to replace field value in output
      * @return void
      */
     public function addFieldReplacement(string $field, string $html): void
@@ -190,7 +191,7 @@ class Table
     /**
      * Check if a field has a replacement pattern.
      *
-     * @param string $field field name
+     * @param  string  $field  field name
      * @return bool
      */
     public function hasFieldReplacement(string $field): bool
@@ -201,8 +202,8 @@ class Table
     /**
      * Get a field's replacement value.
      *
-     * @param string $field field name
-     * @param string $Object Object or array
+     * @param  string  $field  field name
+     * @param  string  $Object  Object or array
      * @return string
      */
     public function getFieldReplacement(string $field, &$Object): string
@@ -250,10 +251,10 @@ class Table
     /**
      * String replace for specific field, conditionally uses htmlspecialchars.
      *
-     * @param string $search
-     * @param string $replace
-     * @param string $subject
-     * @param string $field
+     * @param  string  $search
+     * @param  string  $replace
+     * @param  string  $subject
+     * @param  string  $field
      * @return string
      */
     protected function fieldReplaceString($search, $replace, $subject, $field)
@@ -270,8 +271,8 @@ class Table
     /**
      *  Convenience method for setting a linking pattern on a field.
      *
-     * @param string $field_name
-     * @param string $href
+     * @param  string  $field_name
+     * @param  string  $href
      */
     public function addLinkingPattern(string $field_name, string $href): void
     {
@@ -282,11 +283,12 @@ class Table
     /**
      * Convenience method for creating a link replacement pattern by route name.
      *
-     * @param string $field_name
-     * @param string $route_name
-     * @param array $replacement_map
-     * @param mixed $query_string
+     * @param  string  $field_name
+     * @param  string  $route_name
+     * @param  array  $replacement_map
+     * @param  mixed  $query_string
      * @return void
+     *
      * @throws Nickwest\EloquentForms\InvalidRouteException
      */
     public function addLinkingPatternByRoute(string $field_name, string $route_name, array $replacement_map = [], $query_string = []): void
@@ -319,9 +321,9 @@ class Table
     /**
      * Make a view and extend $extends in $section, $blade_data is the data array to pass to View::make().
      *
-     * @param array $blade_data
-     * @param string $extends
-     * @param string $section
+     * @param  array  $blade_data
+     * @param  string  $extends
+     * @param  string  $section
      * @return Illuminate\View\View
      */
     public function makeView(array $blade_data = [], string $extends = '', string $section = ''): \Illuminate\View\View

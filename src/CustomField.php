@@ -13,8 +13,8 @@ abstract class CustomField
     /**
      * Hook for FormTrait::setAllFormValues allowing CustomField to modify value.
      *
-     * @param Nickwest\EloquentForms\Field $Field
-     * @param mixed $value
+     * @param  Nickwest\EloquentForms\Field  $Field
+     * @param  mixed  $value
      *
      * @throws Nickwest\EloquentForms\Exceptions\NotImplementedException;
      */
@@ -26,7 +26,7 @@ abstract class CustomField
     /**
      * Hook for FormTrait::setPostValues allowing CustomField to modify value.
      *
-     * @param mixed $value
+     * @param  mixed  $value
      *
      * @throws Nickwest\EloquentForms\Exceptions\NotImplementedException;
      */

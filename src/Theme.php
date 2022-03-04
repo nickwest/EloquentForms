@@ -9,7 +9,7 @@ abstract class Theme
      *
      * @return string
      */
-    abstract public function getViewNamespace() : string;
+    abstract public function getViewNamespace(): string;
 
     /**
      * Modify a field as necessary.
