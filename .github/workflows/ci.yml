@@ -3,6 +3,7 @@ name: tests
 jobs:
   linux_tests:
     runs-on: ubuntu-20.04
+    timeout-minutes: 10
 
     services:
       memcached:
@@ -83,6 +84,7 @@ jobs:
           DB_DATABASE: forge
 
       - name: Upload coverage to Codecov
+        if: ${{ matrix.stability == 'prefer-stable' }}
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
