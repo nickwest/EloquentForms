@@ -56,7 +56,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     protected function getPackageProviders($app)
     {
         return [
-            \Orchestra\Database\ConsoleServiceProvider::class,
+            // \Orchestra\Database\ConsoleServiceProvider::class,
             \Nickwest\EloquentForms\EloquentFormsServiceProvider::class,
             \Nickwest\EloquentForms\Themes\bulma\EloquentFormsBulmaThemeServiceProvider::class,
             \Maatwebsite\Excel\ExcelServiceProvider::class,
