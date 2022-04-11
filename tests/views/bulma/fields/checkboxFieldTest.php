@@ -1,8 +1,9 @@
-<?php namespace Nickwest\EloquentForms\Test\views\bulma\fields;
+<?php
+
+namespace Nickwest\EloquentForms\Test\views\bulma\fields;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
-use Nickwest\EloquentForms\Field;
 use Nickwest\EloquentForms\Test\FieldViewBulmaTestCase;
 use Nickwest\EloquentForms\Test\ThemeTestInterfaces\checkboxFieldTestInterface;
 
@@ -79,5 +80,4 @@ class checkboxFieldTest extends FieldViewBulmaTestCase implements checkboxFieldT
 
         $this->assertSame(false, $input->class);
     }
-
 }

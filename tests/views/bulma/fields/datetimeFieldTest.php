@@ -1,4 +1,6 @@
-<?php namespace Nickwest\EloquentForms\Test\views\bulma\fields;
+<?php
+
+namespace Nickwest\EloquentForms\Test\views\bulma\fields;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
@@ -22,6 +24,4 @@ class datetimeFieldTest extends FieldViewBulmaTestCase implements datetimeFieldT
         // & for good measure
         $this->assertEquals('2016-05-04T15:25', $input->value);
     }
-
-
 }

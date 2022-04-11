@@ -591,5 +591,3 @@ class FormTest extends TestCase
     }
 
 }
-
-?>

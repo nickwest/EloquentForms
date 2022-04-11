@@ -1,4 +1,6 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults\fields;
+<?php
+
+namespace Nickwest\EloquentForms\Test\view\defaults\fields;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
@@ -91,5 +93,4 @@ class hiddenFieldTest extends FieldViewTestCase implements hiddenFieldTestInterf
         // Hidden fields don't have a container, so we don't care about its attributes, just pass
         $this->assertSame(false, $div);
     }
-
 }

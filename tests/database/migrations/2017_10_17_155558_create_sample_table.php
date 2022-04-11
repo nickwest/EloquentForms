@@ -24,7 +24,7 @@ class CreateSampleTable extends Migration
             $table->string('file_name')->nullable();
             $table->integer('favorite_number')->nullable();
             $table->boolean('is_hidden')->nullable();
-            $table->enum('favorite_season', array('', 'Winter','Spring','Summer','Autumn'))->nullable();
+            $table->enum('favorite_season', array('', 'Winter', 'Spring', 'Summer', 'Autumn'))->nullable();
             $table->enum('beverage', array('', 'Beer', 'Wine', 'Water'))->nullable();
             $table->string('fruits_liked')->nullable();
             $table->string('actors_liked')->nullable();

@@ -1,4 +1,6 @@
-<?php namespace Nickwest\EloquentForms\Test\views\bulma\fields;
+<?php
+
+namespace Nickwest\EloquentForms\Test\views\bulma\fields;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
@@ -48,11 +50,10 @@ class datalistFieldTest extends TestCase implements datalistFieldTestInterface
         $datalist = current($dom->find('datalist'));
 
         $actual = [];
-        foreach($datalist->find('option') as $option){
+        foreach ($datalist->find('option') as $option) {
             $actual[$option->value] = $option->label;
         }
 
         $this->assertEquals($this->options, $actual);
     }
-
 }

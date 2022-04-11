@@ -1,4 +1,6 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults\fields;
+<?php
+
+namespace Nickwest\EloquentForms\Test\view\defaults\fields;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
@@ -127,6 +129,4 @@ class contentblockFieldTest extends TestCase implements contentblockFieldTestInt
         $actual = explode(' ', $div->class);
         $this->assertEquals(sort($expected), $actual = sort($actual));
     }
-
-
 }

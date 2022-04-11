@@ -1,4 +1,6 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults\fields;
+<?php
+
+namespace Nickwest\EloquentForms\Test\view\defaults\fields;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
@@ -70,5 +72,4 @@ class checkboxFieldTest extends FieldViewTestCase implements checkboxFieldTestIn
 
         $this->assertSame(true, $input->checked);
     }
-
 }

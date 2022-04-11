@@ -1,4 +1,6 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults\fields;
+<?php
+
+namespace Nickwest\EloquentForms\Test\view\defaults\fields;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
@@ -133,5 +135,4 @@ class radioFieldTest extends FieldViewTestCase implements radioFieldTestInterfac
         $this->assertSame(false, $yes_input->checked);
         $this->assertSame(true, $no_input->checked);
     }
-
 }

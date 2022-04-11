@@ -88,8 +88,8 @@ trait HasFields
      */
     public function getField(string $field_name): Field
     {
-        if (! isset($this->Fields[$field_name])) {
-            throw new InvalidFieldException($field_name.' is not part of the Form');
+        if (!isset($this->Fields[$field_name])) {
+            throw new InvalidFieldException($field_name . ' is not part of the Form');
         }
 
         return $this->Fields[$field_name];
@@ -146,7 +146,7 @@ trait HasFields
      */
     public function cloneField(string $field_name, string $new_name): void
     {
-        if (! isset($this->Fields[$field_name])) {
+        if (!isset($this->Fields[$field_name])) {
             throw new InvalidFieldException('Source field is not valid');
         }
 
@@ -203,7 +203,7 @@ trait HasFields
 
         foreach ($this->Fields as $Field) {
             // Don't return subforms as fields they don't really have a valueaddDataList
-            if (! $Field->isSubform()) {
+            if (!$Field->isSubform()) {
                 $values[$Field->getOriginalName()] = $Field->attributes->value;
             }
         }
@@ -225,7 +225,7 @@ trait HasFields
         if (isset($this->Fields[$field_name])) {
             $this->Fields[$field_name]->attributes->value = $value;
         } else {
-            throw new InvalidFieldException($field_name.' is not part of the Form');
+            throw new InvalidFieldException($field_name . ' is not part of the Form');
         }
     }
 
@@ -239,8 +239,8 @@ trait HasFields
      */
     public function getValue(string $field_name)
     {
-        if (! isset($this->Fields[$field_name])) {
-            throw new InvalidFieldException($field_name.' is not part of the Form');
+        if (!isset($this->Fields[$field_name])) {
+            throw new InvalidFieldException($field_name . ' is not part of the Form');
         }
 
         return $this->Fields[$field_name]->attributes->value;
@@ -260,8 +260,8 @@ trait HasFields
         foreach ($values as $field_name => $value) {
             if (isset($this->Fields[$field_name])) {
                 $this->Fields[$field_name]->attributes->value = $value;
-            } elseif (! $ignore_invalid) {
-                throw new InvalidFieldException($field_name.' is not part of the Form');
+            } elseif (!$ignore_invalid) {
+                throw new InvalidFieldException($field_name . ' is not part of the Form');
             }
         }
     }

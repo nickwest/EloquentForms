@@ -16,7 +16,7 @@ class FormObserver
      */
     protected function fireFormEvent($event, Model $model)
     {
-        return Event::until('form.'.$event, [$model]);
+        return Event::until('form.' . $event, [$model]);
     }
 
     /**
@@ -28,7 +28,7 @@ class FormObserver
     public function saving(Model $model)
     {
         // Fire the namespaced version event if hooked in client code
-        if (! $model->validateOnSave() || $this->fireFormEvent('saving', $model) !== null) {
+        if (!$model->validateOnSave() || $this->fireFormEvent('saving', $model) !== null) {
             return;
         }
 

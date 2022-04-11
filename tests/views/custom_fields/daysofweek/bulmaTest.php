@@ -1,4 +1,7 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults;
+<?php
+
+namespace Nickwest\EloquentForms\Test\view\defaults;
+
 use Faker;
 
 use Illuminate\Support\Collection;
@@ -52,7 +55,7 @@ class bulmaTest extends TestCase
     public function test_field_has_each_day_wrapper()
     {
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
-        $spans = $dom->find('span.'.$this->Field->options->wrapper_class);
+        $spans = $dom->find('span.' . $this->Field->options->wrapper_class);
 
         $this->assertEquals(7, count($spans));
     }
@@ -71,7 +74,7 @@ class bulmaTest extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $inputs = $dom->find('input');
 
-        foreach($inputs as $input){
+        foreach ($inputs as $input) {
             $this->assertEquals('checkbox', $input->type);
             $this->assertEquals('days[]', $input->name);
         }
@@ -96,18 +99,17 @@ class bulmaTest extends TestCase
 
     public function test_field_display_shows_given_value()
     {
-        $this->Field->attributes->value = ['M','W','F'];
+        $this->Field->attributes->value = ['M', 'W', 'F'];
 
         $dom = HtmlDomParser::str_get_html($this->Field->makeView(false, true)->render());
         $values = $dom->find('div.daysofweek div');
 
         $days = [];
-        foreach($values as $value){
+        foreach ($values as $value) {
             $days[] = $value->innertext;
         }
         $expected = ['Mon', 'Wed', 'Fri'];
 
         $this->assertEquals($expected, $days);
     }
-
 }

@@ -250,7 +250,7 @@ class Field
             'subform_data' => $this->subform_data,
             'extra_blade_data' => $this->extra_blade_data,
             'original_name' => $this->original_name,
-            'Theme' => (is_object($this->Theme) ? '\\'.get_class($this->Theme) : null),
+            'Theme' => (is_object($this->Theme) ? '\\' . get_class($this->Theme) : null),
         ];
 
         return json_encode($array);
@@ -305,7 +305,7 @@ class Field
         $namespace = DefaultTheme::getDefaultNamespace();
 
         // Get the template name
-        $template = 'fields.'.$this->attributes->type;
+        $template = 'fields.' . $this->attributes->type;
         if ($this->attributes->type == 'checkbox' && $this->options->hasOptions()) {
             $template = 'fields.checkboxes';
         } elseif ($this->attributes->type == 'radio' && $this->options->hasOptions()) {
@@ -313,11 +313,11 @@ class Field
         }
 
         // Check if the theme has an override for the template, if so use the Theme namespace
-        if (View::exists($this->getViewNamespace().'::'.$template)) {
+        if (View::exists($this->getViewNamespace() . '::' . $template)) {
             $namespace = $this->getViewNamespace();
         }
 
-        return $namespace.'::'.$template;
+        return $namespace . '::' . $template;
     }
 
     /**
@@ -376,11 +376,11 @@ class Field
     {
         $this->Theme->prepareFieldView($this);
 
-        if (View::exists($this->getViewNamespace().'::fields.display')) {
-            return View::make($this->getViewNamespace().'::fields.display', ['Field' => $this, 'prev_inline' => $prev_inline, 'display_only' => true]);
+        if (View::exists($this->getViewNamespace() . '::fields.display')) {
+            return View::make($this->getViewNamespace() . '::fields.display', ['Field' => $this, 'prev_inline' => $prev_inline, 'display_only' => true]);
         }
 
-        return View::make(DefaultTheme::getDefaultNamespace().'::fields.display', ['Field' => $this, 'prev_inline' => $prev_inline, 'display_only' => true]);
+        return View::make(DefaultTheme::getDefaultNamespace() . '::fields.display', ['Field' => $this, 'prev_inline' => $prev_inline, 'display_only' => true]);
     }
 
     /**
@@ -397,22 +397,22 @@ class Field
         $Field = clone $this;
         $Field->attributes = clone $Field->attributes;
 
-        $Field->attributes->id_suffix = '-'.$key;
+        $Field->attributes->id_suffix = '-' . $key;
         $Field->attributes->value = $key;
 
         if (is_array($value) && in_array($key, $value)) {
             $Field->attributes->checked = null;
-        } elseif (! is_array($value) && $key == $value) {
+        } elseif (!is_array($value) && $key == $value) {
             $Field->attributes->checked = null;
         }
 
         $Field->Theme->prepareFieldView($Field);
 
-        if (View::exists($Field->getViewNamespace().'::fields.'.$Field->attributes->type.'_option')) {
-            return View::make($Field->getViewNamespace().'::fields.'.$Field->attributes->type.'_option', ['Field' => $Field, 'key' => $key, 'view_only' => $view_only]);
+        if (View::exists($Field->getViewNamespace() . '::fields.' . $Field->attributes->type . '_option')) {
+            return View::make($Field->getViewNamespace() . '::fields.' . $Field->attributes->type . '_option', ['Field' => $Field, 'key' => $key, 'view_only' => $view_only]);
         }
 
-        return View::make(DefaultTheme::getDefaultNamespace().'::fields.'.$Field->attributes->type.'_option', ['Field' => $Field, 'key' => $key, 'view_only' => $view_only]);
+        return View::make(DefaultTheme::getDefaultNamespace() . '::fields.' . $Field->attributes->type . '_option', ['Field' => $Field, 'key' => $key, 'view_only' => $view_only]);
     }
 
     //// HELPERS

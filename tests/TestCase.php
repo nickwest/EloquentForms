@@ -1,10 +1,11 @@
-<?php namespace Nickwest\EloquentForms\Test;
+<?php
 
-use Cache;
+namespace Nickwest\EloquentForms\Test;
+
+use Illuminate\Support\Facades\Cache;
 use Faker;
 
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Nickwest\EloquentForms\FormTrait;
 use Nickwest\EloquentForms\Form;
@@ -26,7 +27,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     {
         // SQL
         $app['config']->set('database.default', env('DB_CONNECTION'));
-        $app['config']->set('database.connections.'.env('DB_CONNECTION'), [
+        $app['config']->set('database.connections.' . env('DB_CONNECTION'), [
             'driver'   => 'mysql',
             'host'      => env('DB_HOST', 'localhost'),
             'port'      => env('DB_PORT', '3306'),
@@ -94,7 +95,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
         $this->fields[3]['value'] = 'Yes';
 
         // Set all field values
-        foreach($this->fields as $field) {
+        foreach ($this->fields as $field) {
             $Form->{$field['name']}->attributes->value = $field['value'];
         }
 
@@ -117,7 +118,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     protected function getManyFieldNames(int $count)
     {
         $field_names = [];
-        foreach($this->getFieldData(5) as $field){
+        foreach ($this->getFieldData(5) as $field) {
             $field_names[] = $field['name'];
         }
 
@@ -127,7 +128,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     protected function getFieldData(int $count = 1)
     {
         $fields = [];
-        for($i = 0; $i < $count; $i++){
+        for ($i = 0; $i < $count; $i++) {
             $fields[] = [
                 'name' => $this->Faker->unique()->word,
                 'length' => $this->Faker->numberBetween(10, 255),
@@ -138,7 +139,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             ];
         }
 
-        if($count == 1){
+        if ($count == 1) {
             return current($fields);
         }
 
@@ -154,7 +155,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
         $test_options = ['1' => 'one', '2' => 'two', '44' => 'Fourtyfour'];
         $Field->options->setOptions($test_options);
 
-        $Field->options->setDisabledOptions(['1','44']);
+        $Field->options->setDisabledOptions(['1', '44']);
 
         $Field->label_suffix = ':';
         $Field->example = 'This is an example';
@@ -196,9 +197,9 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             'last_name' => $this->Faker->name,
             'email' => $this->Faker->email,
             'password' => $this->Faker->sha1,
-            'file_name' => '/'.$this->Faker->word.'/'.$this->Faker->word.'/'.$this->Faker->word.'.'.$this->Faker->fileExtension,
+            'file_name' => '/' . $this->Faker->word . '/' . $this->Faker->word . '/' . $this->Faker->word . '.' . $this->Faker->fileExtension,
             'favorite_number' => $this->Faker->numberBetween(10, 5000),
-            'is_hidden' => [$this->Faker->numberBetween(0,1)],
+            'is_hidden' => [$this->Faker->numberBetween(0, 1)],
             'favorite_season' => $this->Faker->randomElement(['', 'Winter', 'Spring', 'Summer', 'Autumn']),
             'beverage' => '', // Test one enum with an empty string selected
             'fruits_liked' => ['Banana', 'Peach'],
@@ -216,13 +217,11 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             'week_year' => $this->Faker->word,
             'story' => $this->Faker->text,
         ];
-
-
     }
 
     protected function expectedDBStructure($is_mySql = false)
     {
-        if($is_mySql){
+        if ($is_mySql) {
             return [
                 'id' => $this->columnArray('id', 'int', null, 10),
                 'created_at' => $this->columnArray('created_at', 'timestamp'),
@@ -234,7 +233,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
                 'file_name' => $this->columnArray('file_name', 'varchar', null, 255),
                 'favorite_number' => $this->columnArray('favorite_number', 'int', null, '11'),
                 'is_hidden' => $this->columnArray('is_hidden', 'tinyint', null, 1),
-                'favorite_season' => $this->columnArray('favorite_season', 'enum', null, null, ['' => '-- Select One --', 'Winter' => 'Winter', 'Spring' => 'Spring','Summer' => 'Summer','Autumn' => 'Autumn']),
+                'favorite_season' => $this->columnArray('favorite_season', 'enum', null, null, ['' => '-- Select One --', 'Winter' => 'Winter', 'Spring' => 'Spring', 'Summer' => 'Summer', 'Autumn' => 'Autumn']),
                 'beverage' => $this->columnArray('beverage', 'enum', null, null, ['' => '-- Select One --', 'Beer' => 'Beer', 'Wine' => 'Wine', 'Water' => 'Water']),
                 'fruits_liked' => $this->columnArray('fruits_liked', 'varchar', null, 255),
                 'actors_liked' => $this->columnArray('actors_liked', 'varchar', null, 255),
@@ -283,7 +282,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
         ];
     }
 
-    protected function columnArray($name, $type='string', $default=null, $length=null, $values=null)
+    protected function columnArray($name, $type = 'string', $default = null, $length = null, $values = null)
     {
         return [
             'name' => $name,
@@ -430,7 +429,7 @@ class Sample extends Model
         $this->Form()->volume->attributes->step = 5;
         $this->Form()->volume->attributes->list = 'volumes';
 
-        $this->Form()->addDatalist('volumes', [ '5' => '5', '10' => '', '15' => '', '20' => '20', '25' => '', '30' => '', '35' => '', '40' => '40']);
+        $this->Form()->addDatalist('volumes', ['5' => '5', '10' => '', '15' => '', '20' => '20', '25' => '', '30' => '', '35' => '', '40' => '40']);
 
         $this->Form()->phone_number->attributes->pattern = '\\d{3}[\\-]\\d{3}[\\-]\\d{4}';
         $this->Form()->phone_number->attributes->placeholder = '123-456-7890';
@@ -453,6 +452,4 @@ class Sample extends Model
             'volume' => 'numeric',
         ]);
     }
-
-
 }

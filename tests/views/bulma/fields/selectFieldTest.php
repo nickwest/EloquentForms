@@ -1,4 +1,6 @@
-<?php namespace Nickwest\EloquentForms\Test\views\bulma\fields;
+<?php
+
+namespace Nickwest\EloquentForms\Test\views\bulma\fields;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
@@ -22,7 +24,7 @@ class selectFieldTest extends FieldViewBulmaTestCase implements selectFieldTestI
         $options = $dom->find('option');
 
         $actual_options = [];
-        foreach($options as $option){
+        foreach ($options as $option) {
             $actual_options[$option->value] = trim($option->innertext);
         }
 
@@ -98,5 +100,4 @@ class selectFieldTest extends FieldViewBulmaTestCase implements selectFieldTestI
         $this->assertSame(false, $yes_option->selected);
         $this->assertSame(true, $no_option->selected);
     }
-
 }

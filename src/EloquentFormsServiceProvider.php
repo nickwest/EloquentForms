@@ -22,21 +22,21 @@ class EloquentFormsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__.'/views', DefaultTheme::getDefaultNamespace());
+        $this->loadViewsFrom(__DIR__ . '/views', DefaultTheme::getDefaultNamespace());
 
         Blade::directive('eloquentforms_include', function ($expression) {
-            return '<?php if(View::exists('.self::getViewFromExpression($expression).')){
-                echo $__env->make('.$expression.', \Illuminate\Support\Arr::except(get_defined_vars(), array(\'__data\', \'__path\')))->render();
+            return '<?php if(View::exists(' . self::getViewFromExpression($expression) . ')){
+                echo $__env->make(' . $expression . ', \Illuminate\Support\Arr::except(get_defined_vars(), array(\'__data\', \'__path\')))->render();
             }else{
-                echo $__env->make(\''.DefaultTheme::getDefaultNamespace().'::'.substr($expression, strpos($expression, '::') + 2).', \Illuminate\Support\Arr::except(get_defined_vars(), array(\'__data\', \'__path\')))->render();
+                echo $__env->make(\'' . DefaultTheme::getDefaultNamespace() . '::' . substr($expression, strpos($expression, '::') + 2) . ', \Illuminate\Support\Arr::except(get_defined_vars(), array(\'__data\', \'__path\')))->render();
             } ?>';
         });
 
         Blade::directive('eloquentforms_component', function ($expression) {
-            return '<?php if(View::exists('.self::getViewFromExpression($expression).')){
-                $__env->startComponent('.$expression.');
+            return '<?php if(View::exists(' . self::getViewFromExpression($expression) . ')){
+                $__env->startComponent(' . $expression . ');
             }else{
-                $__env->startComponent(\''.DefaultTheme::getDefaultNamespace().'::'.substr($expression, strpos($expression, '::') + 2).');
+                $__env->startComponent(\'' . DefaultTheme::getDefaultNamespace() . '::' . substr($expression, strpos($expression, '::') + 2) . ');
             } ?>';
         });
     }

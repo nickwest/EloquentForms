@@ -1,4 +1,6 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults\fields;
+<?php
+
+namespace Nickwest\EloquentForms\Test\view\defaults\fields;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
@@ -21,7 +23,7 @@ class selectFieldTest extends FieldViewTestCase implements selectFieldTestInterf
         $options = $dom->find('option');
 
         $actual_options = [];
-        foreach($options as $option){
+        foreach ($options as $option) {
             $actual_options[$option->value] = trim($option->innertext);
         }
 
@@ -113,6 +115,4 @@ class selectFieldTest extends FieldViewTestCase implements selectFieldTestInterf
         $this->assertSame(false, $yes_option->selected);
         $this->assertSame(true, $no_option->selected);
     }
-
-
 }

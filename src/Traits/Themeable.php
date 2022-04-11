@@ -4,7 +4,7 @@ namespace Nickwest\EloquentForms\Traits;
 
 use Nickwest\EloquentForms\DefaultTheme;
 use Nickwest\EloquentForms\Theme;
-use View;
+use Illuminate\Support\Facades\View;
 
 trait Themeable
 {
@@ -43,10 +43,10 @@ trait Themeable
      */
     public function getThemeView(string $template, array $blade_data = []): \Illuminate\View\View
     {
-        if (View::exists($this->Theme->getViewNamespace().'::'.$template)) {
-            return View::make($this->Theme->getViewNamespace().'::'.$template, $blade_data);
+        if (View::exists($this->Theme->getViewNamespace() . '::' . $template)) {
+            return View::make($this->Theme->getViewNamespace() . '::' . $template, $blade_data);
         } else {
-            return View::make(DefaultTheme::getDefaultNamespace().'::'.$template, $blade_data);
+            return View::make(DefaultTheme::getDefaultNamespace() . '::' . $template, $blade_data);
         }
     }
 }

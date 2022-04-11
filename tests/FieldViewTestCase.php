@@ -1,4 +1,6 @@
-<?php namespace Nickwest\EloquentForms\Test;
+<?php
+
+namespace Nickwest\EloquentForms\Test;
 
 /**
  * FieldViewTestCase includes basic field tests
@@ -33,7 +35,7 @@ abstract class FieldViewTestCase extends TestCase
 
         $this->Field->attributes->type = $this->test_type;
 
-        if(is_array($this->test_options)){
+        if (is_array($this->test_options)) {
             $this->Field->options->setOptions($this->test_options);
         }
     }
@@ -54,7 +56,7 @@ abstract class FieldViewTestCase extends TestCase
         $input = current($dom->find($this->test_tag));
 
         $expected = 'my_test_field';
-        if($this->Field->attributes->type == 'checkbox' && count($this->Field->options->getOptions()) > 1){
+        if ($this->Field->attributes->type == 'checkbox' && count($this->Field->options->getOptions()) > 1) {
             $expected .= '[]';
         }
 
@@ -68,7 +70,7 @@ abstract class FieldViewTestCase extends TestCase
         $input = current($dom->find($this->test_tag));
 
         $expected = 'new_name';
-        if($this->Field->attributes->type == 'checkbox' && count($this->Field->options->getOptions()) > 1){
+        if ($this->Field->attributes->type == 'checkbox' && count($this->Field->options->getOptions()) > 1) {
             $expected .= '[]';
         }
 
@@ -80,7 +82,7 @@ abstract class FieldViewTestCase extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
 
-        $this->assertEquals('input-my_test_field'.$this->test_id_suffix, $input->id);
+        $this->assertEquals('input-my_test_field' . $this->test_id_suffix, $input->id);
     }
 
     public function test_field_has_correct_id_attribute_when_changed()
@@ -90,7 +92,7 @@ abstract class FieldViewTestCase extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
 
-        $this->assertEquals('input-new_id'.$this->test_id_suffix, $input->id);
+        $this->assertEquals('input-new_id' . $this->test_id_suffix, $input->id);
     }
 
     public function test_field_has_correct_id_attribute_when_prefix_changed()
@@ -99,7 +101,7 @@ abstract class FieldViewTestCase extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
 
-        $this->assertEquals('myprefix_my_test_field'.$this->test_id_suffix, $input->id);
+        $this->assertEquals('myprefix_my_test_field' . $this->test_id_suffix, $input->id);
     }
 
     public function test_field_has_correct_class_attribute()
@@ -270,7 +272,6 @@ abstract class FieldViewTestCase extends TestCase
         $label = current($dom->find('label'));
 
         $this->assertEquals('My test field:', trim($label->plaintext));
-
     }
 
 
@@ -337,15 +338,14 @@ abstract class FieldViewTestCase extends TestCase
         $div = current($dom->find('div'));
 
         $expected = 'field-my_test_field';
-        if($this->Field->attributes->type == 'checkbox' && count($this->Field->options->getOptions()) > 1){
+        if ($this->Field->attributes->type == 'checkbox' && count($this->Field->options->getOptions()) > 1) {
             $expected .= '_1';
         }
 
         $this->assertEquals($expected, $div->id);
         // Order is arbitrary, so sort to make sure they're equal even if not ordered the same way
-        $expected = ['type-'.$this->test_type, 'field', $this->test_type];
+        $expected = ['type-' . $this->test_type, 'field', $this->test_type];
         $actual = explode(' ', $div->class);
         $this->assertEquals(sort($expected), $actual = sort($actual));
     }
-
 }

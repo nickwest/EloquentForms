@@ -1,4 +1,6 @@
-<?php namespace Nickwest\EloquentForms\Test\views\defaults\fields;
+<?php
+
+namespace Nickwest\EloquentForms\Test\views\defaults\fields;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
@@ -159,7 +161,4 @@ class checkboxesFieldTest extends FieldViewTestCase implements checkboxesFieldTe
         $this->assertStringEndsWith('[]', $yes_input->name);
         $this->assertStringEndsWith('[]', $no_input->name);
     }
-
-
-
 }

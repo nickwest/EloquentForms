@@ -1,11 +1,11 @@
-<?php namespace Nickwest\EloquentForms\Test\unit;
+<?php
 
-use Faker;
+namespace Nickwest\EloquentForms\Test\unit;
+
 
 use Nickwest\EloquentForms\Options;
 use Nickwest\EloquentForms\Test\TestCase;
 
-use Nickwest\EloquentForms\Exceptions\OptionValueException;
 use Nickwest\EloquentForms\Exceptions\InvalidOptionException;
 
 class OptionsTest extends TestCase
@@ -133,7 +133,7 @@ class OptionsTest extends TestCase
         $this->Options->setOptions($test_options);
 
         $this->expectException(InvalidOptionException::class);
-        $this->Options->setDisabledOptions(['1','44','4']);
+        $this->Options->setDisabledOptions(['1', '44', '4']);
     }
 
     public function test_null_is_equal_to_empty_string()

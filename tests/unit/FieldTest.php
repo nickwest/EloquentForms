@@ -1,4 +1,6 @@
-<?php namespace Nickwest\EloquentForms\Test\unit;
+<?php
+
+namespace Nickwest\EloquentForms\Test\unit;
 
 use Faker;
 
@@ -112,5 +114,4 @@ class FieldTest extends TestCase
 
         $this->assertInstanceOf(\Illuminate\View\View::class, $view);
     }
-
 }

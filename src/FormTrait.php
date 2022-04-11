@@ -85,7 +85,7 @@ trait FormTrait
      */
     public function Form(): Form
     {
-        if (! is_object($this->Form)) {
+        if (!is_object($this->Form)) {
             $this->Form = new Form();
         }
 
@@ -109,7 +109,7 @@ trait FormTrait
      * @param  string  $extends
      * @param  string  $section
      * @param  bool  $view_only
-     * @return View
+     * @return \Illuminate\View\View
      */
     public function getFormView(array $blade_data, string $extends = '', string $section = '', bool $view_only = false): \Illuminate\View\View
     {
@@ -121,7 +121,7 @@ trait FormTrait
      *
      * @param  string  $field_name
      * @param  array  $options
-     * @return View
+     * @return \Illuminate\View\View
      */
     public function getFieldView(string $field_name): \Illuminate\View\View
     {
@@ -133,7 +133,7 @@ trait FormTrait
      *
      * @param  string  $field_name
      * @param  array  $options
-     * @return View
+     * @return \Illuminate\View\View
      */
     public function getFieldDisplayView(string $field_name, array $options = []): \Illuminate\View\View
     {
@@ -180,7 +180,7 @@ trait FormTrait
 
         // Make sure no Form fields were omitted from the post array (checkboxes can be when none are set)
         foreach ($this->Form()->getDisplayFields() as $Field) {
-            if (isset($post_data[$Field->attributes->name]) || ! $this->isFillable($Field->getOriginalName())) {
+            if (isset($post_data[$Field->attributes->name]) || !$this->isFillable($Field->getOriginalName())) {
                 continue;
             }
 
@@ -228,7 +228,7 @@ trait FormTrait
             }
 
             // If it's a checkbox or otherwise has multi_key set, assume we have a divided string that needs to be made into an array.
-            if ($value !== null && ! is_array($value) && ($Field->attributes->type == 'checkbox' || $Field->attributes->multi_key)) {
+            if ($value !== null && !is_array($value) && ($Field->attributes->type == 'checkbox' || $Field->attributes->multi_key)) {
                 $value = explode($this->multi_delimiter, $value);
             }
 
@@ -289,7 +289,7 @@ trait FormTrait
 
             // We need to do this here because we're not using Form::isValid() we're using the values on the model itself
             // And validating against those using the Form rules + some extra from the table if possible
-            if ($Field->attributes->required && ! in_array('required', $rules)) {
+            if ($Field->attributes->required && !in_array('required', $rules)) {
                 $rules[$Field->getOriginalName()][] = 'required';
             }
 
@@ -305,7 +305,7 @@ trait FormTrait
         );
 
         // Set error messages to fields
-        if (! ($success = ! $Validator->fails())) {
+        if (!($success = !$Validator->fails())) {
             foreach ($Validator->errors()->toArray() as $field => $error) {
                 $this->Form()->$field->error_message = current($error);
             }
@@ -326,12 +326,12 @@ trait FormTrait
 
             foreach ($max_rules as $key => $rule) {
                 if ((int) substr($rule, 4) > $column['length']) {
-                    $rules[$key] = 'max:'.$column['length'];
+                    $rules[$key] = 'max:' . $column['length'];
                 }
             }
 
             if (count($max_rules) == 0) {
-                $rules[] = 'max:'.$column['length'];
+                $rules[] = 'max:' . $column['length'];
             }
         }
     }
@@ -410,7 +410,7 @@ trait FormTrait
     private function getFormTypeFromColumnType(string $type): string
     {
         switch ($type) {
-            // TODO: Expand on this with more HTML5 field types
+                // TODO: Expand on this with more HTML5 field types
             case 'enum':
                 return 'select';
 

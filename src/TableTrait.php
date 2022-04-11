@@ -20,7 +20,7 @@ trait TableTrait
      */
     public function Table()
     {
-        if (! is_object($this->TableObject)) {
+        if (!is_object($this->TableObject)) {
             $this->TableObject = new Table();
         }
 
@@ -30,14 +30,14 @@ trait TableTrait
     /**
      * Make a table View and return the rendered output.
      *
-     * @param  Illuminate\Support\Collection  $blade_data
+     * @param  array  $blade_data
      * @param  string  $extends
      * @param  string  $section
      * @return View
      */
     public function getTableView(Collection &$Collection, array $blade_data, string $extends = '', string $section = '')
     {
-        if (! is_object($this->TableObject)) {
+        if (!is_object($this->TableObject)) {
             $this->TableObject = new Table();
         }
 

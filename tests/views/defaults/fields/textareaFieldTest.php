@@ -1,4 +1,6 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults\fields;
+<?php
+
+namespace Nickwest\EloquentForms\Test\view\defaults\fields;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
@@ -45,6 +47,4 @@ class textareaFieldTest extends FieldViewTestCase implements textareaFieldTestIn
         // But the value between the tags should be equal to the value
         $this->assertEquals(htmlspecialchars($this->test_value), trim($input->innertext));
     }
-
-
 }

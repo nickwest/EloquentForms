@@ -1,8 +1,7 @@
-<?php namespace Nickwest\EloquentForms\Test\unit;
+<?php
 
-use Faker;
+namespace Nickwest\EloquentForms\Test\unit;
 
-use Nickwest\EloquentForms\Theme;
 use Nickwest\EloquentForms\DefaultTheme;
 use Nickwest\EloquentForms\Themes\bulma\Theme as bulmaTheme;
 

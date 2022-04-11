@@ -33,7 +33,7 @@
         "orchestra/testbench": "^6.24",
         "orchestra/database": "^6.0",
         "kub-at/php-simple-html-dom-parser": "^1.9"
-        },
+    },
     "extra": {
         "laravel": {
             "providers": [

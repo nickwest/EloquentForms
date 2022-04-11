@@ -1,8 +1,9 @@
-<?php namespace Nickwest\EloquentForms\Test\views\bulma\fields;
+<?php
+
+namespace Nickwest\EloquentForms\Test\views\bulma\fields;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
-use Nickwest\EloquentForms\Field;
 use Nickwest\EloquentForms\Test\FieldViewBulmaTestCase;
 use Nickwest\EloquentForms\Test\ThemeTestInterfaces\checkboxesFieldTestInterface;
 
@@ -160,6 +161,4 @@ class checkboxesFieldTest extends FieldViewBulmaTestCase implements checkboxesFi
         $this->assertStringEndsWith('[]', $yes_input->name);
         $this->assertStringEndsWith('[]', $no_input->name);
     }
-
-
 }

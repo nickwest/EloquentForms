@@ -1,9 +1,8 @@
-<?php namespace Nickwest\EloquentForms\Test\unit;
+<?php
 
-use Config;
+namespace Nickwest\EloquentForms\Test\unit;
 
 use Illuminate\View\View;
-use Illuminate\Support\Facades\Artisan;
 
 use Nickwest\EloquentForms\Test\Sample;
 use Nickwest\EloquentForms\Test\TestCase;
@@ -14,7 +13,7 @@ class FormTraitTest extends TestCase
     {
         parent::setUp();
 
-        $this->loadMigrationsFrom(realpath(__DIR__.'/../database/migrations/'));
+        $this->loadMigrationsFrom(realpath(__DIR__ . '/../database/migrations/'));
 
         // Sample is a class declared in the bottom of this file
         // It is only used in these tests
@@ -45,14 +44,14 @@ class FormTraitTest extends TestCase
 
     public function test_formtrait_getFieldView_returns_a_view()
     {
-        foreach($this->Model->Form()->getFields() as $Field){
+        foreach ($this->Model->Form()->getFields() as $Field) {
             $this->assertInstanceOf(View::class, $this->Model->getFieldView($Field->attributes->name));
         }
     }
 
     public function test_formtrait_getFieldDisplayView_returns_a_view()
     {
-        foreach($this->Model->Form()->getFields() as $Field){
+        foreach ($this->Model->Form()->getFields() as $Field) {
             $this->assertInstanceOf(View::class, $this->Model->getFieldDisplayView($Field->attributes->name));
         }
     }
@@ -60,8 +59,8 @@ class FormTraitTest extends TestCase
     public function test_formtrait_setAllFormValues_sets_values_to_the_form_from_the_model()
     {
         $post_data = $this->getSimulatedPostValues();
-        foreach($post_data as $field => $value){
-            if(is_array($value)){
+        foreach ($post_data as $field => $value) {
+            if (is_array($value)) {
                 $value = implode('|', $value);
             }
             $this->Model->{$field} = $value;
@@ -107,10 +106,10 @@ class FormTraitTest extends TestCase
 
         $this->Model->setPostValues($post_data);
 
-        foreach($post_data as $field => $value) {
+        foreach ($post_data as $field => $value) {
             $this->assertEquals($value, $this->Model->Form()->{$field}->attributes->value);
             // on the model arrays are flattened
-            if(is_array($value)){
+            if (is_array($value)) {
                 $value = implode('|', $value);
             }
             $this->assertEquals($value, $this->Model->{$field});
@@ -232,5 +231,4 @@ class FormTraitTest extends TestCase
         // Their forms should be equal
         $this->assertEquals($this->Model->Form(), $newModel->Form());
     }
-
 }

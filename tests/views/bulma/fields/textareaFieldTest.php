@@ -1,4 +1,6 @@
-<?php namespace Nickwest\EloquentForms\Test\views\bulma\fields;
+<?php
+
+namespace Nickwest\EloquentForms\Test\views\bulma\fields;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
@@ -48,5 +50,4 @@ class textareaFieldTest extends FieldViewBulmaTestCase implements textareaFieldT
         // But the value between the tags should be equal to the value
         $this->assertEquals(htmlspecialchars($this->test_value), trim($input->innertext));
     }
-
 }

@@ -5,6 +5,7 @@ namespace Nickwest\EloquentForms;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
+
 use Nickwest\EloquentForms\Exceptions\InvalidCustomFieldObjectException;
 use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
 use Nickwest\EloquentForms\Traits\HasFields;
@@ -12,7 +13,7 @@ use Nickwest\EloquentForms\Traits\Themeable;
 
 class Form
 {
-    use HasFields, Themeable{
+    use HasFields, Themeable {
         Themeable::setTheme as parentSetTheme;
     }
 
@@ -91,7 +92,7 @@ class Form
             }
 
             // If it wasn't found, then throw an exception
-            throw new InvalidFieldException($before_field.' is not a display field');
+            throw new InvalidFieldException($before_field . ' is not a display field');
         }
 
         // Stick it on the end of the form
@@ -113,7 +114,7 @@ class Form
             if (isset($this->Fields[$original_name])) {
                 $this->Fields[$original_name]->attributes->name = $name;
             } else {
-                throw new InvalidFieldException($original_name.' is not part of the Form');
+                throw new InvalidFieldException($original_name . ' is not part of the Form');
             }
         }
     }
@@ -137,14 +138,14 @@ class Form
                 }
                 // If it's some other object, it's not a valid type
                 elseif (is_object($type)) {
-                    throw new InvalidCustomFieldObjectException($field_name.' CustomField object need to extend Nickwest\EloquentForms\CustomField');
+                    throw new InvalidCustomFieldObjectException($field_name . ' CustomField object need to extend Nickwest\EloquentForms\CustomField');
                 }
                 // It's probably just a string so set it
                 else {
                     $this->Fields[$field_name]->attributes->type = $type;
                 }
             } else {
-                throw new InvalidFieldException($field_name.' is not part of the Form');
+                throw new InvalidFieldException($field_name . ' is not part of the Form');
             }
         }
     }
@@ -163,7 +164,7 @@ class Form
             if (isset($this->Fields[$field_name])) {
                 $this->Fields[$field_name]->example = $example;
             } else {
-                throw new InvalidFieldException($field_name.' is not part of the Form');
+                throw new InvalidFieldException($field_name . ' is not part of the Form');
             }
         }
     }
@@ -182,7 +183,7 @@ class Form
             if (isset($this->Fields[$field_name])) {
                 $this->Fields[$field_name]->default_value = $default_value;
             } else {
-                throw new InvalidFieldException($field_name.' is not part of the Form');
+                throw new InvalidFieldException($field_name . ' is not part of the Form');
             }
         }
     }
@@ -202,7 +203,7 @@ class Form
             if (isset($this->Fields[$field_name])) {
                 $this->Fields[$field_name]->attributes->required = true;
             } else {
-                throw new InvalidFieldException($field_name.' is not part of the Form');
+                throw new InvalidFieldException($field_name . ' is not part of the Form');
             }
         }
     }
@@ -223,7 +224,7 @@ class Form
             if (isset($this->Fields[$field_name])) {
                 $this->Fields[$field_name]->is_inline = true;
             } else {
-                throw new InvalidFieldException($field_name.' is not part of the Form');
+                throw new InvalidFieldException($field_name . ' is not part of the Form');
             }
         }
     }
@@ -231,7 +232,7 @@ class Form
     /**
      * Add a data list to the form.
      *
-     * @param  array  $name
+     * @param  string  $name
      * @param  array  $options
      * @return void
      */
@@ -259,8 +260,8 @@ class Form
         $fields = [];
         // TODO: add validation on field_names?
         foreach ($field_names as $field) {
-            if (! isset($this->Fields[$field])) {
-                throw new InvalidFieldException($field.' is not part of the Form');
+            if (!isset($this->Fields[$field])) {
+                throw new InvalidFieldException($field . ' is not part of the Form');
             }
             $fields[$field] = $field;
         }
@@ -317,7 +318,7 @@ class Form
             $i++;
         }
 
-        throw new InvalidFieldException($after_field.' is not part of the Form');
+        throw new InvalidFieldException($after_field . ' is not part of the Form');
     }
 
     /**
@@ -364,7 +365,7 @@ class Form
             if (isset($this->Fields[$field_name])) {
                 $this->Fields[$field_name]->label = $label;
             } else {
-                throw new InvalidFieldException($field_name.' is not part of the Form');
+                throw new InvalidFieldException($field_name . ' is not part of the Form');
             }
         }
     }
@@ -401,7 +402,7 @@ class Form
             if (isset($this->Fields[$field_name])) {
                 $labels[$field_name] = $this->Fields[$field_name]->label;
             } else {
-                throw new InvalidFieldException($field_name.' is not part of the Form');
+                throw new InvalidFieldException($field_name . ' is not part of the Form');
             }
         }
 
@@ -420,7 +421,7 @@ class Form
             if (isset($this->Fields[$field_name])) {
                 $this->Fields[$field_name]->validation_rules = $rules;
             } else {
-                throw new InvalidFieldException($field_name.' is not part of the Form');
+                throw new InvalidFieldException($field_name . ' is not part of the Form');
             }
         }
     }
@@ -458,8 +459,8 @@ class Form
             }
 
             // Set required rule on all required fields
-            if ($Field->attributes->required && ! in_array('required', $rules)) {
-                if (! is_array($rules[$Field->getOriginalName()])) {
+            if ($Field->attributes->required && !in_array('required', $rules)) {
+                if (!is_array($rules[$Field->getOriginalName()])) {
                     $rules[$Field->getOriginalName()] = [];
                 }
                 $rules[$Field->getOriginalName()][] = 'required';
@@ -475,7 +476,7 @@ class Form
         );
 
         // Set error messages to fields
-        if (! ($success = ! $Validator->fails())) {
+        if (!($success = !$Validator->fails())) {
             foreach ($Validator->errors()->toArray() as $field => $error) {
                 $this->Fields[$field]->error_message = current($error);
             }
@@ -495,13 +496,13 @@ class Form
      */
     public function addSubmitButton(string $name, string $value, string $label = null, string $classes = ''): void
     {
-        $this->SubmitFields[$name.$value] = new Field($name);
-        $this->SubmitFields[$name.$value]->attributes->value = $value;
-        $this->SubmitFields[$name.$value]->attributes->type = 'submit';
-        $this->SubmitFields[$name.$value]->label = ($label !== null ? $label : ucfirst(str_replace('_', ' ', $value)));
-        $this->SubmitFields[$name.$value]->attributes->addClass('button');
+        $this->SubmitFields[$name . $value] = new Field($name);
+        $this->SubmitFields[$name . $value]->attributes->value = $value;
+        $this->SubmitFields[$name . $value]->attributes->type = 'submit';
+        $this->SubmitFields[$name . $value]->label = ($label !== null ? $label : ucfirst(str_replace('_', ' ', $value)));
+        $this->SubmitFields[$name . $value]->attributes->addClass('button');
         if ($classes != '') {
-            $this->SubmitFields[$name.$value]->attributes->addClasses(explode(' ', $classes));
+            $this->SubmitFields[$name . $value]->attributes->addClasses(explode(' ', $classes));
         }
     }
 
@@ -516,11 +517,11 @@ class Form
      */
     public function removeSubmitButton(string $name, string $value): void
     {
-        if (! isset($this->SubmitFields[$name.$value])) {
-            throw new InvalidFieldException($name.' '.$value.' is not part of the Form');
+        if (!isset($this->SubmitFields[$name . $value])) {
+            throw new InvalidFieldException($name . ' ' . $value . ' is not part of the Form');
         }
 
-        unset($this->SubmitFields[$name.$value]);
+        unset($this->SubmitFields[$name . $value]);
     }
 
     /**
@@ -534,11 +535,11 @@ class Form
      */
     public function getSubmitButton(string $name, string $value): Field
     {
-        if (! isset($this->SubmitFields[$name.$value])) {
-            throw new InvalidFieldException($name.$value.' is not part of the Form');
+        if (!isset($this->SubmitFields[$name . $value])) {
+            throw new InvalidFieldException($name . $value . ' is not part of the Form');
         }
 
-        return $this->SubmitFields[$name.$value];
+        return $this->SubmitFields[$name . $value];
     }
 
     /**
@@ -562,34 +563,34 @@ class Form
      */
     public function renameSubmitButton(string $name, string $value, string $new_name, string $new_value = null, string $new_label = null): void
     {
-        if (! isset($this->SubmitFields[$name.$value])) {
-            throw new InvalidFieldException($name.$value.' is not part of the Form');
+        if (!isset($this->SubmitFields[$name . $value])) {
+            throw new InvalidFieldException($name . $value . ' is not part of the Form');
         }
 
         if ($new_value === null) {
             $new_value = $value;
         }
         if ($name == $new_name && $value == $new_value) {
-            $this->SubmitFields[$name.$value]->label = $new_label;
+            $this->SubmitFields[$name . $value]->label = $new_label;
 
             return;
         }
 
-        if (isset($this->SubmitFields[$new_name.$new_value])) {
-            throw new InvalidFieldException($new_name.' '.$new_value.' already exists');
+        if (isset($this->SubmitFields[$new_name . $new_value])) {
+            throw new InvalidFieldException($new_name . ' ' . $new_value . ' already exists');
         }
 
-        $this->SubmitFields[$name.$value]->attributes->name = $new_name;
-        $this->SubmitFields[$name.$value]->attributes->id = $new_name;
+        $this->SubmitFields[$name . $value]->attributes->name = $new_name;
+        $this->SubmitFields[$name . $value]->attributes->id = $new_name;
         if ($new_value !== null) {
-            $this->SubmitFields[$name.$value]->attributes->value = $new_value;
+            $this->SubmitFields[$name . $value]->attributes->value = $new_value;
         }
         if ($new_label !== null) {
-            $this->SubmitFields[$name.$value]->label = $new_label;
+            $this->SubmitFields[$name . $value]->label = $new_label;
         }
 
-        $this->SubmitFields[$new_name.$new_value] = $this->SubmitFields[$name.$value];
-        unset($this->SubmitFields[$name.$value]);
+        $this->SubmitFields[$new_name . $new_value] = $this->SubmitFields[$name . $value];
+        unset($this->SubmitFields[$name . $value]);
     }
 
     /**
@@ -598,7 +599,7 @@ class Form
      * @param  Nickwest\EloquentForms\Theme  $Theme
      * @return void
      */
-    public function setTheme(Theme $Theme): void
+    public function setTheme(\Nickwest\EloquentForms\Theme $Theme): void
     {
         $this->parentSetTheme($Theme);
 
@@ -649,11 +650,11 @@ class Form
 
         $this->Theme->prepareSubformView($this);
 
-        if ($this->Theme->getViewNamespace() != '' && View::exists($this->Theme->getViewNamespace().'::subform')) {
-            return View::make($this->Theme->getViewNamespace().'::subform', $blade_data);
+        if ($this->Theme->getViewNamespace() != '' && View::exists($this->Theme->getViewNamespace() . '::subform')) {
+            return View::make($this->Theme->getViewNamespace() . '::subform', $blade_data);
         }
 
-        return View::make(DefaultTheme::getDefaultNamespace().'::subform', $blade_data);
+        return View::make(DefaultTheme::getDefaultNamespace() . '::subform', $blade_data);
     }
 
     /**
@@ -669,7 +670,7 @@ class Form
             'Fields' => [],
             'SubmitFields' => [],
             'display_fields' => $this->display_fields,
-            'Theme' => (is_object($this->Theme) ? '\\'.get_class($this->Theme) : null),
+            'Theme' => (is_object($this->Theme) ? '\\' . get_class($this->Theme) : null),
         ];
 
         foreach ($this->Fields as $key => $Field) {

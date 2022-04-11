@@ -1,4 +1,6 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults;
+<?php
+
+namespace Nickwest\EloquentForms\Test\view\defaults;
 
 use Faker;
 
@@ -84,7 +86,7 @@ class tableButtonsTest extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Table->makeView()->render());
         $ths = $dom->find('thead tr th');
 
-        foreach($ths as $th){
+        foreach ($ths as $th) {
             $this->assertEquals(e($this->Table->getLabel($th->{'data-field'})), $th->plaintext);
         }
     }
@@ -97,9 +99,9 @@ class tableButtonsTest extends TestCase
         // Remove the first one since that's the headings
         array_shift($trs);
 
-        foreach($trs as $tr){
+        foreach ($trs as $tr) {
             $data = $this->Collection->shift();
-            foreach($tr->find('td') as $td){
+            foreach ($tr->find('td') as $td) {
                 $this->assertEquals(e($data[$td->{'data-field'}]), trim($td->innertext));
             }
         }
@@ -113,8 +115,8 @@ class tableButtonsTest extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Table->makeView()->render());
         $ths = $dom->find('thead tr th');
 
-        foreach($ths as $th){
-            if(isset($labels[$th->{'data-field'}])){
+        foreach ($ths as $th) {
+            if (isset($labels[$th->{'data-field'}])) {
                 $this->assertEquals(e($labels[$th->{'data-field'}]), trim($th->innertext));
             }
         }
@@ -139,13 +141,13 @@ class tableButtonsTest extends TestCase
         $tds = $dom->find('td');
 
         $data = $Collection->shift();
-        foreach($tds as $td){
-            if($td->{'data-field'} == 'birthday'){
+        foreach ($tds as $td) {
+            if ($td->{'data-field'} == 'birthday') {
                 // Value cleaned with e()
-                $this->assertEquals('<strong>'.e($data[$td->{'data-field'}]).'</strong>', trim($td->innertext));
-            }elseif($td->{'data-field'} == 'nname'){
+                $this->assertEquals('<strong>' . e($data[$td->{'data-field'}]) . '</strong>', trim($td->innertext));
+            } elseif ($td->{'data-field'} == 'nname') {
                 // Value cleaned with e()
-                $this->assertEquals('<a href="/my/url">'.e($data[$td->{'data-field'}]).'</a>', trim($td->innertext));
+                $this->assertEquals('<a href="/my/url">' . e($data[$td->{'data-field'}]) . '</a>', trim($td->innertext));
             }
         }
     }
@@ -154,12 +156,12 @@ class tableButtonsTest extends TestCase
     /**
      *  Make a test collection full of data
      *
-     * @return Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection
      */
     protected function makeData(int $count)
     {
         $Collection = new Collection();
-        for($i = 0; $i < $count; $i++){
+        for ($i = 0; $i < $count; $i++) {
             $Collection->push([
                 'name' => $this->Faker->name,
                 'email' => $this->Faker->email,
@@ -171,5 +173,4 @@ class tableButtonsTest extends TestCase
 
         return $Collection;
     }
-
 }

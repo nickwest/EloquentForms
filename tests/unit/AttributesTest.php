@@ -1,6 +1,6 @@
-<?php namespace Nickwest\EloquentForms\Test\unit;
+<?php
 
-use Faker;
+namespace Nickwest\EloquentForms\Test\unit;
 
 use Nickwest\EloquentForms\Attributes;
 use Nickwest\EloquentForms\Test\TestCase;
@@ -157,7 +157,6 @@ class AttributesTest extends TestCase
 
         $this->assertEquals('red bold big', $Attributes->class);
         $this->assertEquals('class="red bold big"', (string)$Attributes);
-
     }
 
     public function test_attributes_adding_multiple_classes_produces_a_valid_class_string()
@@ -267,9 +266,5 @@ class AttributesTest extends TestCase
         $NewAttributes->fromJson($json);
 
         $this->assertEquals($Attributes, $NewAttributes);
-
     }
-
-
-
 }

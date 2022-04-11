@@ -58,22 +58,22 @@ class TableExporter implements FromCollection, WithEvents
         self::setMargins($event->sheet, 0.7, 0.25, 0.25, 0.25);
 
         // Bold the heading row
-        $event->sheet->getStyle('A1:'.$highestColumn.'1')->getFont()->setBold(true);
+        $event->sheet->getStyle('A1:' . $highestColumn . '1')->getFont()->setBold(true);
 
         // Format all rows as text
-        $event->sheet->getStyle('A1:'.$highestColumn.$highestRow)
+        $event->sheet->getStyle('A1:' . $highestColumn . $highestRow)
             ->getNumberFormat()->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
 
         // Auto wrap all cells by default
-        $event->sheet->getStyle('A1:'.$highestColumn.$highestRow)
+        $event->sheet->getStyle('A1:' . $highestColumn . $highestRow)
             ->getAlignment()->setWrapText(true);
 
         // All cells are text by default
-        $event->sheet->getStyle('A1:'.$highestColumn.$highestRow)
+        $event->sheet->getStyle('A1:' . $highestColumn . $highestRow)
             ->getNumberFormat()->setFormatCode('@');
 
         // Align top
-        $event->sheet->getStyle('A1:'.$highestColumn.$highestRow)
+        $event->sheet->getStyle('A1:' . $highestColumn . $highestRow)
             ->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP);
 
         // Set columns to auto size
@@ -97,7 +97,7 @@ class TableExporter implements FromCollection, WithEvents
         // Set Zebra stripes
         for ($i = 2; $i <= $highestRow; $i++) {
             if ($i % 2 == 0) {
-                $sheet->getStyle('A'.$i.':'.$highestColumn.$i)
+                $sheet->getStyle('A' . $i . ':' . $highestColumn . $i)
                     ->getFill()
                     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
                     ->getStartColor()->setARGB('FFEEEEEE');

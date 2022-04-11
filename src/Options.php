@@ -101,7 +101,7 @@ class Options
      */
     public function getOption(?string $key)
     {
-        if (! isset($this->options[(string) $key])) {
+        if (!isset($this->options[(string) $key])) {
             throw new InvalidOptionException;
         }
 
@@ -141,7 +141,7 @@ class Options
      */
     public function removeOption(?string $key): void
     {
-        if (! isset($this->options[(string) $key])) {
+        if (!isset($this->options[(string) $key])) {
             throw new InvalidOptionException;
         }
 
@@ -210,7 +210,7 @@ class Options
         }
 
         foreach ($keys as $key) {
-            if (! isset($this->options[(string) $key])) {
+            if (!isset($this->options[(string) $key])) {
                 throw new InvalidOptionException;
             }
 

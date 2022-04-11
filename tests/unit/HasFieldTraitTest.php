@@ -1,13 +1,11 @@
-<?php namespace Nickwest\EloquentForms\Test\unit;
+<?php
+
+namespace Nickwest\EloquentForms\Test\unit;
 
 use Faker;
 
-use Illuminate\Validation\Rule;
-
-use Nickwest\EloquentForms\Form;
 use Nickwest\EloquentForms\Field;
 use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
-use Nickwest\EloquentForms\Exceptions\InvalidCustomFieldObjectException;
 
 use Nickwest\EloquentForms\Test\TestCase;
 
@@ -46,7 +44,7 @@ class HasFieldTraitTest extends TestCase
 
         $this->Form->addFields($field_names);
 
-        foreach($field_names as $field_name) {
+        foreach ($field_names as $field_name) {
             $this->assertInstanceOf(Field::class, $this->Form->getField($field_name));
         }
     }
@@ -68,7 +66,7 @@ class HasFieldTraitTest extends TestCase
 
     public function test_removeFields_removes_many_fields_from_the_form()
     {
-        foreach(array_rand($this->fields, 3) as $key){
+        foreach (array_rand($this->fields, 3) as $key) {
             $remove[] = $this->fields[$key]['name'];
             unset($this->fields[$key]);
         }
@@ -76,19 +74,19 @@ class HasFieldTraitTest extends TestCase
         $this->Form->removeFields($remove);
 
         // The others still exist
-        foreach($this->fields as $field) {
+        foreach ($this->fields as $field) {
             $this->assertInstanceOf(Field::class, $this->Form->{$field['name']});
         }
 
         // The ones we removed do not exist
-        foreach($remove as $field_name) {
+        foreach ($remove as $field_name) {
             $this->assertFalse($this->Form->isField($field_name));
         }
     }
 
     public function test_isField_returns_existence_of_field()
     {
-        foreach($this->fields as $field){
+        foreach ($this->fields as $field) {
             $this->assertTrue($this->Form->isField($field['name']));
         }
 
@@ -97,7 +95,7 @@ class HasFieldTraitTest extends TestCase
 
     public function test_magic_set_method_will_set_field_value()
     {
-        foreach($this->fields as $field){
+        foreach ($this->fields as $field) {
             $this->Form->{$field['name']} = $field['value'];
             $this->assertEquals($field['value'], $this->Form->{$field['name']}->attributes->value);
         }
@@ -111,7 +109,7 @@ class HasFieldTraitTest extends TestCase
 
     public function test_magic_get_method_will_get_field_object()
     {
-        foreach($this->fields as $field){
+        foreach ($this->fields as $field) {
             $this->assertInstanceOf(\Nickwest\EloquentForms\Field::class, $this->Form->{$field['name']});
         }
     }
@@ -124,7 +122,7 @@ class HasFieldTraitTest extends TestCase
 
     public function test_magic_isset_method_returns_existence_of_field()
     {
-        foreach($this->fields as $field){
+        foreach ($this->fields as $field) {
             $this->assertTrue(isset($this->Form->{$field['name']}));
         }
         $this->assertFalse(isset($this->Form->notafieldnameatall));
@@ -138,7 +136,7 @@ class HasFieldTraitTest extends TestCase
     public function test_setValue_sets_a_fields_value()
     {
         // Set all fields to a simple value
-        foreach($this->fields as $field){
+        foreach ($this->fields as $field) {
             $this->Form->setValue($field['name'], 'abc1234');
             $this->assertEquals('abc1234', $this->Form->{$field['name']}->attributes->value);
         }
@@ -153,7 +151,7 @@ class HasFieldTraitTest extends TestCase
     public function test_getValue_returns_a_field_value()
     {
 
-        foreach($this->fields as $field){
+        foreach ($this->fields as $field) {
             $this->assertEquals($field['value'], $this->Form->getValue($field['name']));
         }
     }
@@ -168,7 +166,7 @@ class HasFieldTraitTest extends TestCase
     {
         // Set all fields to a simple value
         $values = array_column($this->fields, 'value', 'name');
-        foreach($values as $key => $value){
+        foreach ($values as $key => $value) {
             $values[$key] = 'zyx4321';
         }
 
@@ -189,7 +187,7 @@ class HasFieldTraitTest extends TestCase
     public function test_setValues_does_not_throw_an_exception_on_invalid_field_when_ignoring_invalid_fields()
     {
         $values = array_column($this->fields, 'value', 'name');
-        foreach($values as $key => $value){
+        foreach ($values as $key => $value) {
             $values[$key] = 'zyx4321';
         }
         $values['not_a_field'] = 'break!';

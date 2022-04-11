@@ -1,8 +1,9 @@
-<?php namespace Nickwest\EloquentForms\Test\unit;
+<?php
+
+namespace Nickwest\EloquentForms\Test\unit;
 
 use Faker;
-use Route;
-use Storage;
+use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Support\Collection;
 
@@ -114,7 +115,6 @@ class TableTest extends TestCase
         ];
         $this->expectException(InvalidFieldException::class);
         $this->Table->setLabels($labels);
-
     }
 
     public function test_table_setLabels_gets_a_labels()
@@ -128,7 +128,7 @@ class TableTest extends TestCase
 
         $this->Table->setLabels($labels);
 
-        foreach($this->display_fields as $field_name){
+        foreach ($this->display_fields as $field_name) {
             $this->assertEquals($labels[$field_name], $this->Table->getLabel($field_name));
         }
     }
@@ -153,7 +153,7 @@ class TableTest extends TestCase
         $this->Table->addFieldReplacement('birthday', '<strong>{birthday}</strong>');
 
         $item = $this->Collection->pop();
-        $this->assertEquals('<strong>'.$item['birthday'].'</strong>', $this->Table->getFieldReplacement('birthday', $item));
+        $this->assertEquals('<strong>' . $item['birthday'] . '</strong>', $this->Table->getFieldReplacement('birthday', $item));
     }
 
     public function test_table_getFieldReplacement_replaces_other_field_tokens_too()
@@ -161,7 +161,7 @@ class TableTest extends TestCase
         $this->Table->addFieldReplacement('birthday', '<strong>{email} {birthday}</strong>');
 
         $item = $this->Collection->pop();
-        $this->assertEquals('<strong>'.htmlspecialchars($item['email'], ENT_QUOTES).' '.htmlspecialchars($item['birthday'], ENT_QUOTES).'</strong>', $this->Table->getFieldReplacement('birthday', $item));
+        $this->assertEquals('<strong>' . htmlspecialchars($item['email'], ENT_QUOTES) . ' ' . htmlspecialchars($item['birthday'], ENT_QUOTES) . '</strong>', $this->Table->getFieldReplacement('birthday', $item));
     }
 
     public function test_table_field_with_apostrophe()
@@ -176,7 +176,7 @@ class TableTest extends TestCase
             'phone_number' => '011-321-5778',
             'bio' => 'Blah',
         ];
-        $this->assertEquals('<strong>'.htmlspecialchars($item['email'], ENT_QUOTES).' '.htmlspecialchars($item['birthday'], ENT_QUOTES).'</strong>', $this->Table->getFieldReplacement('birthday', $item));
+        $this->assertEquals('<strong>' . htmlspecialchars($item['email'], ENT_QUOTES) . ' ' . htmlspecialchars($item['birthday'], ENT_QUOTES) . '</strong>', $this->Table->getFieldReplacement('birthday', $item));
     }
 
     public function test_table_addLinkingPattern_adds_a_linking_patter_form_a_field()
@@ -253,12 +253,12 @@ class TableTest extends TestCase
     /**
      *  Make a test collection full of data
      *
-     * @return Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection
      */
     protected function makeData()
     {
         $Collection = new Collection();
-        for($i = 0; $i < 35; $i++){
+        for ($i = 0; $i < 35; $i++) {
             $Collection->push([
                 'name' => $this->Faker->name,
                 'email' => $this->Faker->email,
@@ -270,5 +270,4 @@ class TableTest extends TestCase
 
         return $Collection;
     }
-
 }

@@ -50,7 +50,7 @@ class Attributes
         if ($attribute == 'class') {
             return implode(' ', $this->classes);
         } elseif ($attribute == 'id') {
-            return $this->id_prefix.$this->attributes['id'].$this->id_suffix;
+            return $this->id_prefix . $this->attributes['id'] . $this->id_suffix;
         }
 
         if (isset($this->attributes[$attribute])) {
@@ -209,14 +209,14 @@ class Attributes
 
             // Add [] to name attribute if there's a multi_key set or multi_key === true
             if ($key == 'name' && $this->multi_key !== null && $this->multi_key !== false) {
-                $value .= '['.($this->multi_key !== true ? $this->multi_key : '').']';
+                $value .= '[' . ($this->multi_key !== true ? $this->multi_key : '') . ']';
             }
 
             if ($key == 'id') {
-                $value = $this->id_prefix.$value.$this->id_suffix;
+                $value = $this->id_prefix . $value . $this->id_suffix;
             }
 
-            $output[] = ($value === null ? $key : $key.'="'.htmlspecialchars($value).'"');
+            $output[] = ($value === null ? $key : $key . '="' . htmlspecialchars($value) . '"');
         }
 
         return implode(' ', $output);

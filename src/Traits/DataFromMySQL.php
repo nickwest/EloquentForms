@@ -13,7 +13,7 @@ trait DataFromMySQL
      */
     protected function setColumnsFromMySQL(): void
     {
-        $query = 'SHOW COLUMNS FROM '.$this->getTable();
+        $query = 'SHOW COLUMNS FROM ' . $this->getTable();
 
         foreach (DB::connection($this->connection)->select($query) as $column) {
             $this->columns[$column->Field] = [
@@ -107,7 +107,7 @@ trait DataFromMySQL
             }
         }
 
-        if (! isset($return_array['']) && $nullable) {
+        if (!isset($return_array['']) && $nullable) {
             $return_array = array_merge(['' => $this->blank_select_text], $return_array);
         }
 

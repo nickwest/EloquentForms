@@ -20,7 +20,7 @@ class EloquentFormsBulmaThemeServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__.'/views', 'Nickwest\\EloquentForms\\bulma');
+        $this->loadViewsFrom(__DIR__ . '/views', 'Nickwest\\EloquentForms\\bulma');
     }
 
     /**

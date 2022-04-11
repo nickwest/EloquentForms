@@ -1,4 +1,6 @@
-<?php namespace Nickwest\EloquentForms\Test\views\bulma\fields;
+<?php
+
+namespace Nickwest\EloquentForms\Test\views\bulma\fields;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
@@ -73,6 +75,4 @@ class fileFieldTest extends FieldViewBulmaTestCase implements fileFieldTestInter
 
         $this->assertEquals('my-class three file-input', trim($input->class));
     }
-
-
 }

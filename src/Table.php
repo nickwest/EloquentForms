@@ -7,8 +7,7 @@ use Nickwest\EloquentForms\Exceptions\InvalidFieldException;
 use Nickwest\EloquentForms\Exceptions\InvalidRouteException;
 use Nickwest\EloquentForms\Exports\TableExporter;
 use Nickwest\EloquentForms\Traits\Themeable;
-use Route;
-use View;
+use Illuminate\Support\Facades\Route;
 
 class Table
 {
@@ -144,7 +143,7 @@ class Table
             if (isset($this->display_fields[$field_name])) {
                 $this->labels[$field_name] = $label;
             } else {
-                throw new InvalidFieldException('"'.$field_name.'" not set as a display field');
+                throw new InvalidFieldException('"' . $field_name . '" not set as a display field');
             }
         }
     }
@@ -214,7 +213,7 @@ class Table
 
         $replaced = $this->field_replacements[$field];
 
-        if (! is_array($results[0]) || ! is_array($results[1])) {
+        if (!is_array($results[0]) || !is_array($results[1])) {
             return $replaced;
         }
 
@@ -277,7 +276,7 @@ class Table
     public function addLinkingPattern(string $field_name, string $href): void
     {
         // Make and set the linking pattern
-        $this->field_replacements[$field_name] = '<a href="'.$href.'">{'.$field_name.'}</a>';
+        $this->field_replacements[$field_name] = '<a href="' . $href . '">{' . $field_name . '}</a>';
     }
 
     /**
@@ -295,7 +294,7 @@ class Table
     {
         $Route = Route::getRoutes()->getByName($route_name);
         if ($Route == null) {
-            throw new InvalidRouteException('Invalid route name '.$route_name);
+            throw new InvalidRouteException('Invalid route name ' . $route_name);
         }
 
         $uri = $Route->uri;
@@ -304,18 +303,18 @@ class Table
         }
 
         if (is_array($query_string) && count($query_string) > 0) {
-            $uri .= '?'.implode('&', array_map(function ($key, $val) {
-                return $key.'='.$val;
+            $uri .= '?' . implode('&', array_map(function ($key, $val) {
+                return $key . '=' . $val;
             }, array_keys($query_string), $query_string));
         } elseif (is_string($query_string)) {
-            $uri .= '?'.$query_string;
+            $uri .= '?' . $query_string;
         }
 
         // If it already has a linking pattern, replace $field_name with that linking pattern
-        $link_text = (isset($this->field_replacements[$field_name]) ? $this->field_replacements[$field_name] : '{'.$field_name.'}');
+        $link_text = (isset($this->field_replacements[$field_name]) ? $this->field_replacements[$field_name] : '{' . $field_name . '}');
 
         // Make and set the linking pattern
-        $this->field_replacements[$field_name] = '<a href="/'.$uri.'">'.$link_text.'</a>';
+        $this->field_replacements[$field_name] = '<a href="/' . $uri . '">' . $link_text . '</a>';
     }
 
     /**
@@ -324,7 +323,7 @@ class Table
      * @param  array  $blade_data
      * @param  string  $extends
      * @param  string  $section
-     * @return Illuminate\View\View
+     * @return \Illuminate\View\View
      */
     public function makeView(array $blade_data = [], string $extends = '', string $section = ''): \Illuminate\View\View
     {

@@ -1,4 +1,6 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults;
+<?php
+
+namespace Nickwest\EloquentForms\Test\view\defaults;
 
 use Faker;
 
@@ -13,7 +15,7 @@ class formTest extends TestCase
     {
         parent::setUp();
 
-        $this->loadMigrationsFrom(realpath(__DIR__.'/../../database/migrations/'));
+        $this->loadMigrationsFrom(realpath(__DIR__ . '/../../database/migrations/'));
 
         // Sample is a class declared in the bottom of this file
         // It is only used in these tests
@@ -34,7 +36,7 @@ class formTest extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Model->getFormView([])->render());
         $fields = $dom->find('div.field');
 
-        $this->assertEquals(count($this->Model->Form()->getDisplayFields()), count($fields)-1); // -1 for submit buttons
+        $this->assertEquals(count($this->Model->Form()->getDisplayFields()), count($fields) - 1); // -1 for submit buttons
     }
 
     public function test_form_has_enctype_attribute_when_it_has_a_file_field()

@@ -1,4 +1,6 @@
-<?php namespace Nickwest\EloquentForms\Test\unit;
+<?php
+
+namespace Nickwest\EloquentForms\Test\unit;
 
 use Faker;
 use Config;
@@ -16,7 +18,7 @@ class DataFromMySQLTraitTest extends TestCase
     {
         parent::setUp();
 
-        $this->loadMigrationsFrom(realpath(__DIR__.'/../database/migrations/'));
+        $this->loadMigrationsFrom(realpath(__DIR__ . '/../database/migrations/'));
 
         // Sample is a class declared in the bottom of this file
         // It is only used in these tests
@@ -45,6 +47,4 @@ class DataFromMySQLTraitTest extends TestCase
 
         $this->assertEquals($this->expectedDBStructure(true), $array);
     }
-
-
 }

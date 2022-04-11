@@ -1,4 +1,6 @@
-<?php namespace Nickwest\EloquentForms\Test\views\bulma\fields;
+<?php
+
+namespace Nickwest\EloquentForms\Test\views\bulma\fields;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
@@ -92,5 +94,4 @@ class hiddenFieldTest extends FieldViewBulmaTestCase implements hiddenFieldTestI
         // Hidden fields don't have a container, so we don't care about its attributes, just pass
         $this->assertSame(false, $div);
     }
-
 }

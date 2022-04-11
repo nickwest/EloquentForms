@@ -1,4 +1,6 @@
-<?php namespace Nickwest\EloquentForms\Test\view\defaults;
+<?php
+
+namespace Nickwest\EloquentForms\Test\view\defaults;
 
 use KubAT\PhpSimple\HtmlDomParser;
 
@@ -112,5 +114,4 @@ class submitButtonsTest extends TestCase
         $this->assertEquals('input-save_button', $submit_button->id);
         $this->assertEquals('button', $submit_button->class);
     }
-
 }
