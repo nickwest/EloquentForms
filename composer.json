@@ -9,10 +9,10 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.0.2",
-        "illuminate/support": "^9.2",
+        "php": "^8.1",
+        "illuminate/support": "^10.0",
         "nesbot/carbon": "^2.0",
-        "doctrine/dbal": "~2.13",
+        "doctrine/dbal": "^3.0",
         "maatwebsite/excel": "^3.1"
     },
     "autoload": {
@@ -27,12 +27,12 @@
     "minimum-stability": "stable",
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
-        "laravel/framework": "^9.2",
+        "laravel/framework": "^10.0",
         "mockery/mockery": "^1.4.4",
         "phpunit/phpunit": "^9.5.10",
-        "orchestra/testbench": "^7.1",
+        "orchestra/testbench": "^8.0",
         "kub-at/php-simple-html-dom-parser": "^1.9"
-        },
+    },
     "extra": {
         "laravel": {
             "providers": [
@@ -40,5 +40,29 @@
                 "Nickwest\\EloquentForms\\Themes\\bulma\\EloquentFormsBulmaThemeServiceProvider"
             ]
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@build",
+            "@php vendor/bin/testbench serve"
+        ],
+        "test": [
+            "@php vendor/bin/phpunit"
+        ]
     }
 }
