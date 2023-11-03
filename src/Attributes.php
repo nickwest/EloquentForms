@@ -216,7 +216,7 @@ class Attributes
                 $value = $this->id_prefix.$value.$this->id_suffix;
             }
 
-            $output[] = ($value === null ? $key : $key.'="'.htmlspecialchars($value).'"');
+            $output[] = ($value === null ? $key : $key.'="'.htmlspecialchars($value, ENT_HTML401).'"');
         }
 
         return implode(' ', $output);
