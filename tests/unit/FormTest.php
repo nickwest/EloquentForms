@@ -404,7 +404,7 @@ class FormTest extends TestCase
 
     public function test_form_has_Attributes()
     {
-        $this->assertClassHasAttribute('attributes', Form::class);
+        $this->assertObjectHasProperty('attributes', new Form);
 
         $this->assertInstanceOf(\Nickwest\EloquentForms\Attributes::class, $this->Form->attributes);
     }
