@@ -202,7 +202,7 @@ abstract class FieldViewTestCase extends TestCase
         // Lots of funky types of attributes to support VueJS
 
         // v-bind:class="[activeClass, errorClass]"
-        $this->Field->attributes->{'v-bind:class'} = '[activeClass, errorClass]';
+        $this->Field->attributes->{'v-bind:class'} = "['activeClass', 'errorClass']";
         // v-bind:style="{ display: ['-webkit-box', '-ms-flexbox', 'flex'] }"
         $this->Field->attributes->{'v-bind:style'} = "{ display: ['-webkit-box', '-ms-flexbox', 'flex'] }";
         // v-for="(item, index) in items"
@@ -219,7 +219,7 @@ abstract class FieldViewTestCase extends TestCase
         $dom = HtmlDomParser::str_get_html($this->Field->makeView()->render());
         $input = current($dom->find($this->test_tag));
 
-        $this->assertEquals('[activeClass, errorClass]', $input->{'v-bind:class'});
+        $this->assertEquals("['activeClass', 'errorClass']", $input->{'v-bind:class'});
         $this->assertEquals("{ display: ['-webkit-box', '-ms-flexbox', 'flex'] }", $input->{'v-bind:style'});
         $this->assertEquals('(item, index) in items', $input->{'v-for'});
         $this->assertEquals('item.id', $input->{':key'});
