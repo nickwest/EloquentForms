@@ -51,7 +51,7 @@ jobs:
           coverage: pcov
 
       - name: Set Minimum PHP 8.1 Versions
-        uses: nick-invision/retry@v1
+        uses: nick-fields/retry@v2
         with:
           timeout_minutes: 5
           max_attempts: 5
@@ -59,7 +59,7 @@ jobs:
         if: matrix.php >= 8.1
 
       # - name: Set Minimum PHP 8.1 Versions
-      #   uses: nick-invision/retry@v1
+      #   uses: nick-fields/retry@v2
       #   with:
       #     timeout_minutes: 5
       #     max_attempts: 5
@@ -67,14 +67,14 @@ jobs:
       #   if: matrix.php >= 8.1
 
       - name: Install dependencies
-        uses: nick-invision/retry@v1
+        uses: nick-fields/retry@v2
         with:
           timeout_minutes: 5
           max_attempts: 5
           command: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
 
       - name: Execute tests
-        run: vendor/bin/phpunit --verbose --coverage-clover './clover.xml'
+        run: vendor/bin/phpunit --coverage-clover './clover.xml'
         env:
           DB_CONNECTION: testing
           DB_HOST: 127.0.0.1
@@ -85,7 +85,7 @@ jobs:
 
       - name: Upload coverage to Codecov
         if: ${{ matrix.stability == 'prefer-stable' }}
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: .
