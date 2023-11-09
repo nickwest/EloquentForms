@@ -9,7 +9,7 @@ use KubAT\PhpSimple\HtmlDomParser;
 use Nickwest\EloquentForms\Table;
 use Nickwest\EloquentForms\Test\TestCase;
 
-class tableButtonsTest extends TestCase
+class tableTest extends TestCase
 {
     /**
      * @var array
