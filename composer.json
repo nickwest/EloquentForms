@@ -29,9 +29,9 @@
         "fakerphp/faker": "^1.9.1",
         "laravel/framework": "^10.0",
         "mockery/mockery": "^1.4.4",
-        "phpunit/phpunit": "^9.5.10",
-        "orchestra/testbench": "^8.0",
-        "kub-at/php-simple-html-dom-parser": "^1.9"
+        "orchestra/testbench": "^8.14",
+        "kub-at/php-simple-html-dom-parser": "^1.9",
+        "phpunit/phpunit": "^10.4"
     },
     "extra": {
         "laravel": {
