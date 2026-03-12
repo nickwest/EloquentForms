@@ -1,4 +1,4 @@
-![Build Status](https://github.com/nickwest/EloquentForms/actions/workflows/ci.yml/badge.svg) [![Latest Stable Version](https://poser.pugx.org/nickwest/eloquent-forms/v/stable)](https://packagist.org/packages/nickwest/eloquent-forms) [![License](https://poser.pugx.org/nickwest/eloquent-forms/license)](https://packagist.org/packages/nickwest/eloquent-forms) [![StyleCI](https://github.styleci.io/repos/123993557/shield?branch=main)](https://github.styleci.io/repos/123993557?branch=main) [![Maintainability](https://api.codeclimate.com/v1/badges/f986a765708538da7e5e/maintainability)](https://codeclimate.com/github/nickwest/EloquentForms/maintainability) [![codecov](https://codecov.io/gh/nickwest/EloquentForms/branch/master/graph/badge.svg)](https://codecov.io/gh/nickwest/EloquentForms)
+This project is now Archived. It has been migrated to [The University of Washington Information School](https://github.com/ischooluw) which is maintaining and developing it going forward. Visit [the new repo](https://github.com/ischooluw/EloquentForms) to continue using Eloquent Forms.
 
 
 EloquentForms v11.0.x
